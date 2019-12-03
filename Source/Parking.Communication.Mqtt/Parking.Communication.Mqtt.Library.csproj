@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyName>Parking.Communication.Mqtt</AssemblyName>
+    <AssemblyName>Parking.Communication.Mqtt.Library</AssemblyName>
+    <RootNamespace>Parking.Communication.Mqtt.Library</RootNamespace>
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>

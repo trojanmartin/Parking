@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Parking.Models.Mqtt.Options;
-using Parking.Communication.Mqtt.Handlers;
+using Parking.Communication.Mqtt.Library.Handlers;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Parking.Communication.Mqtt
+namespace Parking.Communication.Mqtt.Library
 {
     public class Program 
     {

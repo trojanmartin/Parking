@@ -3,7 +3,7 @@ using Parking.Models.Mqtt;
 using System.Threading.Tasks;
 using Parking.Models.Mqtt.Options;
 
-namespace Parking.Communication.Mqtt
+namespace Parking.Communication.Mqtt.Library
 {
     public interface IMqttProvider
     {

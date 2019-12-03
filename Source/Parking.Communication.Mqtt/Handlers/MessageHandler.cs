@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Parking.Communication.Mqtt.Handlers
+namespace Parking.Communication.Mqtt.Library.Handlers
 {
     public class MessageHandler : IMessageHandler
     {
@@ -43,11 +43,7 @@ namespace Parking.Communication.Mqtt.Handlers
             await _mqttProvider.Connect(_mqttOptions.Value);
 
             await _mqttProvider.Subscribe(_mqttOptions.Value.TopicsToSubscribe.FirstOrDefault());  
-
-            while (Listnening)
-            {
-
-            }
+                       
         }
 
         public void StopListening()

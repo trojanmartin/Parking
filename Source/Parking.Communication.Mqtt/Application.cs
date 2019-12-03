@@ -1,10 +1,10 @@
-﻿using Parking.Communication.Mqtt.Handlers;
+﻿using Parking.Communication.Mqtt.Library.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parking.Communication.Mqtt
+namespace Parking.Communication.Mqtt.Library
 {
     public class Application : IExecutable
     {
