@@ -7,7 +7,7 @@ namespace Parking.Communication.Mqtt.Library.Handlers
 {
     public interface IMessageHandler
     {
-        Task BeginListening();
+        Task BeginListeningAsync();
 
         void StopListening();
     }

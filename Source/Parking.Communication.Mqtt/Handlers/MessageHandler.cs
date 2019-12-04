@@ -22,13 +22,10 @@ namespace Parking.Communication.Mqtt.Library.Handlers
             _mqttProvider = mqttProvider;
             _mqttOptions = mqttOptions;
 
-            _mqttProvider.MessageReceived += MessageReceived;          
-
-            
+            _mqttProvider.MessageReceived += MessageReceivedAsync;                      
         }
 
-        private async Task MessageReceived(MqttMessage data)
-        {
+        private async Task MessageReceivedAsync(MqttMessage data)        {
 
             await Task.Run(() =>
            {
@@ -37,10 +34,11 @@ namespace Parking.Communication.Mqtt.Library.Handlers
            });
         }
 
-        public async Task BeginListening()
-        {        
+        public async Task BeginListeningAsync()
+        {
+            Listnening = true;
 
-            await _mqttProvider.Connect(_mqttOptions.Value);
+            await _mqttProvider.ConnectAsync(_mqttOptions.Value);
 
             await _mqttProvider.Subscribe(_mqttOptions.Value.TopicsToSubscribe.FirstOrDefault());  
                        

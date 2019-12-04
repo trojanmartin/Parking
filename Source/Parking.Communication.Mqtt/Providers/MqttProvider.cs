@@ -15,35 +15,25 @@ namespace Parking.Communication.Mqtt.Library
     public class MqttProvider : IMqttProvider
     {
 
-        public event Func<MqttMessage,Task> MessageReceived = async (message) =>  {  };
+        public event Func<MqttMessage, Task> MessageReceived;
 
 
         private readonly IMqttClient _client;
-        private  MqttOptions _mqttOptions;
+        private MqttOptions _mqttOptions;
 
 
         public MqttProvider()
         {
 
             var client = new MqttFactory().CreateMqttClient();
-
-            _client = client;
             
+            _client = client;
 
-
-            _client.UseApplicationMessageReceivedHandler((receivedMessage) =>
-            {
-                OnMessageReceived(receivedMessage);
-            });
-
-            _client.UseDisconnectedHandler((data) =>
-           {
-               OnDisconnect(data, _mqttOptions.ReconnectOptions);
-           });
-
+            _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);
+            _client.UseDisconnectedHandler(OnDisconnect);
         }
 
-        public async Task Connect(MqttOptions options)
+        public async Task ConnectAsync(MqttOptions options)
         {
             _mqttOptions = options;
 
@@ -62,7 +52,7 @@ namespace Parking.Communication.Mqtt.Library
 
 
         //TODO doplnit dalsie data do objektu MqttMessage
-        public async Task OnMessageReceived(MqttApplicationMessageReceivedEventArgs data)
+        public async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs data)
         {
             var newData = new MqttMessage()
             {
@@ -70,10 +60,10 @@ namespace Parking.Communication.Mqtt.Library
                 Topic = data.ApplicationMessage.Topic
             };
 
-            MessageReceived(newData);
+            await MessageReceived(newData);
         }
 
-        public async Task PublishMessage(MqttMessage message)
+        public async Task PublishMessageAsync(MqttMessage message)
         {
             var mqttMessage = new MqttApplicationMessageBuilder()
                             .WithQualityOfServiceLevel((MqttQualityOfServiceLevel)message.QoS)
@@ -90,33 +80,25 @@ namespace Parking.Communication.Mqtt.Library
         /// <param name="topic">Topic to subscribe</param>
         /// <param name="qoS">Quality of service, default is AtLeastOnce</param>
         /// <returns></returns>
-        public async Task Subscribe(string topic, MqttMessageQoS qoS = MqttMessageQoS.AtLeastOnce)
+        public async Task SubscribeAsync(string topic, MqttMessageQoS qoS = MqttMessageQoS.AtLeastOnce)
         {
             await _client.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)qoS).Build());
-
         }
 
-        private async void OnDisconnect(MqttClientDisconnectedEventArgs data, ReconnectOptions reconnectOptions)
+        private async Task OnDisconnect(MqttClientDisconnectedEventArgs data)
         {
-            if (!reconnectOptions.Reconnect)
+            if (!_mqttOptions.ReconnectOptions.Reconnect)
                 return;
+            try
+            {
+                await Task.Delay(_mqttOptions.ReconnectOptions.After);
+                await ConnectAsync(_mqttOptions);
+            }
 
-            _client.UseDisconnectedHandler(async (data) =>
-           {
-
-               try
-               {
-                   await Task.Delay(reconnectOptions.After);
-                   await Connect(_mqttOptions);
-               }
-
-               catch (Exception ex)
-               {
-                   throw new ReconnectFailedException($"Cannot reconnect to {_mqttOptions.TcpServer}", ex);
-               }
-
-
-           });
+            catch (Exception ex)
+            {
+                throw new ReconnectFailedException($"Cannot reconnect to {_mqttOptions.TcpServer}", ex);
+            }
         }
     }
 }

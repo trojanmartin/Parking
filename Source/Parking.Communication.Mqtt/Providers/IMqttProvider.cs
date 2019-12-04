@@ -8,8 +8,8 @@ namespace Parking.Communication.Mqtt.Library
     public interface IMqttProvider
     {
         event Func<MqttMessage, Task> MessageReceived;
-        Task Connect(MqttOptions options);
-        Task PublishMessage(MqttMessage message);
-        Task Subscribe(string topic, MqttMessageQoS qoS = MqttMessageQoS.AtLeastOnce);
+        Task ConnectAsync(MqttOptions options);
+        Task PublishMessageAsync(MqttMessage message);
+        Task SubscribeAsync(string topic, MqttMessageQoS qoS = MqttMessageQoS.AtLeastOnce);
     }
 }

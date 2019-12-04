@@ -15,9 +15,9 @@ namespace Parking.Communication.Mqtt.Library
             _messageHandler = messageHandler;
         }
 
-        public async Task Execute()
+        public async Task ExecuteAsync()
         {
-            await _messageHandler.BeginListening();
+            await _messageHandler.BeginListeningAsync();
         }
     }
 }

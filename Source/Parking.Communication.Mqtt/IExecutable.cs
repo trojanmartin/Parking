@@ -7,6 +7,6 @@ namespace Parking.Communication.Mqtt.Library
 {
     public interface IExecutable
     {
-        Task Execute();
+        Task ExecuteAsync();
     }
 }

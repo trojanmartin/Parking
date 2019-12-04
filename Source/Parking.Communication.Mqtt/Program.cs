@@ -25,7 +25,7 @@ namespace Parking.Communication.Mqtt.Library
             var provider = services.BuildServiceProvider();
 
             //run application
-            await provider.GetService<Application>().Execute();
+            await provider.GetService<Application>().ExecuteAsync();
         
         }
 
