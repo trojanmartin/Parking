@@ -1,7 +1,9 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
+using MQTTnet.Client.Publishing;
 using MQTTnet.Protocol;
 using Parking.Models.Mqtt;
 using Parking.Models.Mqtt.Options;
@@ -26,29 +28,15 @@ namespace Parking.Communication.Mqtt.Library
         {
 
             var client = new MqttFactory().CreateMqttClient();
-            
+
             _client = client;
 
             _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);
+
             _client.UseDisconnectedHandler(OnDisconnect);
         }
 
-        public async Task ConnectAsync(MqttOptions options)
-        {
-            _mqttOptions = options;
 
-
-            var mqqtOptions = new MqttClientOptionsBuilder()
-                            .WithClientId(_mqttOptions.ClientId)
-                            .WithTcpServer(_mqttOptions.TcpServer, _mqttOptions.Port)
-                            .WithCredentials(_mqttOptions.Username, _mqttOptions.Password)
-                            .WithTls(t => t.UseTls = _mqttOptions.UseTls)
-                            .WithCleanSession(_mqttOptions.CleanSession)
-                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(_mqttOptions.KeepAlive))
-                            .Build();
-
-            var result = await _client.ConnectAsync(mqqtOptions);
-        }
 
 
         //TODO doplnit dalsie data do objektu MqttMessage
@@ -63,7 +51,7 @@ namespace Parking.Communication.Mqtt.Library
             await MessageReceived(newData);
         }
 
-        public async Task PublishMessageAsync(MqttMessage message)
+        public async Task<MqttResponse> PublishMessageAsync(MqttMessage message)
         {
             var mqttMessage = new MqttApplicationMessageBuilder()
                             .WithQualityOfServiceLevel((MqttQualityOfServiceLevel)message.QoS)
@@ -72,6 +60,13 @@ namespace Parking.Communication.Mqtt.Library
                             .Build();
 
             var result = await _client.PublishAsync(mqttMessage, CancellationToken.None);
+
+            var response = new MqttResponse()
+            {
+                ResponseCode = (result.ReasonCode == MqttClientPublishReasonCode.Success) ? MqttResponseCode.Success : MqttResponseCode.Error
+            };
+
+            return response;
         }
 
         /// <summary>
@@ -100,5 +95,38 @@ namespace Parking.Communication.Mqtt.Library
                 throw new ReconnectFailedException($"Cannot reconnect to {_mqttOptions.TcpServer}", ex);
             }
         }
+
+        public async Task DisconnectAsync()
+        {
+            await _client.UnsubscribeAsync();
+            await _client.DisconnectAsync();
+        }
+
+        public async Task<MqttResponse> ConnectAsync(MqttOptions options)
+        { 
+            _mqttOptions = options;
+
+
+            var mqqtOptions = new MqttClientOptionsBuilder()
+                            .WithClientId(_mqttOptions.ClientId)
+                            .WithTcpServer(_mqttOptions.TcpServer, _mqttOptions.Port)
+                            .WithCredentials(_mqttOptions.Username, _mqttOptions.Password)
+                            .WithTls(t => t.UseTls = _mqttOptions.UseTls)
+                            .WithCleanSession(_mqttOptions.CleanSession)
+                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(_mqttOptions.KeepAlive))
+                            .Build();
+
+            var result = await _client.ConnectAsync(mqqtOptions);
+
+            var response = new MqttResponse()
+            {
+                ResponseCode = (result.ResultCode == MqttClientConnectResultCode.Success) ? MqttResponseCode.Success : MqttResponseCode.Error
+            };
+
+
+            return response;
+        }        
+
+     
     }
 }
