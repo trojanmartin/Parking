@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Parking.Communication.Mqtt.Library;
-using Parking.Models.Mqtt;
-using Parking.Models.Mqtt.Options;
+using Parking.Communication.Mqtt.Library.Models;
+using Parking.Communication.Mqtt.Library.Models.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;

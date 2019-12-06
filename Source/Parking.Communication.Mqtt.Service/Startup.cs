@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Parking.Communication.Mqtt.Library;
 using Parking.Communication.Mqtt.Service.Services;
-using Parking.Models.Mqtt.Options;
+using Parking.Communication.Mqtt.Library.Models.Options;
 
 namespace Parking.Communication.Mqtt.Service
 {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Parking.Models.Mqtt;
+using Parking.Communication.Mqtt.Library.Models;
 using System.Threading.Tasks;
-using Parking.Models.Mqtt.Options;
+using Parking.Communication.Mqtt.Library.Models.Options;
 
 namespace Parking.Communication.Mqtt.Library
 {

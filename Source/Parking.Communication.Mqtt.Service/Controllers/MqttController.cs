@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Parking.Communication.Mqtt.Library.Models;
 using Parking.Communication.Mqtt.Service.Services;
 
 namespace Parking.Communication.Mqtt.Service.Controllers
@@ -41,7 +42,7 @@ namespace Parking.Communication.Mqtt.Service.Controllers
         {
             var response = await _mqttService.BeginListeningAsync();
 
-            if (response.ResponseCode == Models.Mqtt.MqttResponseCode.Success)
+            if (response.ResponseCode == MqttResponseCode.Success)
                 return Ok(response);
 
             return BadRequest(response);
@@ -52,7 +53,7 @@ namespace Parking.Communication.Mqtt.Service.Controllers
         {
             var response = await _mqttService.StopListeningAsync();
 
-           if (response.ResponseCode == Models.Mqtt.MqttResponseCode.Success)
+           if (response.ResponseCode == MqttResponseCode.Success)
                 return Ok(response); 
                     
             return BadRequest(response);

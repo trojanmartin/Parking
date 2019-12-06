@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkingService", "ParkingService\ParkingService.csproj", "{035FB829-EC3A-427A-949E-0D8B2297ACEC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Communication.Mqtt.Library", "Parking.Communication.Mqtt\Parking.Communication.Mqtt.Library.csproj", "{6A20E37D-BED9-4C26-AF2C-883C3878430A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Models", "Parking.Models\Parking.Models.csproj", "{6C6A2894-BE78-4FCA-B4DC-E6011DBBBEFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Communication.Mqtt.Service", "Parking.Communication.Mqtt.Service\Parking.Communication.Mqtt.Service.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Communication.Mqtt.Service", "Parking.Communication.Mqtt.Service\Parking.Communication.Mqtt.Service.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Api", "Parking.Api\Parking.Api.csproj", "{26DCB936-4B24-496B-B9D1-82F626AB9207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Core", "Parking.Core\Parking.Core.csproj", "{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,22 +16,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{035FB829-EC3A-427A-949E-0D8B2297ACEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{035FB829-EC3A-427A-949E-0D8B2297ACEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{035FB829-EC3A-427A-949E-0D8B2297ACEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{035FB829-EC3A-427A-949E-0D8B2297ACEC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C6A2894-BE78-4FCA-B4DC-E6011DBBBEFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C6A2894-BE78-4FCA-B4DC-E6011DBBBEFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C6A2894-BE78-4FCA-B4DC-E6011DBBBEFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C6A2894-BE78-4FCA-B4DC-E6011DBBBEFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26DCB936-4B24-496B-B9D1-82F626AB9207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26DCB936-4B24-496B-B9D1-82F626AB9207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26DCB936-4B24-496B-B9D1-82F626AB9207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26DCB936-4B24-496B-B9D1-82F626AB9207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

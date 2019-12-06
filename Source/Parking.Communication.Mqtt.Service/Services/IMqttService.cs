@@ -1,4 +1,4 @@
-﻿using Parking.Models.Mqtt;
+﻿using Parking.Communication.Mqtt.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
