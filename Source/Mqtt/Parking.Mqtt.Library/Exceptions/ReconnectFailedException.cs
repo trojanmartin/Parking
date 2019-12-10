@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Parking.Communication.Mqtt.Library
+namespace Parking.Mqtt.Library
 {
     [Serializable]
     internal class ReconnectFailedException : Exception

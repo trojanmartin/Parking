@@ -5,14 +5,14 @@ using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Publishing;
 using MQTTnet.Protocol;
-using Parking.Communication.Mqtt.Library.Models;
-using Parking.Communication.Mqtt.Library.Models.Options;
+using Parking.Mqtt.Library.Models;
+using Parking.Mqtt.Library.Models.Options;
 using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Parking.Communication.Mqtt.Library
+namespace Parking.Mqtt.Library
 {
     public class MqttProvider : IMqttProvider
     {

@@ -4,13 +4,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- dev
+- mqtt-dev
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  solution: '**/Parking.Communication.Mqtt.Service.csproj'
+  solution: '**/Parking.Mqtt.Api.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 

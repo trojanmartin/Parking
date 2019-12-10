@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
-using Parking.Communication.Mqtt.Library;
-using Parking.Communication.Mqtt.Library.Models;
-using Parking.Communication.Mqtt.Library.Models.Options;
+using Parking.Mqtt.Library;
+using Parking.Mqtt.Library.Models;
+using Parking.Mqtt.Library.Models.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Parking.Communication.Mqtt.Service.Services
+namespace Parking.Mqtt.Service.Services
 {
     public class MqttService : IMqttService
     {
@@ -35,7 +35,7 @@ namespace Parking.Communication.Mqtt.Service.Services
                 
            
         }
-
+         
         //TODO Logovanie
         public async Task<MqttResponse> BeginListeningAsync()
         {

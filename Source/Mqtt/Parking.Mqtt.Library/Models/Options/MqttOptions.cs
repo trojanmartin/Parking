@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Parking.Communication.Mqtt.Library.Models.Options
+namespace Parking.Mqtt.Library.Models.Options
 {
     public class MqttOptions
     {
