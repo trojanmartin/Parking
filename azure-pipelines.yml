@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  project: '**/Parking.Communication.Mqtt.Library.csproj'
+  project: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
