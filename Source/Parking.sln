@@ -2,17 +2,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Library", "Parking.Mqtt.Library\Parking.Mqtt.Library.csproj", "{6A20E37D-BED9-4C26-AF2C-883C3878430A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Library", "Mqtt\Parking.Mqtt.Library\Parking.Mqtt.Library.csproj", "{6A20E37D-BED9-4C26-AF2C-883C3878430A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Api", "Parking.Mqtt.Api\Parking.Mqtt.Api.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Api", "Mqtt\Parking.Mqtt.Api\Parking.Mqtt.Api.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Api", "Parking.Api\Parking.Api.csproj", "{26DCB936-4B24-496B-B9D1-82F626AB9207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Api", "Api\Parking.Api\Parking.Api.csproj", "{26DCB936-4B24-496B-B9D1-82F626AB9207}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Core", "Parking.Core\Parking.Core.csproj", "{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Core", "Api\Parking.Core\Parking.Core.csproj", "{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mqtt", "Mqtt", "{00555AB6-2792-4524-A065-C0F7DFC6E6B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Mqtt.Core", "Parking.Mqtt.Core\Parking.Mqtt.Core.csproj", "{557D65B8-DA55-4F43-BE4C-5605D95B1FD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Mqtt.Core", "Mqtt\Parking.Mqtt.Core\Parking.Mqtt.Core.csproj", "{557D65B8-DA55-4F43-BE4C-5605D95B1FD8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{0BB67A8B-4159-4F56-B24B-C1AAE70FA132}"
 EndProject
