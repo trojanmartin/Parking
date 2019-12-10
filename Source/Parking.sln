@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Library", "Parking.Communication.Mqtt\Parking.Mqtt.Library.csproj", "{6A20E37D-BED9-4C26-AF2C-883C3878430A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Library", "Parking.Mqtt.Library\Parking.Mqtt.Library.csproj", "{6A20E37D-BED9-4C26-AF2C-883C3878430A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Api", "Parking.Communication.Mqtt.Service\Parking.Mqtt.Api.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Api", "Parking.Mqtt.Api\Parking.Mqtt.Api.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Api", "Parking.Api\Parking.Api.csproj", "{26DCB936-4B24-496B-B9D1-82F626AB9207}"
 EndProject

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Parking.Communication.Mqtt\Parking.Mqtt.Library.csproj" />
+    <ProjectReference Include="..\Parking.Mqtt.Library\Parking.Mqtt.Library.csproj" />
   </ItemGroup>
 
 </Project>
