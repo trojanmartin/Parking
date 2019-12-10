@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Parking.Communication.Mqtt.Library.Models;
-using Parking.Communication.Mqtt.Service.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Parking.Communication.Mqtt.Service.Controllers
+namespace Parking.Mqtt.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class MqttController : ControllerBase
     {
-        private readonly IMqttService _mqttService;
+      ////  private readonly IMqttService _mqttService;
 
-        public MqttController(IMqttService mqttService)
-        {
-            _mqttService = mqttService;
-        }
+      //  public MqttController(IMqttService mqttService)
+      //  {
+      //      _mqttService = mqttService;
+      //  }
 
         // GET: api/Mqtt
         [HttpGet]
@@ -38,25 +32,15 @@ namespace Parking.Communication.Mqtt.Service.Controllers
 
         // POST: api/Mqtt
         [HttpPost("listen")]        
-        public async Task<IActionResult> ListenAsync()
+        public async Task ListenAsync()
         {
-            var response = await _mqttService.BeginListeningAsync();
-
-            if (response.ResponseCode == MqttResponseCode.Success)
-                return Ok(response);
-
-            return BadRequest(response);
+          
         }
         
         [HttpPost("stop")]
-        public async Task<IActionResult> StopListening()
+        public async Task StopListening()
         {
-            var response = await _mqttService.StopListeningAsync();
-
-           if (response.ResponseCode == MqttResponseCode.Success)
-                return Ok(response); 
-                    
-            return BadRequest(response);
+           
             
         }
 

@@ -1,19 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Parking.Communication.Mqtt.Library;
-using Parking.Communication.Mqtt.Service.Services;
-using Parking.Communication.Mqtt.Library.Models.Options;
 
-namespace Parking.Communication.Mqtt.Service
+namespace Parking.Mqtt.Service
 {
     public class Startup
     {
@@ -30,10 +21,7 @@ namespace Parking.Communication.Mqtt.Service
             services.AddControllers();
 
 
-            services.AddSingleton<IMqttProvider, MqttProvider>()
-                .AddSingleton<IMqttService, MqttService>()
-                .AddOptions()
-                .Configure<MqttOptions>(Configuration.GetSection("MqttOptions"));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

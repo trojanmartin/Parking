@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Parking.Communication.Mqtt.Library.Models
+namespace Parking.Mqtt.Library.Models
 {
 
     public enum MqttMessageQoS

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Parking.Communication.Mqtt.Library</AssemblyName>
-    <RootNamespace>Parking.Communication.Mqtt.Library</RootNamespace>
+    <AssemblyName>Parking.Mqtt.Library</AssemblyName>
+    <RootNamespace>Parking.Mqtt.Library</RootNamespace>
     <ApplicationIcon />
     <StartupObject />
   </PropertyGroup>

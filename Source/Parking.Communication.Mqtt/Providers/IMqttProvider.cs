@@ -1,9 +1,9 @@
 ﻿using System;
-using Parking.Communication.Mqtt.Library.Models;
+using Parking.Mqtt.Library.Models;
 using System.Threading.Tasks;
-using Parking.Communication.Mqtt.Library.Models.Options;
+using Parking.Mqtt.Library.Models.Options;
 
-namespace Parking.Communication.Mqtt.Library
+namespace Parking.Mqtt.Library
 {
     public interface IMqttProvider
     {
