@@ -1,5 +1,7 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Options;
+using MQTTnet.Protocol;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models.Gateways;
 using Parking.Mqtt.Core.Models.Gateways.Services;
@@ -16,8 +18,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
     public class MqttService : IMqttService
     {
         private readonly IMqttProvider _provider;
-        private readonly IMqttClient _client;
-        public event Func<MqttMessage, Task> MessageReceived;
+        private readonly IMqttClient _client;      
         public event Func<MqttMessage, Task> MessageReceivedAsync;
 
         public MqttService(IMqttProvider provider)
@@ -30,24 +31,44 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         public async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs data)
         {
             var message = Encoding.UTF8.GetString(data.ApplicationMessage.Payload);
-            await MessageReceived(new MqttMessage(message, data.ApplicationMessage.Topic, data.ClientId, !data.ProcessingFailed));
+            await MessageReceivedAsync(new MqttMessage(message, data.ApplicationMessage.Topic, data.ClientId, !data.ProcessingFailed));
         }
 
         
-
-        public Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Tuple<string, MqttQualityOfService>> topics)
+        /// <summary>
+        /// TODO su
+        /// </summary>
+        /// <param name="topics"></param>
+        /// <returns></returns>
+        public async Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Tuple<string, MqttQualityOfService>> topics)
         {
-            throw new NotImplementedException();
+            foreach(var topic in topics)
+            {
+              var result =  await _client.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic.Item1).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.Item2).Build());
+            }
+            //TODO
+            return new MqttListenResponse(new List<string>{ "test"}, "", true);
+          
         }
 
-        public Task<MqttListenResponse> StopListeningAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task StopListeningAsync()=>  await _client.DisconnectAsync();
+        
 
-        public Task<MqttConnectResponse> ConnectAsync(ConnectRequest connectRequest)
+        public async Task<MqttConnectResponse> ConnectAsync(ConnectRequest connectRequest)
         {
-            throw new NotImplementedException();
+            var mqqtOptions = new MqttClientOptionsBuilder()
+                            .WithClientId(connectRequest.ClientId)
+                            .WithTcpServer(connectRequest.TcpServer, connectRequest.Port)
+                            .WithCredentials(connectRequest.Username, connectRequest.Password)
+                            .WithTls(t => t.UseTls = connectRequest.UseTls)
+                            .WithCleanSession(connectRequest.CleanSession)
+                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(connectRequest.KeepAlive))
+                            .Build();
+
+            var result = await _client.ConnectAsync(mqqtOptions);
+
+            //TODO
+            return (result.ResultCode == MQTTnet.Client.Connecting.MqttClientConnectResultCode.Success) ? new MqttConnectResponse(true) : new MqttConnectResponse(false);
         }
     }
 }
