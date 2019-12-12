@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Parking.Mqtt.Core.Interfaces.UseCases
 {
-    interface IListenUseCase : IUseCaseRequestHandler<ListenRequest, ListenResponse>
+    public interface IListenUseCase : IUseCaseRequestHandler<ListenRequest, ListenResponse>
     {
     }
 }

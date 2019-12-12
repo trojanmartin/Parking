@@ -38,13 +38,13 @@ namespace Parking.Mqtt.Core.UseCases
             try
             {
                 var listenResponse = await _mqttService.BeginListeningAsync(request.Topics);
-                await response.CreateResponseAsync(listenResponse.Succes ? new ListenResponse(true) : new ListenResponse(false));
+                response.CreateResponse(listenResponse.Succes ? new ListenResponse(true,listenResponse.Errors) : new ListenResponse(false,listenResponse.Errors));
                 return listenResponse.Succes;
             }
 
             catch(Exception ex)
             {
-                await  response.CreateResponseAsync(new ListenResponse(false));
+                response.CreateResponse(new ListenResponse(false, null, ex.Message));
                 return false;
             }            
         }

@@ -8,13 +8,11 @@ namespace Parking.Mqtt.Core.Models.Gateways
     {
 
         public IEnumerable<string> Topics { get; }
-        
-        public string Url { get; }
 
-        public MqttListenResponse(IEnumerable<string> topics , string url,  bool succes = false, IEnumerable<Error> errors = null) : base(succes, errors)
+
+        public MqttListenResponse(IEnumerable<string> topics, bool succes = false, IEnumerable<Error> errors = null) : base(succes, errors)
         {
             Topics = topics;
-            Url = url;
         }
     }
 }

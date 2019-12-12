@@ -27,7 +27,7 @@ namespace Parking.Mqtt.Core.UseCases
             try
             {
                 var res = await _mqttService.ConnectAsync(request);
-                await response.CreateResponseAsync(new ConnectResponse(res.Succes, res.Errors));
+                response.CreateResponse(new ConnectResponse(res.Succes, res.Errors));
                 return res.Succes;
             }
                                  
@@ -35,7 +35,7 @@ namespace Parking.Mqtt.Core.UseCases
             {
                 var err = new Error("Error while connecting to server", ex.Message);
 
-                await response.CreateResponseAsync(new ConnectResponse(false, new List<Error>() { err }));
+                response.CreateResponse(new ConnectResponse(false, new List<Error>() { err }));
 
                 return false;
             }

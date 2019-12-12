@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Parking.Mqtt.Api.Models.Requests;
+using Parking.Mqtt.Core.Interfaces.Gateways.Services;
+using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
+using Parking.Mqtt.Core.Interfaces.UseCases;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Parking.Mqtt.Api.Presenters;
 
 namespace Parking.Mqtt.Service.Controllers
 {
@@ -9,12 +15,13 @@ namespace Parking.Mqtt.Service.Controllers
     [ApiController]
     public class MqttController : ControllerBase
     {
-      ////  private readonly IMqttService _mqttService;
+        private readonly IListenUseCase _listenUseCase;
+        private readonly ListenPresenter _listenPresenter;
 
-      //  public MqttController(IMqttService mqttService)
-      //  {
-      //      _mqttService = mqttService;
-      //  }
+        public MqttController(IListenUseCase listenUseCase)
+        {
+            _listenUseCase = listenUseCase;
+        }
 
         // GET: api/Mqtt
         [HttpGet]
@@ -31,17 +38,29 @@ namespace Parking.Mqtt.Service.Controllers
         }
 
         // POST: api/Mqtt
-        [HttpPost("listen")]        
-        public async Task ListenAsync()
+        [HttpPost("listen")]
+        public async Task<IActionResult> ListenAsync([FromBody]ListenRequest request)
         {
-          
+
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var topics = new List<Tuple<string, MqttQualityOfService>>();
+
+            foreach (var req in request.Topics)
+            {
+                topics.Add(new Tuple<string, MqttQualityOfService>(req.TopicName, req.QoS));
+            }
+
+            await _listenUseCase.HandleAsync(new Core.Models.UseCaseRequests.ListenRequest(topics), _listenPresenter);
+            return _listenPresenter.Result;
         }
-        
+
         [HttpPost("stop")]
         public async Task StopListening()
         {
-           
-            
+
+
         }
 
         // PUT: api/Mqtt/5
