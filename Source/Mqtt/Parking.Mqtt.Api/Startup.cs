@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FluentValidation.AspNetCore;
 using Parking.Mqtt.Api.Extensions;
 using Parking.Mqtt.Core.Extensions;
 using Parking.Mqtt.Infrastructure.Extensions;
@@ -21,7 +22,7 @@ namespace Parking.Mqtt.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             //adding all services to dependency injection container
             services.AddApiModule()

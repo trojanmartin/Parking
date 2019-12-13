@@ -16,7 +16,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Core", "Mqtt\P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{0BB67A8B-4159-4F56-B24B-C1AAE70FA132}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Mqtt.Infrastructure", "Mqtt\Parking.Mqtt.Infrastructure\Parking.Mqtt.Infrastructure.csproj", "{2ECBA55C-85AC-4C21-9E15-7BA40318A7D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Infrastructure", "Mqtt\Parking.Mqtt.Infrastructure\Parking.Mqtt.Infrastructure.csproj", "{2ECBA55C-85AC-4C21-9E15-7BA40318A7D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{71F2EC10-3B41-4C86-8A8F-A2EE5404AD28}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

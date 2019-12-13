@@ -12,6 +12,7 @@ namespace Parking.Mqtt.Api.Extensions
         public static IServiceCollection AddApiModule(this IServiceCollection service)
         {
             return service.AddTransient<ListenPresenter>()
+                          .AddTransient<ConnectPresenter>()
                            
                            ;
         }
