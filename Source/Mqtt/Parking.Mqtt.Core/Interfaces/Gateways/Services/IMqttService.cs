@@ -11,7 +11,7 @@ namespace Parking.Mqtt.Core.Interfaces.Gateways.Services
     public interface IMqttService
     {
         event Func<MqttMessage, Task> MessageReceivedAsync;
-        Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Tuple<string, MqttQualityOfService>> topics);
+        Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Topic> topics);
         Task<MqttConnectResponse> ConnectAsync(ConnectRequest connectRequest);
         Task StopListeningAsync();
     }

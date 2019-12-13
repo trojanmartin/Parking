@@ -8,14 +8,23 @@ using System.Text;
 namespace Parking.Mqtt.Core.Models.UseCaseRequests
 {
     public class ListenRequest : IRequest<ListenResponse>
-    {      
+    {
 
-        public IEnumerable<Tuple<string, MqttQualityOfService>> Topics { get; }
+        public IEnumerable<Topic> Topics { get; }
 
-        public ListenRequest(IEnumerable<Tuple<string, MqttQualityOfService>> topics)
+        public ListenRequest(IEnumerable<Topic> topics)
         {
             Topics = topics;
         }
 
+        
     }
+
+    public class Topic
+    {
+        public string TopicName { get; set; }
+        public MqttQualityOfService QoS { get; set; }
+    }
+
 }
+

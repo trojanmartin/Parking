@@ -9,7 +9,6 @@ using Parking.Mqtt.Core.Models.Gateways;
 using Parking.Mqtt.Core.Models.Gateways.Services;
 using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
-using Parking.Mqtt.Library;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -42,7 +41,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         /// </summary>
         /// <param name="topics"></param>
         /// <returns></returns>
-        public async Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Tuple<string, MqttQualityOfService>> topics)
+        public async Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Topic> topics)
         {
 
             var returnList = new List<string>();
@@ -53,7 +52,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 
             foreach (var topic in topics)
             {
-                topicBuilder.WithTopic(topic.Item1).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.Item2);
+                topicBuilder.WithTopic(topic.TopicName).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.QoS);
             }
             var result = await _client.SubscribeAsync(topicBuilder.Build());
 

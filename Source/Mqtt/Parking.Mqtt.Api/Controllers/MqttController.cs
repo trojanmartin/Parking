@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Parking.Mqtt.Api.Presenters;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
 using Parking.Mqtt.Api.Routing;
+using System.Linq;
 
 namespace Parking.Mqtt.Service.Controllers
 {
@@ -43,12 +44,19 @@ namespace Parking.Mqtt.Service.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-          var topics = new List<Tuple<string, MqttQualityOfService>>();
+            var topics = new List<Parking.Mqtt.Core.Models.UseCaseRequests.Topic>();
 
-            foreach (var req in request.Topics)
-            {
-                topics.Add(new Tuple<string, MqttQualityOfService>(req.TopicName, req.QoS));
-            }
+            //TODO prerobit cez automapper
+            request.Topics.ToList().ForEach((topic ) =>
+           {
+               var newTopic = new Parking.Mqtt.Core.Models.UseCaseRequests.Topic()
+               {
+                   QoS = (MqttQualityOfService)topic.QoS,
+                   TopicName = topic.TopicName
+               };
+
+               topics.Add(newTopic);
+           });
 
             await _listenUseCase.HandleAsync(new ListenRequest(topics), _listenPresenter);
             return _listenPresenter.Result;

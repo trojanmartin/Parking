@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Library", "Mqtt\Parking.Mqtt.Library\Parking.Mqtt.Library.csproj", "{6A20E37D-BED9-4C26-AF2C-883C3878430A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Api", "Mqtt\Parking.Mqtt.Api\Parking.Mqtt.Api.csproj", "{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Api", "Api\Parking.Api\Parking.Api.csproj", "{26DCB936-4B24-496B-B9D1-82F626AB9207}"
@@ -23,16 +21,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B70E699A-F646-4A12-B4C2-433BF10022F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Mqtt.Api.UnitTests", "Mqtt\Tests\Parking.Mqtt.Api.UnitTests\Parking.Mqtt.Api.UnitTests.csproj", "{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A20E37D-BED9-4C26-AF2C-883C3878430A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,17 +51,22 @@ Global
 		{2ECBA55C-85AC-4C21-9E15-7BA40318A7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ECBA55C-85AC-4C21-9E15-7BA40318A7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ECBA55C-85AC-4C21-9E15-7BA40318A7D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{6A20E37D-BED9-4C26-AF2C-883C3878430A} = {00555AB6-2792-4524-A065-C0F7DFC6E6B0}
 		{D2138B15-FAE2-4EC7-8FD0-34358FE6E4FF} = {00555AB6-2792-4524-A065-C0F7DFC6E6B0}
 		{26DCB936-4B24-496B-B9D1-82F626AB9207} = {0BB67A8B-4159-4F56-B24B-C1AAE70FA132}
 		{2C7608EC-AAB4-4E6E-A623-7A8E6B9B1D87} = {0BB67A8B-4159-4F56-B24B-C1AAE70FA132}
 		{557D65B8-DA55-4F43-BE4C-5605D95B1FD8} = {00555AB6-2792-4524-A065-C0F7DFC6E6B0}
 		{2ECBA55C-85AC-4C21-9E15-7BA40318A7D7} = {00555AB6-2792-4524-A065-C0F7DFC6E6B0}
+		{B70E699A-F646-4A12-B4C2-433BF10022F4} = {00555AB6-2792-4524-A065-C0F7DFC6E6B0}
+		{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8} = {B70E699A-F646-4A12-B4C2-433BF10022F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C7E35B9-DCF1-4F50-9BAA-DF7B5B27C5F5}
