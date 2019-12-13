@@ -19,11 +19,11 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 {
     public class MqttService : IMqttService
     {
-        private readonly IMqttProvider _provider;
+       
         private readonly IMqttClient _client;
         public event Func<MqttMessage, Task> MessageReceivedAsync;
 
-        public MqttService(IMqttProvider provider)
+        public MqttService()
         {
             _client = new MqttFactory().CreateMqttClient();
 
@@ -87,7 +87,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
                             .WithCleanSession(connectRequest.CleanSession)
                             .WithKeepAlivePeriod(TimeSpan.FromSeconds(connectRequest.KeepAlive))
                             .Build();
-
+            
             var result = await _client.ConnectAsync(mqqtOptions);
 
             if (result.ResultCode == MQTTnet.Client.Connecting.MqttClientConnectResultCode.Success)

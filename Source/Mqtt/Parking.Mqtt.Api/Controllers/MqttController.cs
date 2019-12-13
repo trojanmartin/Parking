@@ -18,9 +18,10 @@ namespace Parking.Mqtt.Service.Controllers
         private readonly IListenUseCase _listenUseCase;
         private readonly ListenPresenter _listenPresenter;
 
-        public MqttController(IListenUseCase listenUseCase)
+        public MqttController(IListenUseCase listenUseCase, ListenPresenter listenPresenter)
         {
             _listenUseCase = listenUseCase;
+            _listenPresenter = listenPresenter;
         }
 
         // GET: api/Mqtt
@@ -39,7 +40,7 @@ namespace Parking.Mqtt.Service.Controllers
 
         // POST: api/Mqtt
         [HttpPost("listen")]
-        public async Task<IActionResult> ListenAsync([FromBody]ListenRequest request)
+        public async Task<IActionResult> ListenAsync([FromBody]ListenApiRequest request)
         {
 
             if(!ModelState.IsValid)

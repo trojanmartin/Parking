@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Api.Models.Requests
 {
-    public class ListenRequest
+    public class ListenApiRequest
     {
        public IEnumerable<Topic> Topics { get; set; } 
     }

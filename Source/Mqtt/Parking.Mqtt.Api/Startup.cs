@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Parking.Mqtt.Api.Extensions;
+using Parking.Mqtt.Core.Extensions;
+using Parking.Mqtt.Infrastructure.Extensions;
 
 namespace Parking.Mqtt.Service
 {
@@ -20,7 +23,10 @@ namespace Parking.Mqtt.Service
         {
             services.AddControllers();
 
-
+            //adding all services to dependency injection container
+            services.AddApiModule()
+                    .AddCoreModule()
+                    .AddInfrastructureModule();
             
         }
 

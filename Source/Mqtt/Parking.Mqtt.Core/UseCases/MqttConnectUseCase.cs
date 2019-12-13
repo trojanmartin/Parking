@@ -6,7 +6,6 @@ using Parking.Mqtt.Core.Models.UseCaseRequests;
 using Parking.Mqtt.Core.Models.UseCaseResponses;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Core.UseCases
@@ -27,16 +26,13 @@ namespace Parking.Mqtt.Core.UseCases
             try
             {
                 var res = await _mqttService.ConnectAsync(request);
-                response.CreateResponse(new ConnectResponse(res.Succes, res.Errors));
+                response.CreateResponse(new ConnectResponse(res.Succes, res.Errors, "Succesfully conected to broker"));
                 return res.Succes;
-            }
-                                 
+            }                                 
             catch(Exception ex)
             {
                 var err = new Error("Error while connecting to server", ex.Message);
-
                 response.CreateResponse(new ConnectResponse(false, new List<Error>() { err }));
-
                 return false;
             }
 

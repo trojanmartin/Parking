@@ -1,15 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Parking.Mqtt.Core.Interfaces.UseCases;
+using Parking.Mqtt.Core.UseCases;
 
 namespace Parking.Mqtt.Core.Extensions
 {
     public static class IServiceCollectionExtensions
-    {
+    { 
+
         public static IServiceCollection AddCoreModule(this IServiceCollection service)
         {
-            return service;
+            return service.AddTransient<IConnectUseCase, MqttConnectUseCase>()
+                           .AddTransient<IListenUseCase, MqttListenUseCase>()
+                           ;
         }
     }
 }

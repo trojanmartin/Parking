@@ -17,5 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Parking.Mqtt.Core\Parking.Mqtt.Core.csproj" />
+    <ProjectReference Include="..\Parking.Mqtt.Infrastructure\Parking.Mqtt.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

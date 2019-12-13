@@ -18,8 +18,6 @@ namespace Parking.Mqtt.Core.UseCases
         public MqttListenUseCase(IMqttService mqttService)
         {
             _mqttService = mqttService;
-
-
             _mqttService.MessageReceivedAsync += MessageReceivedHandlerAsync;
         }
 
