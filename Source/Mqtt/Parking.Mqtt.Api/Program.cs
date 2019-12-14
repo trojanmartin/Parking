@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 using System;
 
 namespace Parking.Mqtt.Api
@@ -24,7 +23,7 @@ namespace Parking.Mqtt.Api
             try
             {
                 Log.Information("Starting up");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(args).Build().Run();                
             }
             catch (Exception ex)
             {

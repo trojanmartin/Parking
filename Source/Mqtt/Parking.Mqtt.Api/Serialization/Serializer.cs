@@ -10,11 +10,10 @@ namespace Parking.Mqtt.Api.Serialization
     {
         private static readonly JsonSerializerOptions Settings = new JsonSerializerOptions()
         {
-            WriteIndented = true
+            WriteIndented = false
         };
 
-        public static string SerializeObjectToJson(object o) => JsonSerializer.Serialize(o, Settings);
-       
+        public static string SerializeObjectToJson(object o) => JsonSerializer.Serialize(o, Settings);     
 
     }
 

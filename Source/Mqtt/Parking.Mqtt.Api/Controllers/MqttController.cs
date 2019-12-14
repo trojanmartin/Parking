@@ -40,7 +40,7 @@ namespace Parking.Mqtt.Api.Controllers
 
         
         [HttpPost]
-        [Route(MqttRouting.Listen)]
+        [Route(ApiRouting.Listen)]
         public async Task<IActionResult> ListenAsync([FromBody]ListenApiRequest request)
         {
             _logger.LogInformation("Started proccesing ListenRequest {@ListenRequest}", request);
@@ -51,14 +51,14 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Listen request is valid");
 
-            var topics = new List<Parking.Mqtt.Core.Models.UseCaseRequests.Topic>();
+            var topics = new List<Core.Models.UseCaseRequests.Topic>();
 
             //TODO prerobit cez automapper
-            request.Topics.ToList().ForEach((topic ) =>
+            request?.Topics.ToList().ForEach((topic ) =>
            {
-               var newTopic = new Parking.Mqtt.Core.Models.UseCaseRequests.Topic()
+               var newTopic = new Core.Models.UseCaseRequests.Topic()
                {
-                   QoS = (MqttQualityOfService)topic.QoS,
+                   QoS = topic.QoS,
                    TopicName = topic.TopicName
                };
 
@@ -73,7 +73,7 @@ namespace Parking.Mqtt.Api.Controllers
 
 
         [HttpPost]
-        [Route(MqttRouting.Connect)]
+        [Route(ApiRouting.Connect)]
         public async Task<IActionResult> ConnectAsync([FromBody]ConnectApiRequest request)
         {
             _logger.LogInformation("Started proccesing ConnectRequest {@ConnectRequest}", request);
@@ -84,7 +84,7 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Connect request is valid");
 
-            await _connectUseCase.HandleAsync(new ConnectRequest(request.ClientId, request.TcpServer, request.Port, request.Username, 
+            await _connectUseCase.HandleAsync(new ConnectRequest(request?.ClientId, request.TcpServer, request.Port, request.Username, 
                                                                 request.Password, request.UseTls, request.CleanSession, request.KeepAlive), _connectPresenter);
 
             _logger.LogInformation("Connect request done with content {@result}", _connectPresenter.Result.Content);

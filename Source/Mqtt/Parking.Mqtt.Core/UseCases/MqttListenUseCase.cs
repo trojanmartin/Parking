@@ -39,11 +39,15 @@ namespace Parking.Mqtt.Core.UseCases
             try
             {
                 _logger.LogInformation("Calling mqttService to start listen");
+
                 var listenResponse = await _mqttService.BeginListeningAsync(request.Topics);
                 _logger.LogInformation("MqttService returned {@Response}", listenResponse);
+
                 response.CreateResponse(listenResponse.Succes ? new ListenResponse(true,listenResponse.Errors) : new ListenResponse(false,listenResponse.Errors));
+                
                 if(listenResponse.Succes)
                     _mqttService.MessageReceivedAsync += MessageReceivedHandlerAsync;
+
                 return listenResponse.Succes;
             }
 
