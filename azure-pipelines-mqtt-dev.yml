@@ -39,6 +39,14 @@ steps:
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration)' 
 
+
+- task: DotNetCoreCLI@2
+  displayName: restoreTest
+  inputs:
+    command: 'restore'
+    projects: '$(test)'
+    feedsToUse: 'select'
+
 - task: DotNetCoreCLI@2
   displayName: tests
   inputs:
