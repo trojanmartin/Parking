@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Moq;
 using Parking.Mqtt.Core.Interfaces;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
@@ -14,6 +15,8 @@ namespace Parking.Mqtt.Core.UnitTests
         [Fact]
         public async void MqttConnectUseCase_SuccesfullyConnected_ReturnsTrue()
         {
+            var logger = new Mock<ILogger<MqttConnectUseCase>>().Object;
+
             var mqttMock = new Mock<IMqttService>();
             mqttMock.Setup(x => x.ConnectAsync(It.IsAny<ConnectRequest>()))
                     .Returns(Task.FromResult(new Models.Gateways.Services.Mqtt.MqttConnectResponse(true)));
@@ -21,7 +24,7 @@ namespace Parking.Mqtt.Core.UnitTests
             var output = new Mock<IOutputPort<ConnectResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<ConnectResponse>()));
 
-            var useCase = new MqttConnectUseCase(mqttMock.Object);
+            var useCase = new MqttConnectUseCase(logger,mqttMock.Object);
 
             var result = await useCase.HandleAsync(new Models.UseCaseRequests.ConnectRequest(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>()), output.Object);
 
@@ -31,6 +34,8 @@ namespace Parking.Mqtt.Core.UnitTests
         [Fact]
         public async void MqttConnectUseCase_NotConnected_ReturnsFalse()
         {
+            var logger = new Mock<ILogger<MqttConnectUseCase>>().Object;
+
             var mqttMock = new Mock<IMqttService>();
             mqttMock.Setup(x => x.ConnectAsync(It.IsAny<ConnectRequest>()))
                     .Returns(Task.FromResult(new Models.Gateways.Services.Mqtt.MqttConnectResponse(false)));
@@ -39,7 +44,7 @@ namespace Parking.Mqtt.Core.UnitTests
             output.Setup(x => x.CreateResponse(It.IsAny<ConnectResponse>()));
 
 
-            var useCase = new MqttConnectUseCase(mqttMock.Object);
+            var useCase = new MqttConnectUseCase(logger, mqttMock.Object);
 
             var result = await useCase.HandleAsync(new Models.UseCaseRequests.ConnectRequest("", "", 0, "", "", false, false, 0), output.Object);
 

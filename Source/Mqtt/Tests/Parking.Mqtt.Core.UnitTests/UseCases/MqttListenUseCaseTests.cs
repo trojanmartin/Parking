@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Parking.Mqtt.Core.Interfaces;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
@@ -17,6 +18,8 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
         [Fact]
         public async void MqttListen_SuccessfulyListening_ReturnsTrue()
         {
+            var logger = new Mock<ILogger<MqttListenUseCase>>().Object;
+
             var mqttMock = new Mock<IMqttService>();
 
             mqttMock.Setup(x => x.BeginListeningAsync(It.IsAny<IEnumerable<Topic>>()))
@@ -26,7 +29,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
             var output = new Mock<IOutputPort<ListenResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<ListenResponse>()));
 
-            var useCase = new MqttListenUseCase(mqttMock.Object);
+            var useCase = new MqttListenUseCase(logger,mqttMock.Object);
 
             var result = await useCase.HandleAsync(new ListenRequest(It.IsAny<IEnumerable<Topic>>()), output.Object);
 
@@ -36,6 +39,8 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
         [Fact]
         public async void MqttListen_UnSuccessfulyListening_ReturnsFalse()
         {
+            var logger = new Mock<ILogger<MqttListenUseCase>>().Object;
+
             var mqttMock = new Mock<IMqttService>();
 
             mqttMock.Setup(x => x.BeginListeningAsync(It.IsAny<IEnumerable<Topic>>()))
@@ -45,7 +50,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
             var output = new Mock<IOutputPort<ListenResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<ListenResponse>()));
 
-            var useCase = new MqttListenUseCase(mqttMock.Object);
+            var useCase = new MqttListenUseCase(logger,mqttMock.Object);
 
             var result = await useCase.HandleAsync(new ListenRequest(It.IsAny<IEnumerable<Topic>>()), output.Object);
 

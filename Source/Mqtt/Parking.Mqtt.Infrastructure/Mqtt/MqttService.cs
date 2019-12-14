@@ -1,4 +1,5 @@
-﻿using MQTTnet;
+﻿using Microsoft.Extensions.Logging;
+using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Subscribing;
@@ -30,7 +31,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         }
 
         public async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs data)
-        {
+        {            
             var message = Encoding.UTF8.GetString(data.ApplicationMessage.Payload);
             await MessageReceivedAsync(new MqttMessage(message, data.ApplicationMessage.Topic, data.ClientId, !data.ProcessingFailed));
         }
