@@ -33,13 +33,12 @@ steps:
     projects: '$(solution)'
     feedsToUse: 'select'
 
-
 - task: DotNetCoreCLI@2
-  displayName: Publish
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: '$(solution)'
+    arguments: '-o $(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: CoreTest
