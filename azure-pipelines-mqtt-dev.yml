@@ -11,6 +11,7 @@ pool:
 
 variables:
   solution: '**/Parking.Mqtt.Api.csproj'
+  test: '**/Parking.Mqtt.Api.UnitTests.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -25,9 +26,10 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: DotNetCoreCLI@2
+  displayName: restore
   inputs:
     command: 'restore'
-    projects: '$(solution)'
+    projects: '$(Solution)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
@@ -38,7 +40,8 @@ steps:
     arguments: '--configuration $(buildConfiguration)' 
 
 - task: DotNetCoreCLI@2
+  displayName: tests
   inputs:
     command: test
-    projects: '$(solution)'
+    projects: '$(test)'
     arguments: '--configuration $(buildConfiguration)'
