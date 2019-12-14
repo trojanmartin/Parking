@@ -30,15 +30,16 @@ steps:
   displayName: restore
   inputs:
     command: 'restore'
-    projects: '$(Solution)'
+    projects: '$(solution)'
     feedsToUse: 'select'
 
+
 - task: DotNetCoreCLI@2
-  displayName: Build
+  displayName: Publish
   inputs:
-    command: build
+    command: 'publish'
+    publishWebProjects: false
     projects: '$(solution)'
-    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: CoreTest
