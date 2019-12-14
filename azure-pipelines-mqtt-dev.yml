@@ -41,15 +41,21 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: tests
+  displayName: CoreTest
   inputs:
     command: test
     projects: '$(coreTests)'
     arguments: '--configuration $(buildConfiguration)' 
 
 - task: DotNetCoreCLI@2
-  displayName: tests
+  displayName: ApiTest
   inputs:
     command: test
     projects: '$(apiTests)'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'mqtt-dev'
+    publishLocation: 'pipeline'
