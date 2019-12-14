@@ -55,7 +55,3 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifact: 'mqtt-dev'
-    publishLocation: 'pipeline'
