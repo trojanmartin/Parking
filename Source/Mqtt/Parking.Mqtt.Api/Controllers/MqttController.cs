@@ -12,7 +12,7 @@ using Parking.Mqtt.Core.Models.UseCaseRequests;
 using Parking.Mqtt.Api.Routing;
 using System.Linq;
 
-namespace Parking.Mqtt.Service.Controllers
+namespace Parking.Mqtt.Api.Controllers
 {
     
     [ApiController]

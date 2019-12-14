@@ -8,7 +8,7 @@ using Parking.Mqtt.Api.Extensions;
 using Parking.Mqtt.Core.Extensions;
 using Parking.Mqtt.Infrastructure.Extensions;
 
-namespace Parking.Mqtt.Service
+namespace Parking.Mqtt.Api
 {
     public class Startup
     {

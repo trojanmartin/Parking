@@ -11,7 +11,8 @@ pool:
 
 variables:
   solution: '**/Parking.Mqtt.Api.csproj'
-  test: '**/Parking.Mqtt.Api.UnitTests.csproj'
+  apiTests: '**/Parking.Mqtt.Api.UnitTests.csproj'
+  coreTests: '**/Parking.Mqtt.Core.UnitTests.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -37,11 +38,18 @@ steps:
   inputs:
     command: build
     projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: tests
+  inputs:
+    command: test
+    projects: '$(coreTests)'
     arguments: '--configuration $(buildConfiguration)' 
 
 - task: DotNetCoreCLI@2
   displayName: tests
   inputs:
     command: test
-    projects: '$(test)'
+    projects: '$(apiTests)'
     arguments: '--configuration $(buildConfiguration)'

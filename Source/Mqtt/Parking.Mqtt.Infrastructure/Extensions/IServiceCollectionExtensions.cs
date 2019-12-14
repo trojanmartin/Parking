@@ -11,7 +11,7 @@ namespace Parking.Mqtt.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructureModule(this IServiceCollection service)
         {
-            return service.AddTransient<IMqttService,MqttService>()
+            return service.AddSingleton<IMqttService,MqttService>()
 
                            ;
         }

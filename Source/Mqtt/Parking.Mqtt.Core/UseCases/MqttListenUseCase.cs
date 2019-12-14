@@ -18,14 +18,13 @@ namespace Parking.Mqtt.Core.UseCases
         public MqttListenUseCase(IMqttService mqttService)
         {
             _mqttService = mqttService;
-            _mqttService.MessageReceivedAsync += MessageReceivedHandlerAsync;
+           
         }
 
         private async Task MessageReceivedHandlerAsync(MqttMessage data)
         {
-            await Task.Run(() =>
+            await Task.Run(()  =>
            {
-
                Console.WriteLine(data.Message);
                Console.WriteLine(data.ClientId);
            });
@@ -37,6 +36,9 @@ namespace Parking.Mqtt.Core.UseCases
             {
                 var listenResponse = await _mqttService.BeginListeningAsync(request.Topics);
                 response.CreateResponse(listenResponse.Succes ? new ListenResponse(true,listenResponse.Errors) : new ListenResponse(false,listenResponse.Errors));
+
+                if(listenResponse.Succes)
+                    _mqttService.MessageReceivedAsync += MessageReceivedHandlerAsync;
                 return listenResponse.Succes;
             }
 

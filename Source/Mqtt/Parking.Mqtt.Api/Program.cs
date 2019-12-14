@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Parking.Mqtt.Service
+namespace Parking.Mqtt.Api
 {
     public class Program
     {
