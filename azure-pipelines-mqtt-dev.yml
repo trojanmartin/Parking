@@ -30,26 +30,32 @@ steps:
   displayName: restore
   inputs:
     command: 'restore'
-    projects: '$(Solution)'
+    projects: '$(solution)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
-  displayName: Build
   inputs:
-    command: build
+    command: 'publish'
+    publishWebProjects: false
     projects: '$(solution)'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '-o $(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
-  displayName: tests
+  displayName: CoreTest
   inputs:
     command: test
     projects: '$(coreTests)'
     arguments: '--configuration $(buildConfiguration)' 
 
 - task: DotNetCoreCLI@2
-  displayName: tests
+  displayName: ApiTest
   inputs:
     command: test
     projects: '$(apiTests)'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
