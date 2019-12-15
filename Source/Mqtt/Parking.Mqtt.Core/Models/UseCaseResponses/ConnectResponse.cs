@@ -7,7 +7,7 @@ namespace Parking.Mqtt.Core.Models.UseCaseResponses
 {
     public class ConnectResponse : UseCaseResponseMessage
     {
-        IEnumerable<Error> Errors { get; }
+        public IEnumerable<Error> Errors { get; }
 
         public ConnectResponse(bool succes = false, IEnumerable <Error> errors = null, string message = null) : base(succes, message)
         {

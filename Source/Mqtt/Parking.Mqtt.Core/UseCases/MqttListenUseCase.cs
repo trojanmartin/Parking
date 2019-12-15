@@ -6,13 +6,11 @@ using Parking.Mqtt.Core.Models.Gateways.Services;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
 using Parking.Mqtt.Core.Models.UseCaseResponses;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Core.UseCases
 {
-    public class MqttListenUseCase : IListenUseCase, IMessageListener
+    public class MqttListenUseCase : IListenUseCase
     {
         private readonly IMqttService _mqttService;
         private readonly ILogger _logger;

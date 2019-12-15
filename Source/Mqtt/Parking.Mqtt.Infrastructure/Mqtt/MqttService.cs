@@ -71,7 +71,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 
 
 
-        public async Task StopListeningAsync() => await _client.DisconnectAsync();
+        public async Task DisconnectAsync() => await _client.DisconnectAsync();
 
 
         public async Task<MqttConnectResponse> ConnectAsync(ConnectRequest connectRequest)

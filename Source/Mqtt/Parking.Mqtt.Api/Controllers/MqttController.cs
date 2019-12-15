@@ -23,9 +23,13 @@ namespace Parking.Mqtt.Api.Controllers
         private readonly IConnectUseCase _connectUseCase;
         private readonly ConnectPresenter _connectPresenter;
 
+        private readonly IDisconnectUseCase _disconnectUseCase;
+        private readonly DisconnectPresenter _disconnectPresenter;
+
         private readonly ILogger _logger;
 
-        public MqttController(ILogger<MqttController> logger,IListenUseCase listenUseCase, ListenPresenter listenPresenter, IConnectUseCase connectUseCase, ConnectPresenter connectPresenter)
+        public MqttController(ILogger<MqttController> logger,IListenUseCase listenUseCase, ListenPresenter listenPresenter, IConnectUseCase connectUseCase, 
+                                ConnectPresenter connectPresenter, IDisconnectUseCase disconnectUseCase, DisconnectPresenter disconnectPresenter)
         {
             _logger = logger;
 
@@ -34,6 +38,9 @@ namespace Parking.Mqtt.Api.Controllers
 
             _connectUseCase = connectUseCase;
             _connectPresenter = connectPresenter;
+
+            _disconnectUseCase = disconnectUseCase;
+            _disconnectPresenter = disconnectPresenter;
         }
 
         
@@ -90,6 +97,23 @@ namespace Parking.Mqtt.Api.Controllers
             _logger.LogInformation("Connect request done with content {@result}", _connectPresenter.Result.Content);
 
             return _connectPresenter.Result;
+        }
+
+        [HttpPost]
+        [Route(ApiRouting.Disconnect)]
+        public async Task<IActionResult> DisconnectAsync()
+        {
+            _logger.LogInformation("Started proccesing DisconnectRequest");
+
+            //TODO validacia null
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            _logger.LogInformation("Disconnect request is valid");
+
+            await _disconnectUseCase.HandleAsync(new DisconnectRequest(), _disconnectPresenter);
+
+            return _disconnectPresenter.Result;
         }
     }
 }

@@ -10,13 +10,16 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Api.Presenters
 {
-    public class ListenPresenter : BasePresenter, IOutputPort<ListenResponse>
+    public class DisconnectPresenter : BasePresenter, IOutputPort<DisconnectResponse>
     {
+        public DisconnectPresenter()
+        {
+        }
 
-        public void CreateResponse(ListenResponse response)
+        public void CreateResponse(DisconnectResponse response)
         {
             Result.Content = Serializer.SerializeObjectToJson(response);
-            Result.StatusCode = (int)((bool)response?.Success ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
+            Result.StatusCode = (int)(response.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError); 
         }
     }
 }

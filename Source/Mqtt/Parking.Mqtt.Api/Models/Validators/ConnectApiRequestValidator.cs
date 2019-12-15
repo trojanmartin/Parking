@@ -13,7 +13,7 @@ namespace Parking.Mqtt.Api.Models.Validators
         {
             RuleFor(x => x.TcpServer).NotEmpty().NotNull();
             RuleFor(x => x.Port).NotEmpty().NotNull();
-            RuleFor(x => x.UseTls).NotEmpty().NotNull();           
+            RuleFor(x => x.UseTls).Must(x => x == false || x == true);
         }
     }
 }

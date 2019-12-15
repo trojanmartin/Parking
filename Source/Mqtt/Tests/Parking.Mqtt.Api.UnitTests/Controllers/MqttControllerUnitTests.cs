@@ -87,7 +87,7 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
         }
 
         [Fact]
-        public async void Connnect_ReturnsBadReques_UseCase_Fails()
+        public async void Connnect_ReturnsBadRequest_UseCase_Fails()
         {
             var logger = new Mock<ILogger<MqttConnectUseCase>>().Object;
 
@@ -119,9 +119,14 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
         public IConnectUseCase ConnectUseCase { get; set; } = new Mock<IConnectUseCase>().Object;
         public ConnectPresenter ConnectPresenter { get; set; } = new Mock<ConnectPresenter>().Object;
 
+        public IDisconnectUseCase DisconnectUseCase { get; set; } = new Mock<IDisconnectUseCase>().Object;
+        public DisconnectPresenter DisconnectPresenter { get; set; } = new Mock<DisconnectPresenter>().Object;
+
+
+
         public MqttController Build()
         {
-            return new MqttController(Logger,ListenUseCase, ListenPresenter, ConnectUseCase, ConnectPresenter);
+            return new MqttController(Logger,ListenUseCase, ListenPresenter, ConnectUseCase, ConnectPresenter, DisconnectUseCase, DisconnectPresenter);
         }
     }
 }
