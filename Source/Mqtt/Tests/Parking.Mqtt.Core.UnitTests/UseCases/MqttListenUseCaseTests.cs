@@ -56,5 +56,23 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             Assert.False(result);
         }
+
+        [Fact]
+        public async void MqttListen_ServiceThrowsException_ReturnsFalse()
+        {
+            var mqttMock = new Mock<IMqttService>();
+
+            mqttMock.Setup(x => x.BeginListeningAsync(It.IsAny<IEnumerable<Topic>>()))
+                    .Throws(new Exception());
+
+            var output = new Mock<IOutputPort<ListenResponse>>();
+            output.Setup(x => x.CreateResponse(It.IsAny<ListenResponse>()));
+
+            var useCase = new MqttListenUseCase(Log.FakeLogger<MqttListenUseCase>(), mqttMock.Object);
+
+            var result = await useCase.HandleAsync(new ListenRequest(It.IsAny<IEnumerable<Topic>>()), output.Object);
+
+            Assert.False(result);
+        }
     }
 }

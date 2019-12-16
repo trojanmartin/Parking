@@ -55,11 +55,6 @@ namespace Parking.Mqtt.Core.UseCases
                 response.CreateResponse(new ListenResponse(false, null, ex.Message));
                 return false;
             }            
-        }
-
-        public Task HandleAsync(MqttMessage message, IOutputPort<MqttMessage> response = null)
-        {
-            throw new NotImplementedException();
-        }
+        }        
     }
 }

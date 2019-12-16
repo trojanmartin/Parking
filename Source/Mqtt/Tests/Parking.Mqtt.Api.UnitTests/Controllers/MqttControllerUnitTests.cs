@@ -10,6 +10,7 @@ using Parking.Mqtt.Core.Models.Gateways;
 using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
 using Parking.Mqtt.Core.UseCases;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             }.Build();
             
             //act 
-            var result = await controller.ListenAsync(new Models.Requests.ListenApiRequest() { Topics = new List<Parking.Mqtt.Api.Models.Requests.Topic>() { new Models.Requests.Topic() { TopicName = "topic", QoS = MqttQualityOfService.AtLeastOnce } } });
+            var result = await controller.ListenAsync(new ListenApiRequest() { Topics = new List<Parking.Mqtt.Api.Models.Requests.Topic>() { new Models.Requests.Topic() { TopicName = "topic", QoS = MqttQualityOfService.AtLeastOnce } } });
 
             //assert
             var code = ((ContentResult)result).StatusCode;
@@ -107,6 +108,48 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             Assert.True(resultCode.HasValue && resultCode == (int)HttpStatusCode.BadRequest);
         }
 
+        [Fact]
+        public async void Disconnect_ReturnsInternalServerError_UseCase_Fails()
+        {
+
+            var mqttMock = new Mock<IMqttService>();
+            mqttMock.Setup(x => x.DisconnectAsync())
+                    .Throws(new Exception());
+
+
+            var controller = new FakeMqttController()
+            {
+                DisconnectUseCase = new MqttDisconnectUseCase(Log.FakeLogger<MqttDisconnectUseCase>(), mqttMock.Object)
+            }.Build();
+
+            var result = await controller.DisconnectAsync();
+
+
+            var resultCode = ((ContentResult)result).StatusCode;
+
+            Assert.True(resultCode.HasValue && resultCode == (int)HttpStatusCode.InternalServerError);
+        }
+
+
+        [Fact]
+        public async void Disconnect_ReturnsOk_UseCase_Succeeds()
+        {
+
+            var mqttMock = new Mock<IMqttService>();
+            mqttMock.Setup(x => x.DisconnectAsync());                                
+
+            var controller = new FakeMqttController()
+            {
+                DisconnectUseCase = new MqttDisconnectUseCase(Log.FakeLogger<MqttDisconnectUseCase>(), mqttMock.Object)
+            }.Build();
+
+            var result = await controller.DisconnectAsync();
+
+            var resultCode = ((ContentResult)result).StatusCode;
+
+            Assert.True(resultCode.HasValue && resultCode == (int)HttpStatusCode.OK);
+        }
+
     }
 
     internal class FakeMqttController
@@ -118,7 +161,6 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
 
         public IConnectUseCase ConnectUseCase { get; set; } = new Mock<IConnectUseCase>().Object;
         public ConnectPresenter ConnectPresenter { get; set; } = new Mock<ConnectPresenter>().Object;
-
         public IDisconnectUseCase DisconnectUseCase { get; set; } = new Mock<IDisconnectUseCase>().Object;
         public DisconnectPresenter DisconnectPresenter { get; set; } = new Mock<DisconnectPresenter>().Object;
 

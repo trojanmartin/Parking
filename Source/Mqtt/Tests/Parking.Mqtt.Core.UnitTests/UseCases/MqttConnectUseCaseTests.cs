@@ -5,6 +5,7 @@ using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
 using Parking.Mqtt.Core.Models.UseCaseResponses;
 using Parking.Mqtt.Core.UseCases;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -46,7 +47,25 @@ namespace Parking.Mqtt.Core.UnitTests
 
             var useCase = new MqttConnectUseCase(logger, mqttMock.Object);
 
-            var result = await useCase.HandleAsync(new Models.UseCaseRequests.ConnectRequest("", "", 0, "", "", false, false, 0), output.Object);
+            var result = await useCase.HandleAsync(It.IsAny<ConnectRequest>(), output.Object);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async void MqttConnectUseCase_ServiceThrowsExceptions_ReturnsFalse()
+        {
+            var mqttMock = new Mock<IMqttService>();
+            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<ConnectRequest>()))
+                    .Throws(new Exception());
+                  
+
+            var output = new Mock<IOutputPort<ConnectResponse>>();
+            output.Setup(x => x.CreateResponse(It.IsAny<ConnectResponse>()));
+
+            var useCase = new MqttConnectUseCase(Log.FakeLogger<MqttConnectUseCase>(), mqttMock.Object);
+
+            var result = await useCase.HandleAsync(It.IsAny<ConnectRequest>(), output.Object);
 
             Assert.False(result);
         }
