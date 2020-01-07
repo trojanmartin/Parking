@@ -11,6 +11,7 @@ pool:
 
 variables:
   solution: '**/Parking.Mqtt.Api.csproj'
+
   apiTests: '**/Parking.Mqtt.Api.UnitTests.csproj'
   coreTests: '**/Parking.Mqtt.Core.UnitTests.csproj'
   buildPlatform: 'Any CPU'
