@@ -7,6 +7,6 @@ namespace Parking.Mqtt.Core.Interfaces
 {
     public interface IOutputPort<TResponse>
     {
-        Task Handle(TResponse response);
+        void CreateResponse(TResponse response);
     }
 }

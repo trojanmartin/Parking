@@ -11,7 +11,9 @@ pool:
 
 variables:
   solution: '**/Parking.Mqtt.Api.csproj'
-  test: '**/Parking.Mqtt.Api.UnitTests.csproj'
+
+  apiTests: '**/Parking.Mqtt.Api.UnitTests.csproj'
+  coreTests: '**/Parking.Mqtt.Core.UnitTests.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -29,19 +31,32 @@ steps:
   displayName: restore
   inputs:
     command: 'restore'
-    projects: '$(Solution)'
+    projects: '$(solution)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
-  displayName: Build
   inputs:
-    command: build
+    command: 'publish'
+    publishWebProjects: false
     projects: '$(solution)'
+    arguments: '-o $(build.artifactstagingdirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: CoreTest
+  inputs:
+    command: test
+    projects: '$(coreTests)'
     arguments: '--configuration $(buildConfiguration)' 
 
 - task: DotNetCoreCLI@2
-  displayName: tests
+  displayName: ApiTest
   inputs:
     command: test
-    projects: '**/Parking.Mqtt.Api.UnitTests.csproj'
+    projects: '$(apiTests)'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
