@@ -2,6 +2,7 @@
 using Parking.Core.Interfaces.Base;
 using Parking.Core.Interfaces.Gateways.Repositories;
 using Parking.Core.Interfaces.Gateways.Services;
+using Parking.Core.Interfaces.UseCases;
 using Parking.Core.Models;
 using Parking.Core.Models.UseCaseRequests;
 using Parking.Core.Models.UseCaseResponses;
@@ -12,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Parking.Core.UseCases
 {
-    public class LoginUseCaseILoginUseCase
+    public class LoginUseCase : ILoginUseCase
     {
 
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenFactory _jwtFactory;
 
-        public LoginUseCaseILoginUseCase(IUserRepository userRepository, IJwtTokenFactory jwtFactory)
+        public LoginUseCase(IUserRepository userRepository, IJwtTokenFactory jwtFactory)
         {
             _userRepository = userRepository;
             _jwtFactory = jwtFactory;
@@ -43,7 +44,6 @@ namespace Parking.Core.UseCases
                     }
                 }
             }
-
             response.CreateResponse(new LoginResponse(new[] { new Error("login_failure", "Username or password is invalid") }));
             return false;
         }
