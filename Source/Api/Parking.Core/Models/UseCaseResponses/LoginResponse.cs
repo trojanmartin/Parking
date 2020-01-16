@@ -7,8 +7,19 @@ namespace Parking.Core.Models.UseCaseResponses
 {
     public class LoginResponse : UseCaseResponseMessage
     {
-        public LoginResponse(bool success = false, string message = null) : base(success, message)
+
+        public Token Token { get; }
+
+        public IEnumerable<Error> Errors { get; }
+
+        public LoginResponse(Token token,bool success = false, string message = null) : base(success, message)
         {
+            Token = token;
+        }
+
+        public LoginResponse(IEnumerable<Error> errors, bool success = false, string message = null) : base(success, message)
+        {
+            Errors = errors;
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Parking.Core.Models.UseCaseResponses
 {
     public class RegisterResponse : UseCaseResponseMessage
     {
+
         public RegisterResponse(bool success = false, string message = null) : base(success, message)
         {
         }
