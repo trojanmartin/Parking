@@ -1,4 +1,5 @@
 ﻿using Parking.Core.Models;
+using Parking.Core.Models.Gateways.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Parking.Core.Interfaces.Gateways.Repositories
 {
     public interface IUserRepository
     {
-        Task CreateUser(User user, string password);
+        Task<CreateUserResponse> CreateUser(User user, string password);
 
         Task<User> FindByName(string username);
 

@@ -39,7 +39,7 @@ namespace Parking.Core.UseCases
 
                         var token = await _jwtFactory.GenerateToken(user.Id, user.UserName);
 
-                        response.CreateResponse(new LoginResponse(token, true));
+                        response.CreateResponse(new LoginResponse(user,token, true));
                         return true;
                     }
                 }

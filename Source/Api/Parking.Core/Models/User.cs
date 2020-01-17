@@ -13,7 +13,7 @@ namespace Parking.Core.Models
         public string UserName { get; }
         public string PasswordHash { get; }
 
-        public User(string id, string firstName, string lastName, string email, string userName, string passwordHash)
+        public User(string firstName, string lastName, string email, string userName, string passwordHash= null, string id = null)
         {
             Id = id;
             FirstName = firstName;

@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Core.UnitTests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32F957AC-652E-4658-B02F-888C1FC4D9B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Core.UnitTests", "Api\Tests\Parking.Core.UnitTests\Parking.Core.UnitTests.csproj", "{7B731A21-A961-477D-BE67-AEA392ED5553}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Core.UnitTests", "Api\Tests\Parking.Core.UnitTests\Parking.Core.UnitTests.csproj", "{7B731A21-A961-477D-BE67-AEA392ED5553}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Infrastructure", "Api\Parking.Infrastructure\Parking.Infrastructure.csproj", "{4AC31005-9FF8-4CFF-9BB6-55D786BDCC85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{7B731A21-A961-477D-BE67-AEA392ED5553}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B731A21-A961-477D-BE67-AEA392ED5553}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B731A21-A961-477D-BE67-AEA392ED5553}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AC31005-9FF8-4CFF-9BB6-55D786BDCC85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AC31005-9FF8-4CFF-9BB6-55D786BDCC85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AC31005-9FF8-4CFF-9BB6-55D786BDCC85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AC31005-9FF8-4CFF-9BB6-55D786BDCC85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{430FC3F3-7BFE-4912-965A-8BA98AF39FB3} = {B70E699A-F646-4A12-B4C2-433BF10022F4}
 		{32F957AC-652E-4658-B02F-888C1FC4D9B0} = {0BB67A8B-4159-4F56-B24B-C1AAE70FA132}
 		{7B731A21-A961-477D-BE67-AEA392ED5553} = {32F957AC-652E-4658-B02F-888C1FC4D9B0}
+		{4AC31005-9FF8-4CFF-9BB6-55D786BDCC85} = {0BB67A8B-4159-4F56-B24B-C1AAE70FA132}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C7E35B9-DCF1-4F50-9BAA-DF7B5B27C5F5}
