@@ -1,0 +1,56 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- api-dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  solution: '**/Parking.Api.csproj'
+
+  apiTests: '**/Parking.Api.UnitTests.csproj'
+  coreTests: '**/Parking.Core.UnitTests.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: sdk
+    version: 3.1.100
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: NuGetToolInstaller@1
+
+- task: DotNetCoreCLI@2
+  displayName: restore
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(solution)'
+    arguments: '-o $(build.artifactstagingdirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: CoreTest
+  inputs:
+    command: test
+    projects: '$(coreTests)'
+    arguments: '--configuration $(buildConfiguration)' 
+
+- task: DotNetCoreCLI@2
+  displayName: ApiTest
+  inputs:
+    command: test
+    projects: '$(apiTests)'
+    arguments: '--configuration $(buildConfiguration)'
