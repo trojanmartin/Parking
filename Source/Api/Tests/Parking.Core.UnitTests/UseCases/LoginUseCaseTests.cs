@@ -9,6 +9,7 @@ using Parking.Core.Models.UseCaseResponses;
 using Parking.Core.UseCases;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -90,22 +91,12 @@ namespace Parking.Core.UnitTests.UseCases
 
             userRepo.Setup(x => x.CheckPassword(It.IsAny<User>(), It.IsAny<string>()))
                     .Returns(Task
-                    .FromResult(true));
-
-
-            var jwtToken = new Mock<IJwtTokenFactory>();
-
-
-            var token = new Token("id", "token", 55);
-
-            jwtToken.Setup(x => x.GenerateToken(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(Task.FromResult(token));
+                    .FromResult(true));            
 
 
             var useCase = new LoginUseCaseBuilder()
             {
-                UserRepository = userRepo.Object,
-                JwtTokenFactory = jwtToken.Object
+                UserRepository = userRepo.Object                
             }.Build();
 
             var outputPort = new Mock<IOutputPort<LoginResponse>>();
@@ -115,6 +106,30 @@ namespace Parking.Core.UnitTests.UseCases
             outputPort.Verify(x => x.CreateResponse(It.IsAny<LoginResponse>()));          
                     
             Assert.True(result);
+        }
+
+        [Fact]
+        public async void LoginUseCase_RepoThrowsUnexpectedException_UseCaseReturnTrue()
+        {
+            var userRepo = new Mock<IUserRepository>();
+            userRepo.Setup(x => x.FindByName(It.IsAny<string>()))
+                .Returns(Task.FromResult(It.IsAny<User>()));
+
+            userRepo.Setup(x => x.CheckPassword(It.IsAny<User>(), It.IsAny<string>()))
+                  .Throws(new Exception());
+
+
+            var useCase = new LoginUseCaseBuilder()
+            {
+                UserRepository = userRepo.Object
+            }.Build();
+
+            var outputPort = new Mock<IOutputPort<LoginResponse>>();
+
+            var result = await useCase.HandleAsync(It.IsAny<LoginRequest>(), outputPort.Object);
+
+            outputPort.Verify(x => x.CreateResponse(It.Is<LoginResponse>(x => x.Success == false && x.Errors.Any())));
+            Assert.False(result);
         }
 
 
@@ -129,6 +144,6 @@ namespace Parking.Core.UnitTests.UseCases
         public IJwtTokenFactory JwtTokenFactory { get; set; } = new Mock<IJwtTokenFactory>().Object;
 
 
-        public ILoginUseCase Build() => new LoginUseCase(UserRepository, JwtTokenFactory);
+        public ILoginUseCase Build() => new LoginUseCase(Log.FakeLogger<LoginUseCase>(),UserRepository, JwtTokenFactory);
     }
 }
