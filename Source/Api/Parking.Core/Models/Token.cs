@@ -8,13 +8,13 @@ namespace Parking.Core.Models
     {
         public string Id { get; }
         public string AuthToken { get; }
-        public int ExpiresIn { get; }
+        public DateTime Expires{ get; }
 
-        public Token(string id, string authToken, int expiresIn)
+        public Token(string id, string authToken, DateTime expires)
         {
             Id = id;
             AuthToken = authToken;
-            ExpiresIn = expiresIn;
+            Expires = expires;
         }
     }
 }

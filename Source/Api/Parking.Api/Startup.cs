@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,12 +7,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Parking.Api.Extensions;
 using Parking.Core.Extensions;
+using Parking.Infrastructure.Auth;
 using Parking.Infrastructure.Data.EntityFramework;
 using Parking.Infrastructure.Extensions;
 using Parking.Infrastructure.Identity;
 using System;
+using System.Text;
 
 namespace Parking.Api
 {
@@ -32,6 +36,10 @@ namespace Parking.Api
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
 
+            //configure options for jwt 
+            services.Configure<JwtTokenOptions>(Configuration);
+           
+
             //adding all requested module for application
             services.AddApiModule()
                     .AddCoreModule()
@@ -41,23 +49,43 @@ namespace Parking.Api
             // Adds scoped classes for things like UserManager, SignInManager, PasswordHashers etc..
             // NOTE: Automatically adds the validated user from a cookie to the HttpContext.User
             // https://github.com/aspnet/Identity/blob/85f8a49aef68bf9763cd9854ce1dd4a26a7c5d3c/src/Identity/IdentityServiceCollectionExtensions.cs
-            services.AddIdentity<AppUser, IdentityRole>()
-
+            services.AddIdentity<AppUser, IdentityRole>( options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            })
                 // Adds UserStore and RoleStore from this context
                 // That are consumed by the UserManager and RoleManager               
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-
                 // Adds a provider that generates unique keys and hashes for things like
                 // forgot password links, phone number verification codes etc...
                 .AddDefaultTokenProviders();
 
 
-            services.AddAuthentication()
-                    .AddJwtBearer(options =>
-                    {
-                        
-                    }
-                    );
+            //configure JWt token Authentication
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
+            ).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = Configuration["JwtToken:Issuer"],
+                    ValidAudience = Configuration["JwtToken:Audience"],
+
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"])),
+                };
+            });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }

@@ -10,6 +10,10 @@ namespace Parking.Api
     {
         public static void Main(string[] args)
         {
+
+            var hash = Convert.FromBase64String("AQAAAAEAACcQAAAAEC+6mW3Rp8RvJsXGCfNtWBhZKuI5K8fCdRKL1f7wuzPqMpmxlYE84PYcMCbXZnONsg==");
+
+
             var configuration = new ConfigurationBuilder()
                               .AddJsonFile("appsettings.json")
                               .Build();

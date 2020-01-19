@@ -11,7 +11,7 @@ namespace Parking.Infrastructure.Data.EntityFramework
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
+           
         }
 
 

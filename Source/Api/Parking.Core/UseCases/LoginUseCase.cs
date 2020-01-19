@@ -28,22 +28,32 @@ namespace Parking.Core.UseCases
         public async Task<bool> HandleAsync(LoginRequest request, IOutputPort<LoginResponse> response)
         {
 
-            if(request.Username.IsValidString() && request.Password.IsValidString())
+
+            try
             {
-                var user = await _userRepository.FindByName(request.Username);
-
-                if(user != null)
+                if (request.Username.IsValidString() && request.Password.IsValidString())
                 {
-                    if(await _userRepository.CheckPassword(user, request.Password))
+                    var user = await _userRepository.FindByName(request.Username);
+
+                    if (user != null)
                     {
+                        if (await _userRepository.CheckPassword(user, request.Password))
+                        {
+                            var token = await _jwtFactory.GenerateToken(user.Id, user.UserName);
 
-                        var token = await _jwtFactory.GenerateToken(user.Id, user.UserName);
-
-                        response.CreateResponse(new LoginResponse(user,token, true));
-                        return true;
+                            response.CreateResponse(new LoginResponse(user, token, true));
+                            return true;
+                        }
                     }
                 }
             }
+            catch(Exception ex)
+            {
+                 response.CreateResponse(new LoginResponse(new[] { new Error("Internal server Error", "Error") }));
+                return false;
+            }
+
+   
             response.CreateResponse(new LoginResponse(new[] { new Error("login_failure", "Username or password is invalid") }));
             return false;
         }
