@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Parking.Api.Presenters;
@@ -45,6 +46,14 @@ namespace Parking.Api.Controllers
             await _registerUseCase.HandleAsync(new RegisterRequest(request.Username, request.FirstName, request.LastName, request.Password, request.Email), _registerPresenter);
 
             return _registerPresenter.Result;
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("api/accounts/private")]
+        public async Task<IActionResult> Private()
+        {
+            return new JsonResult("This is private area");
         }
 
 

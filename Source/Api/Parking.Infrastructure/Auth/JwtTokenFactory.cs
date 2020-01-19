@@ -30,7 +30,7 @@ namespace Parking.Infrastructure.Auth
 
 
             var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key)),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
                 SecurityAlgorithms.HmacSha256
                 );
 
@@ -45,7 +45,7 @@ namespace Parking.Infrastructure.Auth
 
             var encodedToken =  new JwtSecurityTokenHandler().WriteToken(token);
 
-            return new Token("", encodedToken, DateTime.Now.AddMonths(_options.ValidTo));
+            return new Token(encodedToken, DateTime.Now.AddMonths(_options.ValidTo));
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Parking.Infrastructure.Mapping
     {
         public Profiles()
         {
-            CreateMap<User, AppUser>().ConvertUsing(u => new AppUser { Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, UserName = u.UserName, PasswordHash = u.PasswordHash });
-            CreateMap<AppUser, User>().ConstructUsing(au => new User(au.FirstName, au.LastName, au.Email, au.UserName, au.Id, au.PasswordHash));
+            CreateMap<User, AppUser>().ConvertUsing(u => new AppUser { Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, Email = u.Email, UserName = u.UserName, PasswordHash = u.PasswordHash });
+            CreateMap<AppUser, User>().ConstructUsing(au => new User(au.FirstName, au.LastName, au.Email, au.UserName, au.PasswordHash, au.Id));
         }  
     }
 }

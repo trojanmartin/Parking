@@ -1,4 +1,6 @@
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,13 +33,18 @@ namespace Parking.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
 
+            //adding controllers and setting for fluent validation
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            ValidatorOptions.LanguageManager.Enabled = false;
+
+
+            //adding db context
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
 
             //configure options for jwt 
-            services.Configure<JwtTokenOptions>(Configuration);
+            services.Configure<JwtTokenOptions>(Configuration.GetSection("JwtTokenOptions"));
            
 
             //adding all requested module for application
@@ -79,11 +86,11 @@ namespace Parking.Api
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
 
-                    ValidIssuer = Configuration["JwtToken:Issuer"],
-                    ValidAudience = Configuration["JwtToken:Audience"],
+                    ValidIssuer = Configuration["JwtTokenOptions:Issuer"],
+                    ValidAudience = Configuration["JwtTokenOptions:Audience"],
 
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"])),
+                        Encoding.UTF8.GetBytes(Configuration["JwtTokenOptions:SecretKey"])),
                 };
             });
 

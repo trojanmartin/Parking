@@ -28,9 +28,7 @@ namespace Parking.Infrastructure.Data.EntityFramework.Repositories
         {
             var appUser = _mapper.Map<AppUser>(user);
 
-            var resu = await _userManager.CheckPasswordAsync(appUser, password);
-
-            return resu;
+           return  await _userManager.CheckPasswordAsync(appUser, password);           
         }
 
         public async Task<CreateUserResponse> CreateUser(User user, string password)

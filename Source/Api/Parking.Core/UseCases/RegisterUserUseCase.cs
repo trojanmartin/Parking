@@ -3,6 +3,7 @@ using Parking.Core.Interfaces.Base;
 using Parking.Core.Interfaces.Gateways.Repositories;
 using Parking.Core.Interfaces.UseCases;
 using Parking.Core.Models;
+using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseRequests;
 using Parking.Core.Models.UseCaseResponses;
 using System;
@@ -50,7 +51,7 @@ namespace Parking.Core.UseCases
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                response.CreateResponse(new RegisterResponse(new List<Error> { new Error("Fatal error","Unexpexted error while creating user") }));
+                response.CreateResponse(new RegisterResponse(new List<Error> { GlobalErrors.UnexpectedError }));
                 return false;
             }
            

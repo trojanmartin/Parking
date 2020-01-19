@@ -6,7 +6,7 @@ namespace Parking.Infrastructure.Auth
 {
     public class JwtTokenOptions
     {
-        public string Key { get; set; }
+        public string SecretKey { get; set; }
 
         public string Issuer { get; set; }
 

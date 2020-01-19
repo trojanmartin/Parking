@@ -1,9 +1,11 @@
-﻿using Parking.Core.Extensions;
+﻿using Microsoft.Extensions.Logging;
+using Parking.Core.Extensions;
 using Parking.Core.Interfaces.Base;
 using Parking.Core.Interfaces.Gateways.Repositories;
 using Parking.Core.Interfaces.Gateways.Services;
 using Parking.Core.Interfaces.UseCases;
 using Parking.Core.Models;
+using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseRequests;
 using Parking.Core.Models.UseCaseResponses;
 using System;
@@ -18,19 +20,21 @@ namespace Parking.Core.UseCases
 
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenFactory _jwtFactory;
+        private readonly ILogger _logger;
 
-        public LoginUseCase(IUserRepository userRepository, IJwtTokenFactory jwtFactory)
+        public LoginUseCase(ILogger<LoginUseCase> logger,IUserRepository userRepository, IJwtTokenFactory jwtFactory)
         {
             _userRepository = userRepository;
             _jwtFactory = jwtFactory;
+            _logger = logger;
         }
 
         public async Task<bool> HandleAsync(LoginRequest request, IOutputPort<LoginResponse> response)
         {
-
-
             try
             {
+                _logger.LogInformation("Logging user for request {@request}", request);
+
                 if (request.Username.IsValidString() && request.Password.IsValidString())
                 {
                     var user = await _userRepository.FindByName(request.Username);
@@ -41,7 +45,9 @@ namespace Parking.Core.UseCases
                         {
                             var token = await _jwtFactory.GenerateToken(user.Id, user.UserName);
 
-                            response.CreateResponse(new LoginResponse(user, token, true));
+                            _logger.LogInformation("Login succesfull, token generated succesful");
+
+                            response.CreateResponse(new LoginResponse(user.WithoutPassword(), token, true));
                             return true;
                         }
                     }
@@ -49,10 +55,10 @@ namespace Parking.Core.UseCases
             }
             catch(Exception ex)
             {
-                 response.CreateResponse(new LoginResponse(new[] { new Error("Internal server Error", "Error") }));
+                _logger.LogInformation(ex.Message);
+                response.CreateResponse(new LoginResponse(new[] { GlobalErrors.UnexpectedError }));
                 return false;
             }
-
    
             response.CreateResponse(new LoginResponse(new[] { new Error("login_failure", "Username or password is invalid") }));
             return false;

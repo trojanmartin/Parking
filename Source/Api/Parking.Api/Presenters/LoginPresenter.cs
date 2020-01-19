@@ -15,7 +15,7 @@ namespace Parking.Api.Presenters
         public void CreateResponse(LoginResponse response)
         {
             Result.StatusCode = (int)(response.Success ? HttpStatusCode.OK : HttpStatusCode.Unauthorized);
-            Result.Content = response.Success ? Serializer.SerializeObjectToJson(response.Token) : Serializer.SerializeObjectToJson(response.Errors);                
+            Result.Content = response.Success ? Serializer.SerializeObjectToJson(response) : Serializer.SerializeObjectToJson(response.Errors);                
         }
     }
 }
