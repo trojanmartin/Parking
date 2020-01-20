@@ -67,6 +67,12 @@ namespace Parking.Api.Controllers
             return _registerPresenter.Result;
         }
 
+        /// <summary>
+        /// Only test method, checks if the user is authenticated.
+        /// If are logged, send request to this method with Jwt token in header. 
+        /// If you are authenticated, method returns text "This is private area"
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Authorize]
         [Route("api/accounts/private")]
