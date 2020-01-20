@@ -9,8 +9,6 @@ using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseRequests;
 using Parking.Core.Models.UseCaseResponses;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Parking.Core.UseCases
@@ -37,13 +35,13 @@ namespace Parking.Core.UseCases
 
                 if (request.Username.IsValidString() && request.Password.IsValidString())
                 {
-                    var user = await _userRepository.FindByName(request.Username);
+                    var user = await _userRepository.FindByNameAsync(request.Username);
 
                     if (user != null)
                     {
-                        if (await _userRepository.CheckPassword(user, request.Password))
+                        if (await _userRepository.CheckPasswordAsync(user, request.Password))
                         {
-                            var token = await _jwtFactory.GenerateToken(user.Id, user.UserName);
+                            var token = await _jwtFactory.GenerateTokenAsync(user.Id, user.UserName);
 
                             _logger.LogInformation("Login succesfull, token generated succesful");
 

@@ -21,7 +21,7 @@ namespace Parking.Infrastructure.Auth
             _options = options.Value;
         }
 
-        public async Task<Token> GenerateToken(string id, string username)
+        public async Task<Token> GenerateTokenAsync(string id, string username)
         {
             var claims = new[]
             {

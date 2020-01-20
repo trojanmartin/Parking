@@ -24,14 +24,14 @@ namespace Parking.Infrastructure.Data.EntityFramework.Repositories
             _userManager = userManager;
         }
 
-        public async Task<bool> CheckPassword(User user, string password)
+        public async Task<bool> CheckPasswordAsync(User user, string password)
         {
             var appUser = _mapper.Map<AppUser>(user);
 
            return  await _userManager.CheckPasswordAsync(appUser, password);           
         }
 
-        public async Task<CreateUserResponse> CreateUser(User user, string password)
+        public async Task<CreateUserResponse> CreateUserAsync(User user, string password)
         {
             var appUser = _mapper.Map<AppUser>(user);
 
@@ -40,7 +40,7 @@ namespace Parking.Infrastructure.Data.EntityFramework.Repositories
             return new CreateUserResponse(appUser.Id, result.Succeeded, result.Succeeded ? null : result.Errors.Select(e => new Error(e.Code, e.Description)));                    
         }
 
-        public async Task<User> FindByName(string username)
+        public async Task<User> FindByNameAsync(string username)
         {
             var appUser= await _userManager.FindByNameAsync(username);
 

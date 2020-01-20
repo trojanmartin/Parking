@@ -25,7 +25,7 @@ namespace Parking.Core.UnitTests.UseCases
 
             var userRepo = new Mock<IUserRepository>();
 
-            userRepo.Setup(x => x.CreateUser(It.IsAny<User>(), It.IsAny<string>()))
+            userRepo.Setup(x => x.CreateUserAsync(It.IsAny<User>(), It.IsAny<string>()))
                     .Throws(new Exception());
 
             var useCase = new RegisterUseCaseBuilder()
@@ -49,7 +49,7 @@ namespace Parking.Core.UnitTests.UseCases
         {
             var userRepo = new Mock<IUserRepository>();
 
-            userRepo.Setup(x => x.CreateUser(It.IsAny<User>(), It.IsAny<string>()))
+            userRepo.Setup(x => x.CreateUserAsync(It.IsAny<User>(), It.IsAny<string>()))
                     .Returns(Task.FromResult(new CreateUserResponse(It.IsAny<string>(), false, new[] { new Error("Any error", "error description") })));
 
             var useCase = new RegisterUseCaseBuilder()
@@ -70,7 +70,7 @@ namespace Parking.Core.UnitTests.UseCases
         {
             var userRepo = new Mock<IUserRepository>();
 
-            userRepo.Setup(x => x.CreateUser(It.IsAny<User>(), It.IsAny<string>()))
+            userRepo.Setup(x => x.CreateUserAsync(It.IsAny<User>(), It.IsAny<string>()))
                     .Returns(Task.FromResult(new CreateUserResponse(It.IsAny<string>(), true)));
 
             var useCase = new RegisterUseCaseBuilder()

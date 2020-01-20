@@ -9,10 +9,10 @@ namespace Parking.Core.Interfaces.Gateways.Repositories
 {
     public interface IUserRepository
     {
-        Task<CreateUserResponse> CreateUser(User user, string password);
+        Task<CreateUserResponse> CreateUserAsync(User user, string password);
 
-        Task<User> FindByName(string username);
+        Task<User> FindByNameAsync(string username);
 
-        Task<bool> CheckPassword(User user, string password);
+        Task<bool> CheckPasswordAsync(User user, string password);
     }
 }

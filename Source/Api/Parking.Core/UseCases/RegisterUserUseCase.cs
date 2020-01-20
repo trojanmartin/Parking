@@ -8,7 +8,6 @@ using Parking.Core.Models.UseCaseRequests;
 using Parking.Core.Models.UseCaseResponses;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Parking.Core.UseCases
@@ -30,7 +29,7 @@ namespace Parking.Core.UseCases
             try
             {
                 _logger.LogInformation("Creating user for request {@request}", request);
-                var result = await _userRepository.CreateUser(new User(request.FirstName, request.LastName, request.Email, request.Username), request.Password);
+                var result = await _userRepository.CreateUserAsync(new User(request.FirstName, request.LastName, request.Email, request.Username), request.Password);
 
                 _logger.LogInformation("User repository returned {@response}", result);
 

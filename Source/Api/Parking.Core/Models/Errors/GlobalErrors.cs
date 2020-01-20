@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Parking.Core.Models.Errors
+﻿namespace Parking.Core.Models.Errors
 {
     public static class GlobalErrors
     {

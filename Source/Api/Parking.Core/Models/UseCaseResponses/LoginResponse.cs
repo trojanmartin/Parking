@@ -1,7 +1,5 @@
 ﻿using Parking.Core.Interfaces.Base;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Parking.Core.Models.UseCaseResponses
 {
