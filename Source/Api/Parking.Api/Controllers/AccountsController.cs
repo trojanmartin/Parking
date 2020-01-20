@@ -69,16 +69,17 @@ namespace Parking.Api.Controllers
 
         /// <summary>
         /// Only test method, checks if the user is authenticated.
-        /// If are logged, send request to this method with Jwt token in header. 
-        /// If you are authenticated, method returns text "This is private area"
+        /// Send request to this method with Jwt token in header and  
+        /// if you are authenticated, method returns text "This is private area"
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("api/accounts/private")]
         public async Task<IActionResult> Private()
         {
-            return new JsonResult("This is private area");
+            return Ok("This is private area");
         }
 
 
