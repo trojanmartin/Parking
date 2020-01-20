@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 using Parking.Api.Presenters;
 using Parking.Api.Routing;
 using Parking.Core.Interfaces.UseCases;
+using Parking.Core.Models;
 using Parking.Core.Models.UseCaseRequests;
+using Parking.Core.Models.UseCaseResponses;
+using Swashbuckle.Swagger.Annotations;
 
 namespace Parking.Api.Controllers
 {
-    
+
+    [Produces("application/json")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
@@ -30,8 +34,16 @@ namespace Parking.Api.Controllers
             _registerPresenter = registerPresenter;
         }
 
+
+        /// <summary>
+        /// Login to the application
+        /// </summary> 
+        /// <param name="request"></param>
+        /// <returns>A newly created User with jwt token</returns>        
         [HttpPost]
         [Route(ApiRouting.Login)]
+        [ProducesResponseType(typeof(LoginResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<Error>), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] Models.Request.LoginRequest request)
         {
             await _loginUseCase.HandleAsync(new LoginRequest(request.UserName, request.Password), _loginPresenter);
@@ -39,8 +51,15 @@ namespace Parking.Api.Controllers
             return _loginPresenter.Result;
         }
 
+        /// <summary>
+        /// Register new user
+        /// </summary>  
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route(ApiRouting.Register)]
+        [ProducesResponseType( typeof(RegisterResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RegisterResponse),StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] Models.Request.RegisterRequest request)
         {
             await _registerUseCase.HandleAsync(new RegisterRequest(request.Username, request.FirstName, request.LastName, request.Password, request.Email), _registerPresenter);

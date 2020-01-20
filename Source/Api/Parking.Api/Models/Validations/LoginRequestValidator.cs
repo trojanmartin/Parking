@@ -11,7 +11,7 @@ namespace Parking.Api.Models.Validations
     {
         public LoginRequestValidator()
         {
-            RuleFor(x => x.Password).NotEmpty().NotNull();
+            RuleFor(x => x.Password).NotEmpty();
             RuleFor(x => x.UserName).NotEmpty().NotNull();
         }
     }
