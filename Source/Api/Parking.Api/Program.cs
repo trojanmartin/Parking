@@ -16,7 +16,7 @@ namespace Parking.Api
 
             var configuration = new ConfigurationBuilder()
                               .AddJsonFile("appsettings.json")
-                           
+                            
                               .Build();
 
             Log.Logger = new LoggerConfiguration()
@@ -41,6 +41,11 @@ namespace Parking.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration( (hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables();
+                    
+                })
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

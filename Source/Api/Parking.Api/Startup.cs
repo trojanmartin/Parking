@@ -46,7 +46,7 @@ namespace Parking.Api
             //// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Parking API", Version = "v1" });
                 c.AddFluentValidationRules();
 
                 // Set the comments path for the Swagger JSON and UI.
@@ -129,7 +129,7 @@ namespace Parking.Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("../swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "Parking API V1");
                 c.RoutePrefix = string.Empty;
                 
             });
