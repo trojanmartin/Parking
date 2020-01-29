@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using MQTTnet;
+﻿using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Subscribing;
@@ -11,6 +10,7 @@ using Parking.Mqtt.Core.Models.Gateways.Services;
 using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +19,16 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 {
     public class MqttService : IMqttService
     {
+        private IEnumerable<Topic> SubsribedTopics { get; set; }
        
         private readonly IMqttClient _client;
         public event Func<MqttMessage, Task> MessageReceivedAsync;
 
         public MqttService()
         {
+            if (SubsribedTopics == null)
+                SubsribedTopics = new List<Topic>();
+
             _client = new MqttFactory().CreateMqttClient();
 
             _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);
@@ -54,6 +58,8 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             foreach (var topic in topics)
             {
                 topicBuilder.WithTopic(topic.TopicName).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.QoS);
+
+                SubsribedTopics.Append(topic);
             }
             var result = await _client.SubscribeAsync(topicBuilder.Build());
 
@@ -105,5 +111,18 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         {
             return resultCode == MqttClientSubscribeResultCode.GrantedQoS0 || resultCode == MqttClientSubscribeResultCode.GrantedQoS1 || resultCode == MqttClientSubscribeResultCode.GrantedQoS2;
         }
+
+        public async Task<MqttStatus> GetStatusAsync()
+        {
+            if(_client?.Options != null)
+            {
+                var tcpOptions = (MqttClientTcpOptions)_client.Options.ChannelOptions;
+
+                return new MqttStatus(_client.IsConnected, _client.Options.ClientId, tcpOptions.Server, (int)tcpOptions.Port, SubsribedTopics);
+            }
+
+            return new MqttStatus(false, null, null, null, null);
+        }
+        
     }
 }

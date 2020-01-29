@@ -26,10 +26,13 @@ namespace Parking.Mqtt.Api.Controllers
         private readonly IDisconnectUseCase _disconnectUseCase;
         private readonly DisconnectPresenter _disconnectPresenter;
 
+        private readonly IGetStatusUseCase _getStatusUseCase;
+        private readonly GetStatusPresenter _getStatusPresenter;
+
         private readonly ILogger _logger;
 
-        public MqttController(ILogger<MqttController> logger,IListenUseCase listenUseCase, ListenPresenter listenPresenter, IConnectUseCase connectUseCase, 
-                                ConnectPresenter connectPresenter, IDisconnectUseCase disconnectUseCase, DisconnectPresenter disconnectPresenter)
+        public MqttController(ILogger<MqttController> logger, IListenUseCase listenUseCase, ListenPresenter listenPresenter, IConnectUseCase connectUseCase,
+                                ConnectPresenter connectPresenter, IDisconnectUseCase disconnectUseCase, DisconnectPresenter disconnectPresenter, IGetStatusUseCase getStatusUseCase, GetStatusPresenter getStatusPresenter)
         {
             _logger = logger;
 
@@ -41,11 +44,13 @@ namespace Parking.Mqtt.Api.Controllers
 
             _disconnectUseCase = disconnectUseCase;
             _disconnectPresenter = disconnectPresenter;
+            _getStatusUseCase = getStatusUseCase;
+            _getStatusPresenter = getStatusPresenter;
         }
 
-        
 
-        
+
+
         [HttpPost]
         [Route(ApiRouting.Listen)]
         public async Task<IActionResult> ListenAsync([FromBody]ListenApiRequest request)
@@ -115,5 +120,23 @@ namespace Parking.Mqtt.Api.Controllers
 
             return _disconnectPresenter.Result;
         }
+
+        [HttpGet]
+        [Route(ApiRouting.Status)]
+        public async Task<IActionResult> GetStatus()
+        {
+            _logger.LogInformation("Started proccesing GetStatus");
+
+            //TODO validacia null
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+          
+
+            await _getStatusUseCase.HandleAsync(new GetStatusRequest(), _getStatusPresenter);
+
+            return _getStatusPresenter.Result;
+        }
+
+
     }
 }

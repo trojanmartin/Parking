@@ -12,6 +12,7 @@ namespace Parking.Mqtt.Core.Extensions
             return service.AddTransient<IConnectUseCase, MqttConnectUseCase>()
                            .AddTransient<IListenUseCase, MqttListenUseCase>()
                            .AddTransient<IDisconnectUseCase,MqttDisconnectUseCase>()
+                           .AddTransient<IGetStatusUseCase, MqttGetStatusUseCase>()
                            ;
         }
     }

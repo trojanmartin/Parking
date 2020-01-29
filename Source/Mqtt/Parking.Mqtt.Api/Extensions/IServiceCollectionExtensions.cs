@@ -14,6 +14,7 @@ namespace Parking.Mqtt.Api.Extensions
             return service.AddTransient<ListenPresenter>()
                           .AddTransient<ConnectPresenter>()
                           .AddTransient<DisconnectPresenter>()
+                          .AddTransient<GetStatusPresenter>()
                            
                            ;
         }
