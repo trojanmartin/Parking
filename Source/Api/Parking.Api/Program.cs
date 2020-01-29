@@ -10,13 +10,9 @@ namespace Parking.Api
     {
         public static void Main(string[] args)
         {
-
-            var hash = Convert.FromBase64String("AQAAAAEAACcQAAAAEC+6mW3Rp8RvJsXGCfNtWBhZKuI5K8fCdRKL1f7wuzPqMpmxlYE84PYcMCbXZnONsg==");
-
-
+           
             var configuration = new ConfigurationBuilder()
-                              .AddJsonFile("appsettings.json")
-                            
+                              .AddJsonFile("appsettings.json")                            
                               .Build();
 
             Log.Logger = new LoggerConfiguration()
@@ -41,11 +37,16 @@ namespace Parking.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration( (hostingContext, config) =>
-                {
-                    config.AddEnvironmentVariables();
+                .ConfigureAppConfiguration((hostingContext, config) =>
+               {
+                   //if (hostingContext.HostingEnvironment.IsDevelopment())
+                       config.AddJsonFile("appsettings.Development.json");
+
+                   //else        
                     
-                })
+                    config.AddEnvironmentVariables();
+
+               })
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

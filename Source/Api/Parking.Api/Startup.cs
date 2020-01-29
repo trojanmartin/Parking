@@ -36,8 +36,7 @@ namespace Parking.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        {           
             //adding controllers and setting for fluent validation
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             ValidatorOptions.LanguageManager.Enabled = false;
@@ -57,10 +56,16 @@ namespace Parking.Api
 
             //adding db context
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-
+            
 
             //configure options for jwt 
-            services.Configure<JwtTokenOptions>(Configuration.GetSection("JwtTokenOptions"));
+            services.Configure<JwtTokenOptions>(x =>
+            {
+                x.Audience = Configuration["JwtTokenOptions:Audience"];
+                x.Issuer = Configuration["JwtTokenOptions:Issuer"];
+                x.ValidTo = Convert.ToInt32(Configuration["JwtTokenOptions:ValidTo"]);
+                x.SecretKey = Configuration["JwtTokenOptions:SecretKey"];
+            });
            
 
             //adding all requested module for application

@@ -14,6 +14,7 @@ namespace Parking.Core.Extensions
 
             services.AddTransient<ILoginUseCase, LoginUseCase>()
                     .AddTransient<IRegisterUseCase, RegisterUserUseCase>()                    
+                    .AddTransient<IGetUserUseCase, GetUserUseCase>()                    
             
             ;
         

@@ -13,6 +13,7 @@ namespace Parking.Api.Extensions
         {
             return services.AddTransient<LoginPresenter>()
                            .AddTransient<RegisterPresenter>()
+                           .AddTransient<GetUserPresenter>()
 
 
                            ;

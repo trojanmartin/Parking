@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Parking.Core.Models.UseCaseResponses
 {
-    public class RegisterResponse : UseCaseResponseMessage
+    public class RegisterResponse : BaseUseCaseResponseMessage
     {
 
         public string Id { get; }

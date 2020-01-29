@@ -14,5 +14,6 @@ namespace Parking.Core.Interfaces.Gateways.Repositories
         Task<User> FindByNameAsync(string username);
 
         Task<bool> CheckPasswordAsync(User user, string password);
+       
     }
 }

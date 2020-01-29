@@ -1,11 +1,11 @@
 ﻿namespace Parking.Core.Interfaces.Base
 {
-    public abstract class UseCaseResponseMessage
+    public abstract class BaseUseCaseResponseMessage
     {
         public bool Success { get; }
         public string Message { get; }
 
-        protected UseCaseResponseMessage(bool success = false, string message = null)
+        protected BaseUseCaseResponseMessage(bool success = false, string message = null)
         {
             Success = success;
             Message = message;

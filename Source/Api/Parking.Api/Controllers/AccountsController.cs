@@ -26,12 +26,17 @@ namespace Parking.Api.Controllers
         private readonly IRegisterUseCase _registerUseCase;
         private readonly RegisterPresenter _registerPresenter;
 
-        public AccountsController(ILoginUseCase loginUseCase, LoginPresenter loginPresenter, IRegisterUseCase registerUseCase, RegisterPresenter registerPresenter)
+        private readonly IGetUserUseCase _getUserUseCase;
+        private readonly GetUserPresenter _getUserPresenter;
+
+        public AccountsController(ILoginUseCase loginUseCase, LoginPresenter loginPresenter, IRegisterUseCase registerUseCase, RegisterPresenter registerPresenter, IGetUserUseCase getUserUseCase, GetUserPresenter getUserPresenter)
         {
             _loginUseCase = loginUseCase;
             _loginPresenter = loginPresenter;
             _registerUseCase = registerUseCase;
             _registerPresenter = registerPresenter;
+            _getUserUseCase = getUserUseCase;
+            _getUserPresenter = getUserPresenter;
         }
 
 
@@ -65,6 +70,23 @@ namespace Parking.Api.Controllers
             await _registerUseCase.HandleAsync(new RegisterRequest(request.Username, request.FirstName, request.LastName, request.Password, request.Email), _registerPresenter);
 
             return _registerPresenter.Result;
+        }
+
+
+        /// <summary>
+        /// Get user with given username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(ApiRouting.User)]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUser(string username)
+        {
+            await _getUserUseCase.HandleAsync(new GetUserRequest(username), _getUserPresenter);
+
+            return _getUserPresenter.Result;
         }
 
         /// <summary>
