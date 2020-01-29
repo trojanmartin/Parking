@@ -163,12 +163,17 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
         public ConnectPresenter ConnectPresenter { get; set; } = new Mock<ConnectPresenter>().Object;
         public IDisconnectUseCase DisconnectUseCase { get; set; } = new Mock<IDisconnectUseCase>().Object;
         public DisconnectPresenter DisconnectPresenter { get; set; } = new Mock<DisconnectPresenter>().Object;
+        public IGetStatusUseCase GetStatusUseCase { get; set; } = new Mock<IGetStatusUseCase>().Object;
+        public GetStatusPresenter GetStatusPresenter { get; set; } = new Mock<GetStatusPresenter>().Object;
+
+
 
 
 
         public MqttController Build()
         {
-            return new MqttController(Logger,ListenUseCase, ListenPresenter, ConnectUseCase, ConnectPresenter, DisconnectUseCase, DisconnectPresenter);
+            return new MqttController(Logger,ListenUseCase, ListenPresenter, ConnectUseCase, ConnectPresenter, 
+                                    DisconnectUseCase, DisconnectPresenter,GetStatusUseCase,GetStatusPresenter);
         }
     }
 }
