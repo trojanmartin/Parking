@@ -40,7 +40,7 @@ namespace Parking.Api
                 .ConfigureAppConfiguration((hostingContext, config) =>
                {
                    //if (hostingContext.HostingEnvironment.IsDevelopment())
-                       config.AddJsonFile("appsettings.Development.json");
+                       config.AddJsonFile("appsettings.Development.json", optional: true);
 
                    //else        
                     
