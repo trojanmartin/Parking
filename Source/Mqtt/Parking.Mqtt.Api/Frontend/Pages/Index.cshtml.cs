@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Parking.Mqtt.Api.Frontend.Presenters;
+using Parking.Mqtt.Core.Interfaces.UseCases;
 
 namespace Parking.Mqtt.Api.Frontend.Pages
 {
@@ -12,14 +10,20 @@ namespace Parking.Mqtt.Api.Frontend.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+
+        private readonly GetStatusWebPresenter _presenter;
+        private readonly IGetStatusUseCase _getStatusUseCase;
+
+        public IndexModel(ILogger<IndexModel> logger, GetStatusWebPresenter presenter, IGetStatusUseCase getStatusUseCase)
         {
             _logger = logger;
+            _presenter = presenter;
+            _getStatusUseCase = getStatusUseCase;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            return Page();
         }
     }
 }
