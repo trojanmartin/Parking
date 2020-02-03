@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Parking.Mqtt.Api.Frontend.Presenters;
 using Parking.Mqtt.Api.Presenters;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,15 @@ namespace Parking.Mqtt.Api.Extensions
                           .AddTransient<ConnectPresenter>()
                           .AddTransient<DisconnectPresenter>()
                           .AddTransient<GetStatusPresenter>()
-                           
                            ;
+        }
+
+        public static IServiceCollection AddAdministrationModule(this IServiceCollection service)
+        {
+            return service.AddTransient<GetStatusWebPresenter>()
+
+
+                ;
         }
     }
 }

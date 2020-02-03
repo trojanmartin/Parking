@@ -8,17 +8,11 @@ namespace Parking.Mqtt.Api.Frontend.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<IndexModel> _logger;       
 
-
-        private readonly GetStatusWebPresenter _presenter;
-        private readonly IGetStatusUseCase _getStatusUseCase;
-
-        public IndexModel(ILogger<IndexModel> logger, GetStatusWebPresenter presenter, IGetStatusUseCase getStatusUseCase)
+        public IndexModel(ILogger<IndexModel> logger)
         {
-            _logger = logger;
-            _presenter = presenter;
-            _getStatusUseCase = getStatusUseCase;
+            _logger = logger;            
         }
 
         public IActionResult OnGet()

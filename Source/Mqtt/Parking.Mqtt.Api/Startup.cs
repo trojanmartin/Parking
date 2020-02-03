@@ -33,6 +33,7 @@ namespace Parking.Mqtt.Api
 
             //adding all services to dependency injection container
             services.AddApiModule()
+                    .AddAdministrationModule()
                     .AddCoreModule()
                     .AddInfrastructureModule();
             
