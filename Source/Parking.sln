@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B70E699A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Api.UnitTests", "Mqtt\Tests\Parking.Mqtt.Api.UnitTests\Parking.Mqtt.Api.UnitTests.csproj", "{71BB6DCC-DCE4-4E4A-9047-649D6BCA51D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parking.Mqtt.Core.UnitTests", "Mqtt\Tests\Parking.Mqtt.Core.UnitTests\Parking.Mqtt.Core.UnitTests.csproj", "{430FC3F3-7BFE-4912-965A-8BA98AF39FB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Mqtt.Core.UnitTests", "Mqtt\Tests\Parking.Mqtt.Core.UnitTests\Parking.Mqtt.Core.UnitTests.csproj", "{430FC3F3-7BFE-4912-965A-8BA98AF39FB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -25,6 +25,12 @@ namespace Parking.Mqtt.Api
         {
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            services.AddRazorPages().AddRazorPagesOptions(options =>
+            {
+                options.RootDirectory = "/Frontend/Pages";
+            });
+
+
             //adding all services to dependency injection container
             services.AddApiModule()
                     .AddCoreModule()
@@ -44,12 +50,13 @@ namespace Parking.Mqtt.Api
             app.UseSerilogRequestLogging();
 
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();               
             });
         }
     }
