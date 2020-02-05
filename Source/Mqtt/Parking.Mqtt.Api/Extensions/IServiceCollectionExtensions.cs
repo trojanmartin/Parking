@@ -21,7 +21,7 @@ namespace Parking.Mqtt.Api.Extensions
 
         public static IServiceCollection AddAdministrationModule(this IServiceCollection service)
         {
-            return service.AddTransient<GetStatusWebPresenter>()
+            return service//.AddTransient<GetStatusWebPresenter>()
 
 
                 ;

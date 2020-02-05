@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Parking.Mqtt.Api.Data;
-using Parking.Mqtt.Api.Frontend.Pages.Models;
+using Parking.Mqtt.Infrastructure.Data;
+using Parking.Mqtt.Infrastructure.Data.Entities;
 
 namespace Parking.Mqtt.Api
 {
     public class CreateModel : PageModel
     {
-        private readonly Parking.Mqtt.Api.Data.ParkingMqttApiContext _context;
+        private readonly Parking.Mqtt.Infrastructure.Data.ApplicationDbContext _context;
 
-        public CreateModel(Parking.Mqtt.Api.Data.ParkingMqttApiContext context)
+        public CreateModel(Parking.Mqtt.Infrastructure.Data.ApplicationDbContext context)
         {
             _context = context;
         }
@@ -25,7 +25,7 @@ namespace Parking.Mqtt.Api
         }
 
         [BindProperty]
-        public MqttStatusViewModel MqttStatusViewModel { get; set; }
+        public MqttServerConfiguration MqttServerConfiguration { get; set; }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -36,7 +36,7 @@ namespace Parking.Mqtt.Api
                 return Page();
             }
 
-            _context.MqttStatusViewModel.Add(MqttStatusViewModel);
+            _context.MqttServerConfigurations.Add(MqttServerConfiguration);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

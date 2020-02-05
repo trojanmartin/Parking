@@ -14,40 +14,91 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MqttStatusViewModel.Connected)
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MqttStatusViewModel.ClientId)
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].TCPServer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MqttStatusViewModel.TcpServer)
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Port)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MqttStatusViewModel.Port)
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].UseTls)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].CleanSession)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].KeepAlive)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
+        @foreach (var item in Model.MqttServerConfiguration)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TCPServer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Port)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UseTls)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CleanSession)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KeepAlive)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                @Html.DisplayFor(Model.MqttStatusViewModel.Connected)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TcpServer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Port)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().TopicName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().QoS)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var topic in item.Topics)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => topic.TopicName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => topic.QoS)
+                            </td>
+                        </tr>
+                    }
+                    }
+                </tbody>
+            </table>

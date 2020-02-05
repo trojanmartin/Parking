@@ -6,22 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Parking.Mqtt.Api.Data;
-using Parking.Mqtt.Api.Frontend.Pages.Models;
+using Parking.Mqtt.Infrastructure.Data;
+using Parking.Mqtt.Infrastructure.Data.Entities;
 
 namespace Parking.Mqtt.Api
 {
     public class EditModel : PageModel
     {
-        private readonly Parking.Mqtt.Api.Data.ParkingMqttApiContext _context;
+        private readonly Parking.Mqtt.Infrastructure.Data.ApplicationDbContext _context;
 
-        public EditModel(Parking.Mqtt.Api.Data.ParkingMqttApiContext context)
+        public EditModel(Parking.Mqtt.Infrastructure.Data.ApplicationDbContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public MqttStatusViewModel MqttStatusViewModel { get; set; }
+        public MqttServerConfiguration MqttServerConfiguration { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,9 +30,9 @@ namespace Parking.Mqtt.Api
                 return NotFound();
             }
 
-            MqttStatusViewModel = await _context.MqttStatusViewModel.FirstOrDefaultAsync(m => m.ID == id);
+            MqttServerConfiguration = await _context.MqttServerConfigurations.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (MqttStatusViewModel == null)
+            if (MqttServerConfiguration == null)
             {
                 return NotFound();
             }
@@ -48,7 +48,7 @@ namespace Parking.Mqtt.Api
                 return Page();
             }
 
-            _context.Attach(MqttStatusViewModel).State = EntityState.Modified;
+            _context.Attach(MqttServerConfiguration).State = EntityState.Modified;
 
             try
             {
@@ -56,7 +56,7 @@ namespace Parking.Mqtt.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MqttStatusViewModelExists(MqttStatusViewModel.ID))
+                if (!MqttServerConfigurationExists(MqttServerConfiguration.Id))
                 {
                     return NotFound();
                 }
@@ -69,9 +69,9 @@ namespace Parking.Mqtt.Api
             return RedirectToPage("./Index");
         }
 
-        private bool MqttStatusViewModelExists(int id)
+        private bool MqttServerConfigurationExists(int id)
         {
-            return _context.MqttStatusViewModel.Any(e => e.ID == id);
+            return _context.MqttServerConfigurations.Any(e => e.Id == id);
         }
     }
 }
