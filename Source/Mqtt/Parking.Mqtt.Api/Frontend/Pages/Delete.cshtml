@@ -1,0 +1,46 @@
+﻿@page
+@model Parking.Mqtt.Api.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MqttStatusViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MqttStatusViewModel.Connected)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MqttStatusViewModel.Connected)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MqttStatusViewModel.ClientId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MqttStatusViewModel.ClientId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MqttStatusViewModel.TcpServer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MqttStatusViewModel.TcpServer)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MqttStatusViewModel.Port)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MqttStatusViewModel.Port)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="MqttStatusViewModel.ID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

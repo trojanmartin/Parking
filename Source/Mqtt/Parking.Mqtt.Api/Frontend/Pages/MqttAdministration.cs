@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Parking.Mqtt.Api.Frontend.Presenters;
 using Parking.Mqtt.Core.Interfaces.UseCases;
+using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
 using Parking.Mqtt.Core.Models.UseCaseRequests;
-using Parking.Mqtt.Core.Models.UseCaseResponses;
+using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Api
 {
@@ -15,7 +12,7 @@ namespace Parking.Mqtt.Api
     {
 
         [BindProperty]
-        public GetStatusResponse Status { get; set; }
+        public MqttStatus Status { get; set; }
 
         private readonly GetStatusWebPresenter _presenter;
         private readonly IGetStatusUseCase _getStatusUseCase;

@@ -1,10 +1,53 @@
 ﻿@page
-@model IndexModel
+@model Parking.Mqtt.Api.IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Administration of parking service</a>.</p>
-</div>
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttStatusViewModel.Connected)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttStatusViewModel.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttStatusViewModel.TcpServer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MqttStatusViewModel.Port)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>
+                @Html.DisplayFor(Model.MqttStatusViewModel.Connected)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TcpServer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Port)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

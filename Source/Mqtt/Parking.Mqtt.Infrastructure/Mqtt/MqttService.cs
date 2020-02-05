@@ -121,7 +121,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
                 return new MqttStatus(_client.IsConnected, _client.Options.ClientId, tcpOptions.Server, (int)tcpOptions.Port, SubsribedTopics);
             }
 
-            return new MqttStatus(false, null, null, null, null);
+            return new MqttStatus(false, "","", null, new List<Topic>());
         }
         
     }

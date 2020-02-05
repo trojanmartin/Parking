@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +8,8 @@ using Parking.Mqtt.Api.Extensions;
 using Parking.Mqtt.Core.Extensions;
 using Parking.Mqtt.Infrastructure.Extensions;
 using Serilog;
+using Microsoft.EntityFrameworkCore;
+using Parking.Mqtt.Api.Data;
 
 namespace Parking.Mqtt.Api
 {
@@ -36,6 +38,9 @@ namespace Parking.Mqtt.Api
                     .AddAdministrationModule()
                     .AddCoreModule()
                     .AddInfrastructureModule();
+
+            services.AddDbContext<ParkingMqttApiContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("ParkingMqttApiContext")));
             
         }
 

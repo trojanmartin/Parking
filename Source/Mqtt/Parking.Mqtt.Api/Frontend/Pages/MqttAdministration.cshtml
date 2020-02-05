@@ -9,20 +9,27 @@
 
 <div class="row">
     <div class="col-4">
+        <h3>Server information</h3>
         <table>
             <tr>
-                @if (Model.Status.Status.Connected)
+                @if (Model.Status.Connected)
                 {
-                    <td>Connected</td>
+                    <td>Connected<span class="badge badge-success"></span></td>
                 }
                 else
                 {
-                    <td>Disconnected</td>
+                    <td>Disconnected<span class="badge badge-success"></span></td>
                 }
             </tr>
         </table>
     </div>
     <div class="col-8">
-
+        <h3>Topics</h3>
+        <ul class="list-group">
+            @foreach(var topic in Model.Status.TopicSubscribing)
+            {
+                <li class="list-group-item">@topic<span class="badge badge-success"></span></li>
+            }
+        </ul>
     </div>
 </div>

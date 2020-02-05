@@ -1,0 +1,49 @@
+﻿@page
+@model Parking.Mqtt.Api.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>MqttStatusViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="MqttStatusViewModel.Connected" /> @Html.DisplayNameFor(model => model.MqttStatusViewModel.Connected)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="MqttStatusViewModel.ClientId" class="control-label"></label>
+                <input asp-for="MqttStatusViewModel.ClientId" class="form-control" />
+                <span asp-validation-for="MqttStatusViewModel.ClientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MqttStatusViewModel.TcpServer" class="control-label"></label>
+                <input asp-for="MqttStatusViewModel.TcpServer" class="form-control" />
+                <span asp-validation-for="MqttStatusViewModel.TcpServer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MqttStatusViewModel.Port" class="control-label"></label>
+                <input asp-for="MqttStatusViewModel.Port" class="form-control" />
+                <span asp-validation-for="MqttStatusViewModel.Port" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
