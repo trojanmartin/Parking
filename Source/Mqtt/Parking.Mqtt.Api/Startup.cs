@@ -70,23 +70,23 @@ namespace Parking.Mqtt.Api
 
             serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
 
-            //var server = new MqttServerConfiguration()
-            //{
-            //    Name = "TestKubo",
-            //    CleanSession = false,
-            //    TCPServer = "iot.mythings.sk",
-            //    Port = 1883,
-            //    KeepAlive = 100,
-            //    UseTls = false,
-            //    Username = "xmarceks",
-            //    Password = "xmarceks",
+            var server = new MqttServerConfiguration()
+            {
+                Name = "TestKubo",
+                CleanSession = false,
+                TCPServer = "iot.mythings.sk",
+                Port = 1883,
+                KeepAlive = 100,
+                UseTls = false,
+                Username = "xmarceks",
+                Password = "xmarceks",
 
-            //    Topics = new List<MqttTopicConfiguration>() { new MqttTopicConfiguration { QoS = MqttTopicConfiguration.MqttQualtiyOfService.AtLeastOnce, TopicName = "/smarthome/#" } }
+                Topics = new List<MqttTopicConfiguration>() { new MqttTopicConfiguration { QoS = MqttTopicConfiguration.MqttQualtiyOfService.AtLeastOnce, TopicName = "/smarthome/#" } }
 
 
-            //};
-            //serviceProvider.GetService<ApplicationDbContext>().MqttServerConfigurations.Add(server);
-            //serviceProvider.GetService<ApplicationDbContext>().SaveChanges();
+            };
+            serviceProvider.GetService<ApplicationDbContext>().MqttServerConfigurations.Add(server);
+            serviceProvider.GetService<ApplicationDbContext>().SaveChanges();
         }
     }
 }

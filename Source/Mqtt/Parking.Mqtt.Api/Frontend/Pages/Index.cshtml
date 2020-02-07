@@ -39,66 +39,70 @@
             </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.MqttServerConfiguration)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TCPServer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Port)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Username)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Password)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UseTls)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CleanSession)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.KeepAlive)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+    </thead>    
+</table>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().TopicName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().QoS)
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                    @foreach (var topic in item.Topics)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => topic.TopicName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => topic.QoS)
-                            </td>
-                        </tr>
-                    }
-                    }
-                </tbody>
-            </table>
+<div id="accordion">
+
+    @foreach (var item in Model.MqttServerConfiguration)
+    {
+        var id = item.Name + Guid.NewGuid().ToString("N");        
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#@id" aria-expanded="true" aria-controls="@id">
+                       @Html.DisplayFor(name => item.Name);
+                    </button>
+                </h5>
+            </div>
+
+            <div id="@id" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">                
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h3>Server</h3>   
+                                
+                                <div class="row">
+                                    @Html.LabelFor(item => item.)
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </div>
+                            </div>
+
+                            <div class="col-8">
+                                <h2>Topics</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table>
+                        <tbody>
+                            @foreach (var topic in item.Topics)
+                            {
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().TopicName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().QoS)
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => topic.TopicName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => topic.QoS)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
