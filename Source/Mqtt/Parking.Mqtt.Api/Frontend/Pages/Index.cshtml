@@ -10,99 +10,107 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].TCPServer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Port)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Username)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].UseTls)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].CleanSession)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].KeepAlive)
-            </th>
-            <th></th>
-        </tr>
-    </thead>    
-</table>
-
 
 <div id="accordion">
 
     @foreach (var item in Model.MqttServerConfiguration)
     {
-        var id = item.Name + Guid.NewGuid().ToString("N");        
+        var id = item.Name + Guid.NewGuid().ToString("N");
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#@id" aria-expanded="true" aria-controls="@id">
-                       @Html.DisplayFor(name => item.Name);
+                        @Html.DisplayFor(name => item.Name)
                     </button>
                 </h5>
             </div>
 
             <div id="@id" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">                
+                <div class="card-body">
 
                     <div class="container">
                         <div class="row">
                             <div class="col-4">
-                                <h3>Server</h3>   
-                                
+                                <h3>Server</h3>
+
                                 <div class="row">
-                                    @Html.LabelFor(item => item.)
+                                    @Html.LabelFor(modelItem => item.Name, new { @class = "font-weight-bold" })
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.TCPServer, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.TCPServer)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Port, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Port)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Username, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Password, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Password)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.KeepAlive, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.KeepAlive)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.UseTls, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.UseTls)
+                                </div>
+
+                                <div class="row">
+                                    <button asp-page="./Edit" asp-route-id="@item.Id">Edit</button>
+                                    <button asp-page="./Delete" asp-route-id="@item.Id">Delete</button>
+                                    <form method="post">
+                                        <button asp-page-handler="Connect" asp-route-id="@item.Id">Connect</button>
+                                    </form>
+                                </div>
+
+
                             </div>
 
                             <div class="col-8">
                                 <h2>Topics</h2>
+
+                                <table>
+                                    <tbody>
+                                        @foreach (var topic in item.Topics)
+                                        {
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().TopicName)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().QoS)
+                                                </th>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => topic.TopicName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => topic.QoS)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-
-                    <table>
-                        <tbody>
-                            @foreach (var topic in item.Topics)
-                            {
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().TopicName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().QoS)
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => topic.TopicName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => topic.QoS)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     }
-    </div>
+</div>

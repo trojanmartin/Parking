@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Parking.Mqtt.Core.Models
+﻿namespace Parking.Mqtt.Core.Models
 {
     public class Error
     {

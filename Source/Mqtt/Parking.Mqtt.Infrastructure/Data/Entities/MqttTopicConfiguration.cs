@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Parking.Mqtt.Infrastructure.Data.Entities
+﻿namespace Parking.Mqtt.Infrastructure.Data.Entities
 {
     public class MqttTopicConfiguration
     {

@@ -4,9 +4,10 @@ using Microsoft.Extensions.Logging;
 using Parking.Mqtt.Api.Models.Requests;
 using Parking.Mqtt.Api.Presenters;
 using Parking.Mqtt.Api.Routing;
-using Parking.Mqtt.Core.Interfaces.UseCases;
-using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
-using Parking.Mqtt.Core.Models.UseCaseRequests;
+using Parking.Mqtt.Core.Interfaces.Handlers;
+using Parking.Mqtt.Core.Models.MQTT;
+using Parking.Mqtt.Core.Models.MQTT.DTO;
+using Parking.Mqtt.Core.Models.MQTT.Requests;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,43 +18,26 @@ namespace Parking.Mqtt.Api.Controllers
     [ApiController]
     public class MqttController : ControllerBase
     {
-        private readonly IListenUseCase _listenUseCase;
-        private readonly ListenPresenter _listenPresenter;
-
-        private readonly IConnectUseCase _connectUseCase;
-        private readonly ConnectPresenter _connectPresenter;
-
-        private readonly IDisconnectUseCase _disconnectUseCase;
         private readonly DisconnectPresenter _disconnectPresenter;
+        private readonly ConnectPresenter _connectPresenter;
+        private readonly SubscribePresenter _subscribePresenter;
+      
 
-        private readonly IGetStatusUseCase _getStatusUseCase;
-        private readonly GetStatusPresenter _getStatusPresenter;
-
+        private readonly IMQTTHandler _handler;
         private readonly ILogger _logger;
 
-        public MqttController(ILogger<MqttController> logger, IListenUseCase listenUseCase, ListenPresenter listenPresenter, IConnectUseCase connectUseCase,
-                                ConnectPresenter connectPresenter, IDisconnectUseCase disconnectUseCase, DisconnectPresenter disconnectPresenter, IGetStatusUseCase getStatusUseCase, GetStatusPresenter getStatusPresenter)
+        public MqttController(IMQTTHandler handler, ILogger<MqttController> logger, DisconnectPresenter disconnectPresenter, ConnectPresenter connectPresenter, SubscribePresenter subscribePresenter)
         {
+            _handler = handler;
             _logger = logger;
-
-            _listenUseCase = listenUseCase;
-            _listenPresenter = listenPresenter;
-
-            _connectUseCase = connectUseCase;
-            _connectPresenter = connectPresenter;
-
-            _disconnectUseCase = disconnectUseCase;
             _disconnectPresenter = disconnectPresenter;
-            _getStatusUseCase = getStatusUseCase;
-            _getStatusPresenter = getStatusPresenter;
+            _connectPresenter = connectPresenter;
+            _subscribePresenter = subscribePresenter;
         }
 
-
-
-
         [HttpPost]
-        [Route(ApiRouting.Listen)]
-        public async Task<IActionResult> ListenAsync([FromBody]ListenApiRequest request)
+        [Route(ApiRouting.Subscribe)]
+        public async Task<IActionResult> SubscribeAsync([FromBody]ListenApiRequest request)
         {
             _logger.LogInformation("Started proccesing ListenRequest {@ListenRequest}", request);
 
@@ -63,23 +47,19 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Listen request is valid");
 
-            var topics = new List<Core.Models.UseCaseRequests.Topic>();
+            var topics = new List<MQTTTopicConfiguration>();
 
             //TODO prerobit cez automapper
             request?.Topics.ToList().ForEach((topic ) =>
            {
-               var newTopic = new Core.Models.UseCaseRequests.Topic()
-               {
-                   QoS = topic.QoS,
-                   TopicName = topic.TopicName
-               };
+               var newTopic = new MQTTTopicConfiguration(topic.TopicName, (MQTTQualityOfService)topic.QoS);             
 
                topics.Add(newTopic);
            });
             
-            await _listenUseCase.HandleAsync(new ListenRequest(topics), _listenPresenter);
-            _logger.LogInformation("Listen request done with content {@result}", _listenPresenter.Result.Content);
-            return _listenPresenter.Result;
+            await _handler.SubscribeAsync(new SubscribeRequest(topics), _subscribePresenter);
+            _logger.LogInformation("Listen request done with content {@result}", _subscribePresenter.Result.Content);
+            return _subscribePresenter.Result;
         }
 
 
@@ -96,8 +76,8 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Connect request is valid");
 
-            await _connectUseCase.HandleAsync(new ConnectRequest(request?.ClientId, request.TcpServer, request.Port, request.Username, 
-                                                                request.Password, request.UseTls, request.CleanSession, request.KeepAlive), _connectPresenter);
+            await _handler.ConnectAsync(new ConnectRequest(new MQTTServerConfiguration(request?.ClientId, request.TcpServer, request.Port, request.Username, 
+                                                                request.Password, request.UseTls, request.CleanSession, request.KeepAlive)), _connectPresenter);
 
             _logger.LogInformation("Connect request done with content {@result}", _connectPresenter.Result.Content);
 
@@ -116,27 +96,9 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Disconnect request is valid");
 
-            await _disconnectUseCase.HandleAsync(new DisconnectRequest(), _disconnectPresenter);
+            await _handler.DisconnectAsync(new DisconnectRequest(), _disconnectPresenter);
 
             return _disconnectPresenter.Result;
-        }
-
-        [HttpGet]
-        [Route(ApiRouting.Status)]
-        public async Task<IActionResult> GetStatus()
-        {
-            _logger.LogInformation("Started proccesing GetStatus");
-
-            //TODO validacia null
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-          
-
-            await _getStatusUseCase.HandleAsync(new GetStatusRequest(), _getStatusPresenter);
-
-            return _getStatusPresenter.Result;
-        }
-
-
+        }      
     }
 }

@@ -6,11 +6,10 @@ using MQTTnet.Protocol;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models;
 using Parking.Mqtt.Core.Models.Gateways;
-using Parking.Mqtt.Core.Models.Gateways.Services;
 using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
-using Parking.Mqtt.Core.Models.UseCaseRequests;
+using Parking.Mqtt.Core.Models.MQTT;
+using Parking.Mqtt.Core.Models.MQTT.DTO;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,17 +17,13 @@ using System.Threading.Tasks;
 namespace Parking.Mqtt.Infrastructure.Mqtt
 {
     public class MqttService : IMqttService
-    {
-        private IEnumerable<Topic> SubsribedTopics { get; set; }
+    {       
        
         private readonly IMqttClient _client;
-        public event Func<MqttMessage, Task> MessageReceivedAsync;
+        public event Func<MQTTMessage, Task> MessageReceivedAsync;
 
         public MqttService()
         {
-            if (SubsribedTopics == null)
-                SubsribedTopics = new List<Topic>();
-
             _client = new MqttFactory().CreateMqttClient();
 
             _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);
@@ -37,7 +32,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         public async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs data)
         {            
             var message = Encoding.UTF8.GetString(data.ApplicationMessage.Payload);
-            await MessageReceivedAsync(new MqttMessage(message, data.ApplicationMessage.Topic, data.ClientId, !data.ProcessingFailed));
+            await MessageReceivedAsync(new MQTTMessage(message, data.ApplicationMessage.Topic, data.ClientId));           
         }
 
 
@@ -46,10 +41,10 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         /// </summary>
         /// <param name="topics"></param>
         /// <returns></returns>
-        public async Task<MqttListenResponse> BeginListeningAsync(IEnumerable<Topic> topics)
+        public async Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTopicConfiguration> topics)
         {
 
-            var returnList = new List<string>();
+            var returnList = new List<MQTTTopicConfiguration>();
             var errorList = new List<Error>();
 
 
@@ -57,9 +52,8 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 
             foreach (var topic in topics)
             {
-                topicBuilder.WithTopic(topic.TopicName).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.QoS);
-
-                SubsribedTopics.Append(topic);
+                topicBuilder.WithTopic(topic.Name).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.QoS);                
+                      
             }
             var result = await _client.SubscribeAsync(topicBuilder.Build());
 
@@ -67,12 +61,12 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             foreach (var res in result.Items)
             {
                 if (SubscribeSucceeded(res.ResultCode))
-                    returnList.Add(res.TopicFilter.Topic);
+                    returnList.Add(new MQTTTopicConfiguration(res.TopicFilter.Topic, (MQTTQualityOfService)res.TopicFilter.QualityOfServiceLevel));
                 else
                     errorList.Add(new Error(res.ResultCode.ToString(), res.TopicFilter.Topic));
             }
 
-            return new MqttListenResponse(returnList, (returnList.Count > 0), errorList);
+            return new MQTTSubscribeGateResponse(returnList, (returnList.Count > 0), errorList);
         }
 
 
@@ -80,31 +74,31 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         public async Task DisconnectAsync() => await _client.DisconnectAsync();
 
 
-        public async Task<MqttConnectResponse> ConnectAsync(ConnectRequest connectRequest)
+        public async Task<MQTTConnectGateResponse> ConnectAsync(MQTTServerConfiguration configuration)
         {
 
             var errors = new List<Error>();
 
             var mqqtOptions = new MqttClientOptionsBuilder()
-                            .WithClientId(connectRequest.ClientId)
-                            .WithTcpServer(connectRequest.TcpServer, connectRequest.Port)
-                            .WithCredentials(connectRequest.Username, connectRequest.Password)
-                            .WithTls(t => t.UseTls = connectRequest.UseTls)
-                            .WithCleanSession(connectRequest.CleanSession)
-                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(connectRequest.KeepAlive))
+                            .WithClientId(configuration.ClientId)
+                            .WithTcpServer(configuration.TcpServer, configuration.Port)
+                            .WithCredentials(configuration.Username, configuration.Password)
+                            .WithTls(t => t.UseTls = configuration.UseTls)
+                            .WithCleanSession(configuration.CleanSession)
+                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(configuration.KeepAlive))
                             .Build();
             
             var result = await _client.ConnectAsync(mqqtOptions);
 
             if (result.ResultCode == MQTTnet.Client.Connecting.MqttClientConnectResultCode.Success)
             {
-                return new MqttConnectResponse(true);
+                return new MQTTConnectGateResponse(true);
             }
 
             //error 
             var err = new Error(result.ResultCode.ToString(), result.ReasonString);
             errors.Add(err);
-            return new MqttConnectResponse(false, errors);
+            return new MQTTConnectGateResponse(false, errors);
         }
 
         private bool SubscribeSucceeded(MqttClientSubscribeResultCode resultCode)
@@ -112,17 +106,19 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             return resultCode == MqttClientSubscribeResultCode.GrantedQoS0 || resultCode == MqttClientSubscribeResultCode.GrantedQoS1 || resultCode == MqttClientSubscribeResultCode.GrantedQoS2;
         }
 
-        public async Task<MqttStatus> GetStatusAsync()
+  
+
+        public async Task<MQTTGetStatusGateResponse> GetStatusAsync()
         {
-            if(_client?.Options != null)
+            if (_client?.Options != null)
             {
                 var tcpOptions = (MqttClientTcpOptions)_client.Options.ChannelOptions;
 
-                return new MqttStatus(_client.IsConnected, _client.Options.ClientId, tcpOptions.Server, (int)tcpOptions.Port, SubsribedTopics);
+                return new MQTTGetStatusGateResponse(_client.IsConnected, new MQTTServerConfiguration(_client.Options.ClientId, tcpOptions.Server, (int)tcpOptions.Port, "", "", false, false, 100), true);                              
+                    
             }
 
-            return new MqttStatus(false, "","", null, new List<Topic>());
-        }
-        
+            return new MQTTGetStatusGateResponse(false);
+        }        
     }
 }

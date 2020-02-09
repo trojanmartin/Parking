@@ -27,5 +27,11 @@ namespace Parking.Mqtt.Api
         {
             MqttServerConfiguration = await _context.MqttServerConfigurations.Include(x => x.Topics).ToListAsync();
         }
+
+        public async Task<IActionResult> OnPostConnectAsync(string id)
+        {
+            
+            return RedirectToPage();
+        }
     }
 }
