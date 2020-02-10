@@ -10,10 +10,11 @@ namespace Parking.Mqtt.Core.Interfaces.Gateways.Services
 {
     public interface IMqttService
     {
-        event Func<MQTTMessage, Task> MessageReceivedAsync;
-        Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTServerConfiguration> topics);
-        Task<MQTTConnectGateResponse> ConnectAsync(MQTTServerConfiguration configuration);
+        event Func<MQTTMessageDTO, Task> MessageReceivedAsync;
+        Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTopicConfigurationDTO> topics);
+        Task<MQTTConnectGateResponse> ConnectAsync(MQTTServerConfigurationDTO configuration);
         Task<MQTTGetStatusGateResponse> GetStatusAsync();
         Task DisconnectAsync();
+        Task UnSubscribe(IEnumerable<MQTTTopicConfigurationDTO> topics);
     }
 }

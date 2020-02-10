@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Parking.Mqtt.Core.Models.MQTT
 {
-    public class MQTTServerConfiguration
+    public class MQTTServerConfigurationDTO
     {
 
 
 
-        public MQTTServerConfiguration(string clientId, string tcpServer, int port, string username, string password, bool useTls, bool cleanSession, int keepAlive, string id = null, IEnumerable<MQTTTServerConfiguration> topics = null)
+        public MQTTServerConfigurationDTO(string clientId, string tcpServer, int port, string username, string password, bool useTls, bool cleanSession, int keepAlive, int? id = null, IEnumerable<MQTTTopicConfigurationDTO> topics = null, string configurationName = null)
         {
             ClientId = clientId;
             TcpServer = tcpServer;
@@ -20,9 +20,11 @@ namespace Parking.Mqtt.Core.Models.MQTT
             KeepAlive = keepAlive;
             Id = id;
             Topics = topics;
+            ConfigurationName = configurationName;           
         }
 
-        public string Id { get; }
+        public int? Id { get; }
+        public string ConfigurationName { get; set; }
         public string ClientId { get; }
         public string TcpServer { get; }
         public int Port { get; }
@@ -31,6 +33,6 @@ namespace Parking.Mqtt.Core.Models.MQTT
         public bool UseTls { get; }
         public bool CleanSession { get; }
         public int KeepAlive { get; }
-        public IEnumerable<MQTTTServerConfiguration> Topics { get; }
+        public IEnumerable<MQTTTopicConfigurationDTO> Topics { get; }
     }
 }

@@ -3,16 +3,23 @@ using System.Collections.Generic;
 
 namespace Parking.Mqtt.Api.Frontend.Models
 {
-    public class MqttStatusViewModel
+    public class MqttConfigurationViewModel
     {
-        public bool Connected { get; }
-        public string ClientId { get; }
-        public string TcpServer { get; }
-        public int? Port { get; }
-        public IEnumerable<TopicViewModel> TopicSubscribing { get; }
+        public int? Id { get; set; }
+        public string Name { get; set; }
+        public bool Connected { get; set; }
+        public string ClientId { get; set; }
+        public string TcpServer { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public int KeepAlive { get; set; }
+        public bool CleanSession { get; set; }
+        public bool UseTls { get; set; }
+        public int Port { get; set; }
+        public IEnumerable<MqttTopicViewModel> TopicSubscribing { get; set; }
     }
 
-    public class TopicViewModel
+    public class MqttTopicViewModel
     {
         public string TopicName { get; set; }
         public MQTTQualityOfService QoS { get; set; }

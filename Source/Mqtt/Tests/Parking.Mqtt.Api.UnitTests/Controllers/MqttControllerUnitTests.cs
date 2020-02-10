@@ -5,6 +5,7 @@ using Parking.Mqtt.Api.Controllers;
 using Parking.Mqtt.Api.Models.Requests;
 using Parking.Mqtt.Api.Presenters;
 using Parking.Mqtt.Core.Handlers;
+using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Core.Models.Gateways;
@@ -29,12 +30,16 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             var logger = new Mock<ILogger<MQTTHandler>>().Object;
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
-                                                    .Returns(Task.FromResult(new MQTTSubscribeGateResponse(new List<MQTTTServerConfiguration>() { new MQTTTServerConfiguration("name", MQTTQualityOfService.AtLeastOnce)}, true)));
+            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfigurationDTO>>()))
+                                                    .Returns(Task.FromResult(new MQTTSubscribeGateResponse(new List<MQTTTopicConfigurationDTO>() { new MQTTTopicConfigurationDTO("name", MQTTQualityOfService.AtLeastOnce)}, true)));
 
             var controller = new FakeMqttController()
             {
-                MQTTHandler = new MQTTHandler(logger,mqttMock.Object)
+                MQTTHandler = new BuilderMQTTHandler()
+                {
+                    MQTTService = mqttMock.Object
+                }.Build()
+
             }.Build();
             
             //act 
@@ -53,12 +58,16 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             var logger = new Mock<ILogger<MQTTHandler>>().Object;
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
+            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfigurationDTO>>()))
                                                     .Returns(Task.FromResult(new MQTTSubscribeGateResponse(null, false)));
 
             var controller = new FakeMqttController()
             {
-                MQTTHandler = new MQTTHandler(logger, mqttMock.Object)
+                MQTTHandler = new BuilderMQTTHandler()
+                {
+                    MQTTService = mqttMock.Object
+                }.Build()
+
             }.Build();
 
             var result = await controller.SubscribeAsync(new Models.Requests.ListenApiRequest() { Topics = new List<Parking.Mqtt.Api.Models.Requests.Topic>() { new Models.Requests.Topic() { TopicName = "topic", QoS = MQTTQualityOfService.AtLeastOnce } } });
@@ -75,12 +84,16 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
 
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(m => m.ConnectAsync(It.IsAny<MQTTServerConfiguration>()))
+            mqttMock.Setup(m => m.ConnectAsync(It.IsAny<MQTTServerConfigurationDTO>()))
                      .Returns(Task.FromResult(new MQTTConnectGateResponse(true)));
 
             var controller = new FakeMqttController()
             {
-                MQTTHandler = new MQTTHandler(logger, mqttMock.Object)
+                MQTTHandler = new BuilderMQTTHandler()
+                {
+                    MQTTService = mqttMock.Object
+                }.Build()
+
             }.Build();
 
             var result = await controller.ConnectAsync(new ConnectApiRequest());
@@ -96,12 +109,16 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             var logger = new Mock<ILogger<MQTTHandler>>().Object;
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(m => m.ConnectAsync(It.IsAny<MQTTServerConfiguration>()))
+            mqttMock.Setup(m => m.ConnectAsync(It.IsAny<MQTTServerConfigurationDTO>()))
                      .Returns(Task.FromResult(new MQTTConnectGateResponse(false)));
 
             var controller = new FakeMqttController()
             {
-                MQTTHandler = new MQTTHandler(logger, mqttMock.Object)
+                MQTTHandler = new BuilderMQTTHandler()
+                {
+                    MQTTService = mqttMock.Object
+                }.Build()
+
             }.Build();
 
             var result = await controller.ConnectAsync(new ConnectApiRequest());
@@ -123,7 +140,11 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
 
             var controller = new FakeMqttController()
             {
-                MQTTHandler = new MQTTHandler(logger, mqttMock.Object)
+                MQTTHandler = new BuilderMQTTHandler()
+                {
+                    MQTTService = mqttMock.Object
+                }.Build()
+
             }.Build();
 
             var result = await controller.DisconnectAsync();
@@ -142,11 +163,15 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
 
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(x => x.DisconnectAsync());                                
+            mqttMock.Setup(x => x.DisconnectAsync());
 
             var controller = new FakeMqttController()
             {
-                MQTTHandler = new MQTTHandler(logger, mqttMock.Object)
+                MQTTHandler = new BuilderMQTTHandler()
+                {
+                    MQTTService = mqttMock.Object
+                }.Build()
+
             }.Build();
 
             var result = await controller.DisconnectAsync();
@@ -174,5 +199,16 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
         {
             return new MqttController(MQTTHandler, Logger, DisconnectPresenter, ConnectPresenter, SubscribePresenter);
         }
+    }
+
+    internal class BuilderMQTTHandler
+    {
+        public ILogger<MQTTHandler> Logger { get; set; } = new Mock<ILogger<MQTTHandler>>().Object;
+
+        public IMQTTConfigurationRepository MQTTRepo { get; set; } = new Mock<IMQTTConfigurationRepository>().Object;
+
+        public IMqttService MQTTService { get; set; } = new Mock<IMqttService>().Object;
+
+        public IMQTTHandler Build() => new MQTTHandler(Logger, MQTTService, MQTTRepo);
     }
 }

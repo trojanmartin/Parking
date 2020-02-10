@@ -5,7 +5,7 @@ namespace Parking.Mqtt.Core.Models.Gateways.Services.Mqtt
 {
     public class MQTTMessageReceivedGateResponse : BaseGatewayResponse
     {
-        public MQTTMessageReceivedGateResponse(MQTTMessage message, bool succes = false) : base(succes)
+        public MQTTMessageReceivedGateResponse(MQTTMessageDTO message, bool succes = false) : base(succes)
         {
             Message = message;
         }
@@ -14,6 +14,6 @@ namespace Parking.Mqtt.Core.Models.Gateways.Services.Mqtt
         {
         }
 
-        public MQTTMessage Message { get;}
+        public MQTTMessageDTO Message { get;}
     }
 }

@@ -17,19 +17,21 @@ namespace Parking.Mqtt.Core.UnitTests
     {
         [Fact]
         public async void MqttConnectUseCase_SuccesfullyConnected_ReturnsTrue()
-        {
-            var logger = new Mock<ILogger<MQTTHandler>>().Object;
+        {          
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<MQTTServerConfiguration>()))
+            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<MQTTServerConfigurationDTO>()))
                     .Returns(Task.FromResult(new MQTTConnectGateResponse(true)));
 
             var output = new Mock<IOutputPort<ConnectResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<ConnectResponse>()));
 
-            var handler = new MQTTHandler(logger,mqttMock.Object);
+            var handler = new BuilderMQTTHandler()
+            {
+                MQTTService = mqttMock.Object
+            }.Build();
 
-            var result = await handler.ConnectAsync(new ConnectRequest(It.IsAny<MQTTServerConfiguration>()), output.Object);
+            var result = await handler.ConnectAsync(new ConnectRequest(It.IsAny<MQTTServerConfigurationDTO>()), output.Object);
 
             output.Verify(x => x.CreateResponse(It.Is<ConnectResponse>(a => a.Success == true)));
             Assert.True(result);
@@ -37,18 +39,20 @@ namespace Parking.Mqtt.Core.UnitTests
 
         [Fact]
         public async void MqttConnectUseCase_NotConnected_ReturnsFalse()
-        {
-            var logger = new Mock<ILogger<MQTTHandler>>().Object;
+        {         
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<MQTTServerConfiguration>()))
+            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<MQTTServerConfigurationDTO>()))
                     .Returns(Task.FromResult(new MQTTConnectGateResponse(false)));
 
             var output = new Mock<IOutputPort<ConnectResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<ConnectResponse>()));
 
 
-            var handler = new MQTTHandler(logger, mqttMock.Object);
+            var handler = new BuilderMQTTHandler()
+            {
+                MQTTService = mqttMock.Object
+            }.Build();
 
             var result = await handler.ConnectAsync(It.IsAny<ConnectRequest>(), output.Object);
 
@@ -59,18 +63,20 @@ namespace Parking.Mqtt.Core.UnitTests
 
         [Fact]
         public async void MqttConnectUseCase_ServiceThrowsExceptions_ReturnsFalse()
-        {
-            var logger = new Mock<ILogger<MQTTHandler>>().Object;
+        {           
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<MQTTServerConfiguration>()))
+            mqttMock.Setup(x => x.ConnectAsync(It.IsAny<MQTTServerConfigurationDTO>()))
                     .Throws(new Exception());
                   
 
             var output = new Mock<IOutputPort<ConnectResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<ConnectResponse>()));
 
-            var handler = new MQTTHandler(logger, mqttMock.Object);
+            var handler = new BuilderMQTTHandler()
+            {
+                MQTTService = mqttMock.Object
+            }.Build();
 
             var result = await handler.ConnectAsync(It.IsAny<ConnectRequest>(), output.Object);
 

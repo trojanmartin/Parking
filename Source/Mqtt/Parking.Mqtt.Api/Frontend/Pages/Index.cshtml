@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{handler?}/{id?}"
 @model Parking.Mqtt.Api.IndexModel
 
 @{
@@ -13,7 +13,7 @@
 
 <div id="accordion">
 
-    @foreach (var item in Model.MqttServerConfiguration)
+    @foreach (var item in Model.Configuration)
     {
         var id = item.Name + Guid.NewGuid().ToString("N");
         <div class="card">
@@ -39,8 +39,8 @@
                                 </div>
 
                                 <div class="row">
-                                    @Html.LabelFor(modelItem => item.TCPServer, new { @class = "font-weight-bold" })
-                                    @Html.DisplayFor(modelItem => item.TCPServer)
+                                    @Html.LabelFor(modelItem => item.TcpServer, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.TcpServer)
                                 </div>
 
                                 <div class="row">
@@ -84,14 +84,14 @@
 
                                 <table>
                                     <tbody>
-                                        @foreach (var topic in item.Topics)
+                                        @foreach (var topic in item.TopicSubscribing)
                                         {
                                             <tr>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().TopicName)
+                                                    @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().TopicName)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.MqttServerConfiguration[0].Topics.FirstOrDefault().QoS)
+                                                    @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().QoS)
                                                 </th>
                                             </tr>
 

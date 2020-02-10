@@ -43,37 +43,37 @@ namespace Parking.Mqtt.Infrastructure.Data.Repositories
             }
         }
 
-        public async Task<IEnumerable<MQTTServerConfiguration>> GetConfigurationsAsync()
+        public async Task<IEnumerable<MQTTServerConfigurationDTO>> GetConfigurationsAsync()
         {
             var res = await  _context.MqttServerConfigurations.Include(x => x.Topics).ToListAsync();
 
-            return new List<MQTTServerConfiguration>( _mapper.Map<ICollection<MqttServerConfiguration>,IEnumerable<MQTTServerConfiguration>>(res));
+            return new List<MQTTServerConfigurationDTO>( _mapper.Map<ICollection<MqttServerConfiguration>,IEnumerable<MQTTServerConfigurationDTO>>(res));
         }
 
-        public async Task<MQTTServerConfiguration> GetConfigurationAsync(string id)
+        public async Task<MQTTServerConfigurationDTO> GetConfigurationAsync(string id)
         {
 
             var config = await _context.MqttServerConfigurations.FindAsync(id);
 
-            return _mapper.Map<MQTTServerConfiguration>(config);
+            return _mapper.Map<MQTTServerConfigurationDTO>(config);
         }
 
-        public Task<bool> CreateOrUpdateMqttStatusAsync(MQTTServerConfiguration configuration)
+        public Task<bool> CreateOrUpdateMqttStatusAsync(MQTTServerConfigurationDTO configuration)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<MQTTServerConfiguration> GetConfigurationAsync(int id)
+        public Task<MQTTServerConfigurationDTO> GetConfigurationAsync(int id)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> CreateConfigurationAsync(MQTTServerConfiguration configuration)
+        public Task<bool> CreateConfigurationAsync(MQTTServerConfigurationDTO configuration)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> UpdateConfigurationAsync(MQTTServerConfiguration configuration)
+        public Task<bool> UpdateConfigurationAsync(MQTTServerConfigurationDTO configuration)
         {
             throw new System.NotImplementedException();
         }

@@ -10,7 +10,7 @@ namespace Parking.Mqtt.Infrastructure.Mapping
     {
         public Profiles()
         {
-            CreateMap<MQTTTServerConfiguration, MqttTopicConfiguration>()
+            CreateMap<MQTTTopicConfigurationDTO, MqttTopicConfiguration>()
                 .ConvertUsing(x => new MqttTopicConfiguration
                 {
                     QoS = (MqttQualtiyOfService)x.QoS,
@@ -18,16 +18,27 @@ namespace Parking.Mqtt.Infrastructure.Mapping
                 });
 
 
-            CreateMap<MqttTopicConfiguration, MQTTTServerConfiguration>()
-             .ConvertUsing(x => new MQTTTServerConfiguration(x.TopicName, (MQTTQualityOfService)x.QoS));            
+            CreateMap<MqttTopicConfiguration, MQTTTopicConfigurationDTO>()
+             .ConvertUsing(x => new MQTTTopicConfigurationDTO(x.TopicName, (MQTTQualityOfService)x.QoS));            
 
-            CreateMap<MQTTServerConfiguration, MqttServerConfiguration>()
+            CreateMap<MQTTServerConfigurationDTO, MqttServerConfiguration>()
                 .ForMember(dest => dest.Topics,
                 opt => opt.MapFrom(src => src.Topics));
 
-            CreateMap<MqttServerConfiguration, MQTTServerConfiguration>()
-               .ForMember(dest => dest.Topics,
-               opt => opt.MapFrom(src => src.Topics));         
+            CreateMap<MqttServerConfiguration, MQTTServerConfigurationDTO>()
+                .ForCtorParam("clientId", opt => opt.MapFrom(src => src.Id))
+                .ForCtorParam("configurationName", opt => opt.MapFrom(src => src.Name))
+                .ForCtorParam("tcpServer", opt => opt.MapFrom(src => src.TCPServer))
+                .ForCtorParam("port", opt => opt.MapFrom(src => src.Port))
+                .ForCtorParam("username", opt => opt.MapFrom(src => src.Username))
+                .ForCtorParam("password", opt => opt.MapFrom(src => src.Password))
+                .ForCtorParam("useTls", opt => opt.MapFrom(src => src.UseTls))
+                .ForCtorParam("cleanSession", opt => opt.MapFrom(src => src.CleanSession))
+                .ForCtorParam("keepAlive", opt => opt.MapFrom(src => src.KeepAlive))
+                .ForCtorParam("topics", opt => opt.MapFrom(src => src.Topics));         
+               
+              
+               
         }
     }
 }

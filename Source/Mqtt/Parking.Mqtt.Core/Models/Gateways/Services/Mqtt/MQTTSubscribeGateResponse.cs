@@ -7,10 +7,10 @@ namespace Parking.Mqtt.Core.Models.Gateways
     public class MQTTSubscribeGateResponse : BaseGatewayResponse
     {
 
-        public IEnumerable<MQTTTServerConfiguration> Topics { get; }
+        public IEnumerable<MQTTTopicConfigurationDTO> Topics { get; }
 
 
-        public MQTTSubscribeGateResponse(IEnumerable<MQTTTServerConfiguration> topics = null, bool succes = false, IEnumerable<Error> errors = null) : base(succes, errors)
+        public MQTTSubscribeGateResponse(IEnumerable<MQTTTopicConfigurationDTO> topics = null, bool succes = false, IEnumerable<Error> errors = null) : base(succes, errors)
         {
             Topics = topics;
         }       

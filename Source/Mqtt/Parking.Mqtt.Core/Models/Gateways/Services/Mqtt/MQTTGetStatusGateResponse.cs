@@ -7,14 +7,14 @@ namespace Parking.Mqtt.Core.Models.Gateways.Services.Mqtt
     {
         public bool Connected { get;  }
 
-        public MQTTServerConfiguration ServerConfiguration { get; }
+        public MQTTServerConfigurationDTO ServerConfiguration { get; }
 
         public MQTTGetStatusGateResponse(bool succes = false, IEnumerable<Error> errors = null) : base(succes, errors)
         {
 
         }
 
-        public MQTTGetStatusGateResponse(bool connected, MQTTServerConfiguration serverConfiguration, bool succes = false) : base(succes)
+        public MQTTGetStatusGateResponse(bool connected, MQTTServerConfigurationDTO serverConfiguration, bool succes = false) : base(succes)
         {
             Connected = connected;
             ServerConfiguration = serverConfiguration;

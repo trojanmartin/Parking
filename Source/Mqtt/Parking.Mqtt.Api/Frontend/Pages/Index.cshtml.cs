@@ -1,37 +1,64 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Parking.Mqtt.Api.Frontend.Models;
+using Parking.Mqtt.Api.Frontend.Presenters;
+using Parking.Mqtt.Core.Interfaces.Handlers;
+using Parking.Mqtt.Core.Models.MQTT;
+using Parking.Mqtt.Core.Models.MQTT.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Parking.Mqtt.Infrastructure.Data;
-using Parking.Mqtt.Infrastructure.Data.Entities;
 
 namespace Parking.Mqtt.Api
 {
     public class IndexModel : PageModel
     {
-        private readonly Parking.Mqtt.Infrastructure.Data.ApplicationDbContext _context;
+        private readonly IMQTTHandler _handler;
+        private readonly ConfigurationWebPresenter _configurationPresenter;
 
-        public IndexModel(Parking.Mqtt.Infrastructure.Data.ApplicationDbContext context)
+        public IndexModel(IMQTTHandler handler, ConfigurationWebPresenter configurationPresenter)
         {
-            _context = context;
+            _handler = handler;
+            _configurationPresenter = configurationPresenter;
+            Configuration  = new List<MqttConfigurationViewModel>();
         }
 
-        public IList<MqttServerConfiguration> MqttServerConfiguration { get;set; }
+        public IList<MqttConfigurationViewModel> Configuration { get; set; } 
 
+        public MqttConfigurationViewModel Connected { get; set; }
 
-
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            MqttServerConfiguration = await _context.MqttServerConfigurations.Include(x => x.Topics).ToListAsync();
+            var result = await _handler.GetConfigurationAsync(new GetConfigurationRequest(null), _configurationPresenter);
+
+            if (result)
+            {
+                Configuration = _configurationPresenter.Configurations;
+                return Page();
+            }
+                
+
+            else
+                return RedirectToPage("Error");
         }
 
-        public async Task<IActionResult> OnPostConnectAsync(string id)
+        public async Task<IActionResult> OnPostConnectAsync(int id)
         {
-            
-            return RedirectToPage();
+            return Page();
+
+            var connect = Configuration.First(x => x.Id == id);
+
+            var res = await _handler.ConnectAsync(new ConnectRequest(new MQTTServerConfigurationDTO(connect.ClientId, connect.TcpServer, connect.Port,
+                                      connect.Username, connect.Password, connect.UseTls, connect.CleanSession, connect.KeepAlive)), _configurationPresenter);
+
+            if (res)
+                Connected = connect;
+
+            else
+                return RedirectToPage("Error");
+
+            return Page();
         }
     }
 }

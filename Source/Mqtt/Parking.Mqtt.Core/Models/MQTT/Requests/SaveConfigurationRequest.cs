@@ -5,11 +5,11 @@ namespace Parking.Mqtt.Core.Models.MQTT.Requests
 {
     public class SaveConfigurationRequest : IRequest<SaveConfigurationResponse>
     {
-        public SaveConfigurationRequest(MQTTServerConfiguration mqttServerConfiguration)
+        public SaveConfigurationRequest(MQTTServerConfigurationDTO mqttServerConfiguration)
         {
             MqttServerConfiguration = mqttServerConfiguration;
         }
 
-        public MQTTServerConfiguration MqttServerConfiguration { get; }
+        public MQTTServerConfigurationDTO MqttServerConfiguration { get; }
     }
 }

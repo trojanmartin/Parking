@@ -5,11 +5,11 @@ namespace Parking.Mqtt.Core.Models.MQTT.Requests
 {
     public class ConnectRequest : IRequest<ConnectResponse>
     {
-        public ConnectRequest(MQTTServerConfiguration configuration)
+        public ConnectRequest(MQTTServerConfigurationDTO configuration)
         {
             ServerConfiguration = configuration;
         }
 
-        public MQTTServerConfiguration ServerConfiguration { get; }
+        public MQTTServerConfigurationDTO ServerConfiguration { get; }
     }
 }

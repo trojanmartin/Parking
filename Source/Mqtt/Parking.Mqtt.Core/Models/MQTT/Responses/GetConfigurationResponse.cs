@@ -5,13 +5,13 @@ namespace Parking.Mqtt.Core.Models.MQTT.Responses
 {
     public class GetConfigurationResponse : BaseResponse
     {
-        public IEnumerable<MQTTServerConfiguration> ServerConfigurations{ get;}
+        public IEnumerable<MQTTServerConfigurationDTO> ServerConfigurations{ get;}
 
         public GetConfigurationResponse(bool success = false, IEnumerable<Error> errors = null, string message = null) : base(success, errors, message)
         {
         }
 
-        public GetConfigurationResponse(IEnumerable<MQTTServerConfiguration> serverConfigurations, bool succes) : base(succes)
+        public GetConfigurationResponse(IEnumerable<MQTTServerConfigurationDTO> serverConfigurations, bool succes) : base(succes)
         {
             ServerConfigurations = serverConfigurations;
         }

@@ -47,12 +47,12 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Listen request is valid");
 
-            var topics = new List<MQTTTServerConfiguration>();
+            var topics = new List<MQTTTopicConfigurationDTO>();
 
             //TODO prerobit cez automapper
             request?.Topics.ToList().ForEach((topic ) =>
            {
-               var newTopic = new MQTTTServerConfiguration(topic.TopicName, (MQTTQualityOfService)topic.QoS);             
+               var newTopic = new MQTTTopicConfigurationDTO(topic.TopicName, (MQTTQualityOfService)topic.QoS);             
 
                topics.Add(newTopic);
            });
@@ -76,7 +76,7 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Connect request is valid");
 
-            await _handler.ConnectAsync(new ConnectRequest(new MQTTServerConfiguration(request?.ClientId, request.TcpServer, request.Port, request.Username, 
+            await _handler.ConnectAsync(new ConnectRequest(new MQTTServerConfigurationDTO(request?.ClientId, request.TcpServer, request.Port, request.Username, 
                                                                 request.Password, request.UseTls, request.CleanSession, request.KeepAlive)), _connectPresenter);
 
             _logger.LogInformation("Connect request done with content {@result}", _connectPresenter.Result.Content);

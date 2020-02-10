@@ -1,5 +1,4 @@
 ﻿using Moq;
-using Parking.Mqtt.Core.Handlers;
 using Parking.Mqtt.Core.Interfaces;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models.MQTT.Requests;
@@ -20,12 +19,15 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
             var output = new Mock<IOutputPort<DisconnectResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<DisconnectResponse>()));
 
-            var handler = new MQTTHandler(Log.FakeLogger<MQTTHandler>(), mqttMock.Object);
+            var handler = new BuilderMQTTHandler()
+            {
+                MQTTService = mqttMock.Object
+            }.Build();
 
 
             var result = await handler.DisconnectAsync(It.IsAny<DisconnectRequest>(), output.Object);
 
-            output.Verify(x => x.CreateResponse(It.Is<DisconnectResponse>(a => a.Success == true)));
+            output.Verify(x => x.CreateResponse(It.Is<DisconnectResponse>(a => a.Success)));
 
             Assert.True(result);
         }
@@ -39,12 +41,15 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
             var output = new Mock<IOutputPort<DisconnectResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<DisconnectResponse>()));
 
-            var handler = new MQTTHandler(Log.FakeLogger<MQTTHandler>(), mqttMock.Object);
+            var handler = new BuilderMQTTHandler()
+            {
+                MQTTService = mqttMock.Object
+            }.Build();
 
 
             var result = await handler.DisconnectAsync(It.IsAny<DisconnectRequest>(), output.Object);
 
-            output.Verify(x => x.CreateResponse(It.Is<DisconnectResponse>(a => a.Success == false)));
+            output.Verify(x => x.CreateResponse(It.Is<DisconnectResponse>(a => !a.Success)));
            
 
             Assert.False(false);

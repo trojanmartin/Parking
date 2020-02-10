@@ -5,7 +5,7 @@ namespace Parking.Mqtt.Core.Models.MQTT.Requests
 {
     public class GetConfigurationRequest : IRequest<GetConfigurationResponse>
     {
-        public GetConfigurationRequest(int id)
+        public GetConfigurationRequest(int? id)
         {
             Id = id;
         }

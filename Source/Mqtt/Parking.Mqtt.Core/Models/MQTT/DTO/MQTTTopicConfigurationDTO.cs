@@ -1,8 +1,8 @@
 ﻿namespace Parking.Mqtt.Core.Models.MQTT.DTO
 {
-    public class MQTTTServerConfiguration
+    public class MQTTTopicConfigurationDTO
     {
-        public MQTTTServerConfiguration(string name, MQTTQualityOfService qoS)
+        public MQTTTopicConfigurationDTO(string name, MQTTQualityOfService qoS)
         {
             Name = name;
             QoS = qoS;

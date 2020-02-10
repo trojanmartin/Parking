@@ -93,11 +93,11 @@ namespace Parking.Mqtt.Core.Handlers
             }
         }
 
-        private async Task MessageReceivedHandlerAsync(MQTTMessage message)
+        private async Task MessageReceivedHandlerAsync(MQTTMessageDTO message)
         {
             await  Task.Run(() =>
            {
-               Console.WriteLine(message.Message);
+               Console.WriteLine(message.Payload);
            });
             
         }
@@ -119,7 +119,7 @@ namespace Parking.Mqtt.Core.Handlers
                 else
                 {
                     var res =await  _repo.GetConfigurationAsync((int)configurationRequest.Id);
-                    outputPort.CreateResponse(new GetConfigurationResponse(new List<MQTTServerConfiguration>() { res }, true));                   
+                    outputPort.CreateResponse(new GetConfigurationResponse(new List<MQTTServerConfigurationDTO>() { res }, true));                   
                 }
                 _logger.LogInformation("GetConfigurationAsync succesfull");
                 return true;
