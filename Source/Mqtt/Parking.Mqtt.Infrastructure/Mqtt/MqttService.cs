@@ -26,7 +26,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         {
             _client = new MqttFactory().CreateMqttClient();
 
-            _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);
+            _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);            
         }
 
         public async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs data)
@@ -41,10 +41,10 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         /// </summary>
         /// <param name="topics"></param>
         /// <returns></returns>
-        public async Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTopicConfiguration> topics)
+        public async Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTServerConfiguration> topics)
         {
 
-            var returnList = new List<MQTTTopicConfiguration>();
+            var returnList = new List<MQTTTServerConfiguration>();
             var errorList = new List<Error>();
 
 
@@ -61,7 +61,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             foreach (var res in result.Items)
             {
                 if (SubscribeSucceeded(res.ResultCode))
-                    returnList.Add(new MQTTTopicConfiguration(res.TopicFilter.Topic, (MQTTQualityOfService)res.TopicFilter.QualityOfServiceLevel));
+                    returnList.Add(new MQTTTServerConfiguration(res.TopicFilter.Topic, (MQTTQualityOfService)res.TopicFilter.QualityOfServiceLevel));
                 else
                     errorList.Add(new Error(res.ResultCode.ToString(), res.TopicFilter.Topic));
             }

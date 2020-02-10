@@ -23,8 +23,8 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var mqttMock = new Mock<IMqttService>();
 
-            mqttMock.Setup(x => x.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfiguration>>()))
-                    .Returns(Task.FromResult(new MQTTSubscribeGateResponse(It.IsAny<IEnumerable<MQTTTopicConfiguration>>(), true)));
+            mqttMock.Setup(x => x.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
+                    .Returns(Task.FromResult(new MQTTSubscribeGateResponse(It.IsAny<IEnumerable<MQTTTServerConfiguration>>(), true)));
 
 
             var output = new Mock<IOutputPort<SubscribeResponse>>();
@@ -32,7 +32,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var handler = new MQTTHandler(logger,mqttMock.Object);
 
-            var result = await handler.SubscribeAsync(new SubscribeRequest(It.IsAny<IEnumerable<MQTTTopicConfiguration>>()), output.Object);
+            var result = await handler.SubscribeAsync(new SubscribeRequest(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()), output.Object);
 
             output.Verify(x => x.CreateResponse(It.Is<SubscribeResponse>(a => a.Success == true)));
             Assert.True(result);
@@ -45,8 +45,8 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var mqttMock = new Mock<IMqttService>();
 
-            mqttMock.Setup(x => x.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfiguration>>()))
-                  .Returns(Task.FromResult(new MQTTSubscribeGateResponse(It.IsAny<IEnumerable<MQTTTopicConfiguration>>(), false)));
+            mqttMock.Setup(x => x.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
+                  .Returns(Task.FromResult(new MQTTSubscribeGateResponse(It.IsAny<IEnumerable<MQTTTServerConfiguration>>(), false)));
 
 
             var output = new Mock<IOutputPort<SubscribeResponse>>();
@@ -68,7 +68,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var mqttMock = new Mock<IMqttService>();
 
-            mqttMock.Setup(x => x.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfiguration>>()))
+            mqttMock.Setup(x => x.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
                     .Throws(new Exception());
 
             var output = new Mock<IOutputPort<SubscribeResponse>>();

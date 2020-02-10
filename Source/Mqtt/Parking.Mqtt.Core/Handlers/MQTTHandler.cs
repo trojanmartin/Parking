@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Parking.Mqtt.Core.Interfaces;
+using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Core.Models;
+using Parking.Mqtt.Core.Models.Errors;
+using Parking.Mqtt.Core.Models.MQTT;
 using Parking.Mqtt.Core.Models.MQTT.DTO;
 using Parking.Mqtt.Core.Models.MQTT.Requests;
 using Parking.Mqtt.Core.Models.MQTT.Responses;
@@ -16,12 +19,14 @@ namespace Parking.Mqtt.Core.Handlers
     {
 
         private readonly IMqttService _mqttService;
+        private readonly IMQTTConfigurationRepository _repo;
         private readonly ILogger _logger;
 
-        public MQTTHandler(ILogger<MQTTHandler> logger, IMqttService mqttService)
+        public MQTTHandler(ILogger<MQTTHandler> logger, IMqttService mqttService, IMQTTConfigurationRepository repo)
         {
             _logger = logger;
             _mqttService = mqttService;
+            _repo = repo;
         }
 
         public async Task<bool> ConnectAsync(ConnectRequest connectRequest, IOutputPort<ConnectResponse> outputPort)
@@ -62,6 +67,7 @@ namespace Parking.Mqtt.Core.Handlers
             }
         }
 
+
         public async Task<bool> SubscribeAsync(SubscribeRequest subscribeRequest, IOutputPort<SubscribeResponse> outputPort)
         {
             try
@@ -94,6 +100,56 @@ namespace Parking.Mqtt.Core.Handlers
                Console.WriteLine(message.Message);
            });
             
+        }
+
+
+
+        public async Task<bool> GetConfigurationAsync(GetConfigurationRequest configurationRequest, IOutputPort<GetConfigurationResponse> outputPort)
+        {
+            _logger.LogInformation("GetConfigurationAsync invoked with {@Request}", configurationRequest);
+
+           try
+            {
+                if(configurationRequest.Id == null)
+                {
+                    var res = await _repo.GetConfigurationsAsync();
+                    outputPort.CreateResponse(new GetConfigurationResponse(res, true));
+                    
+                }
+                else
+                {
+                    var res =await  _repo.GetConfigurationAsync((int)configurationRequest.Id);
+                    outputPort.CreateResponse(new GetConfigurationResponse(new List<MQTTServerConfiguration>() { res }, true));                   
+                }
+                _logger.LogInformation("GetConfigurationAsync succesfull");
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                outputPort.CreateResponse(new GetConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                return false;
+            }
+        }
+
+        public async Task<bool> SaveConfigurationAsync(SaveConfigurationRequest saveConfigurationRequest, IOutputPort<SaveConfigurationResponse> outputPort)
+        {
+            _logger.LogInformation("SaveConfigurationAsync invoked with {@Request}", saveConfigurationRequest);
+           
+            try
+            {
+                var res = await _repo.CreateConfigurationAsync(saveConfigurationRequest.MqttServerConfiguration);
+                outputPort.CreateResponse(new SaveConfigurationResponse(true));
+
+                _logger.LogInformation("SaveConfigurationAsync succesfull");
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                outputPort.CreateResponse(new SaveConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                return false;
+            }
         }
     }
 }

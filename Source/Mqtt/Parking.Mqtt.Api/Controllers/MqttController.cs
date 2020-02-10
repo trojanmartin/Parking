@@ -47,12 +47,12 @@ namespace Parking.Mqtt.Api.Controllers
 
             _logger.LogInformation("Listen request is valid");
 
-            var topics = new List<MQTTTopicConfiguration>();
+            var topics = new List<MQTTTServerConfiguration>();
 
             //TODO prerobit cez automapper
             request?.Topics.ToList().ForEach((topic ) =>
            {
-               var newTopic = new MQTTTopicConfiguration(topic.TopicName, (MQTTQualityOfService)topic.QoS);             
+               var newTopic = new MQTTTServerConfiguration(topic.TopicName, (MQTTQualityOfService)topic.QoS);             
 
                topics.Add(newTopic);
            });

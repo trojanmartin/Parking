@@ -8,7 +8,7 @@ namespace Parking.Mqtt.Core.Models.MQTT
 
 
 
-        public MQTTServerConfiguration(string clientId, string tcpServer, int port, string username, string password, bool useTls, bool cleanSession, int keepAlive, string id = null, IEnumerable<MQTTTopicConfiguration> topics = null)
+        public MQTTServerConfiguration(string clientId, string tcpServer, int port, string username, string password, bool useTls, bool cleanSession, int keepAlive, string id = null, IEnumerable<MQTTTServerConfiguration> topics = null)
         {
             ClientId = clientId;
             TcpServer = tcpServer;
@@ -31,6 +31,6 @@ namespace Parking.Mqtt.Core.Models.MQTT
         public bool UseTls { get; }
         public bool CleanSession { get; }
         public int KeepAlive { get; }
-        public IEnumerable<MQTTTopicConfiguration> Topics { get; }
+        public IEnumerable<MQTTTServerConfiguration> Topics { get; }
     }
 }

@@ -11,7 +11,7 @@ namespace Parking.Mqtt.Core.Interfaces.Gateways.Services
     public interface IMqttService
     {
         event Func<MQTTMessage, Task> MessageReceivedAsync;
-        Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTopicConfiguration> topics);
+        Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTServerConfiguration> topics);
         Task<MQTTConnectGateResponse> ConnectAsync(MQTTServerConfiguration configuration);
         Task<MQTTGetStatusGateResponse> GetStatusAsync();
         Task DisconnectAsync();

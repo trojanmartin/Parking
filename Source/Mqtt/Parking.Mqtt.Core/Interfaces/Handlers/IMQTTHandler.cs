@@ -2,6 +2,7 @@
 
 using Parking.Mqtt.Core.Models.MQTT.Requests;
 using Parking.Mqtt.Core.Models.MQTT.Responses;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Core.Interfaces.Handlers
@@ -13,5 +14,9 @@ namespace Parking.Mqtt.Core.Interfaces.Handlers
         Task<bool> SubscribeAsync(SubscribeRequest subscribeRequest, IOutputPort<SubscribeResponse> outputPort);
 
         Task<bool> DisconnectAsync(DisconnectRequest disconnectRequest, IOutputPort<DisconnectResponse> outputPort);
+
+        Task<bool> GetConfigurationAsync(GetConfigurationRequest configurationRequest, IOutputPort<GetConfigurationResponse> outputPort);
+
+        Task<bool> SaveConfigurationAsync(SaveConfigurationRequest saveConfigurationRequest, IOutputPort<SaveConfigurationResponse> outputPort);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Infrastructure.Data.Repositories
 {
-    public class MqttConfigurationRepo : IMqttConfigurationRepository
+    public class MqttConfigurationRepo : IMQTTConfigurationRepository
     {
 
         private readonly ApplicationDbContext _context;
@@ -59,6 +59,21 @@ namespace Parking.Mqtt.Infrastructure.Data.Repositories
         }
 
         public Task<bool> CreateOrUpdateMqttStatusAsync(MQTTServerConfiguration configuration)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<MQTTServerConfiguration> GetConfigurationAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> CreateConfigurationAsync(MQTTServerConfiguration configuration)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> UpdateConfigurationAsync(MQTTServerConfiguration configuration)
         {
             throw new System.NotImplementedException();
         }

@@ -10,7 +10,7 @@ namespace Parking.Mqtt.Infrastructure.Mapping
     {
         public Profiles()
         {
-            CreateMap<MQTTTopicConfiguration, MqttTopicConfiguration>()
+            CreateMap<MQTTTServerConfiguration, MqttTopicConfiguration>()
                 .ConvertUsing(x => new MqttTopicConfiguration
                 {
                     QoS = (MqttQualtiyOfService)x.QoS,
@@ -18,8 +18,8 @@ namespace Parking.Mqtt.Infrastructure.Mapping
                 });
 
 
-            CreateMap<MqttTopicConfiguration, MQTTTopicConfiguration>()
-             .ConvertUsing(x => new MQTTTopicConfiguration(x.TopicName, (MQTTQualityOfService)x.QoS));            
+            CreateMap<MqttTopicConfiguration, MQTTTServerConfiguration>()
+             .ConvertUsing(x => new MQTTTServerConfiguration(x.TopicName, (MQTTQualityOfService)x.QoS));            
 
             CreateMap<MQTTServerConfiguration, MqttServerConfiguration>()
                 .ForMember(dest => dest.Topics,

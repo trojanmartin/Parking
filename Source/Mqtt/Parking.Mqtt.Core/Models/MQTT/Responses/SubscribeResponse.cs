@@ -6,14 +6,14 @@ namespace Parking.Mqtt.Core.Models.MQTT.Responses
 {
     public class SubscribeResponse : BaseResponse
     {
-        public IEnumerable<MQTTTopicConfiguration> SubscribedTopics { get;}
+        public IEnumerable<MQTTTServerConfiguration> SubscribedTopics { get;}
 
 
         public SubscribeResponse(bool success = false, IEnumerable<Error> errors = null, string message = null) : base(success, errors, message)
         {
         }
 
-        public SubscribeResponse(IEnumerable<MQTTTopicConfiguration> subscribedTopics, bool succes) : base(succes)
+        public SubscribeResponse(IEnumerable<MQTTTServerConfiguration> subscribedTopics, bool succes) : base(succes)
         {
             SubscribedTopics = subscribedTopics;
         }

@@ -29,8 +29,8 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             var logger = new Mock<ILogger<MQTTHandler>>().Object;
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfiguration>>()))
-                                                    .Returns(Task.FromResult(new MQTTSubscribeGateResponse(new List<MQTTTopicConfiguration>() { new MQTTTopicConfiguration("name", MQTTQualityOfService.AtLeastOnce)}, true)));
+            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
+                                                    .Returns(Task.FromResult(new MQTTSubscribeGateResponse(new List<MQTTTServerConfiguration>() { new MQTTTServerConfiguration("name", MQTTQualityOfService.AtLeastOnce)}, true)));
 
             var controller = new FakeMqttController()
             {
@@ -53,7 +53,7 @@ namespace Parking.Mqtt.Api.UnitTests.Controllers
             var logger = new Mock<ILogger<MQTTHandler>>().Object;
 
             var mqttMock = new Mock<IMqttService>();
-            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTopicConfiguration>>()))
+            mqttMock.Setup(m => m.SubscribeAsync(It.IsAny<IEnumerable<MQTTTServerConfiguration>>()))
                                                     .Returns(Task.FromResult(new MQTTSubscribeGateResponse(null, false)));
 
             var controller = new FakeMqttController()

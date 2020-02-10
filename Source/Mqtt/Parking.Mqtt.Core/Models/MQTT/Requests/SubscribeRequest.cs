@@ -7,11 +7,11 @@ namespace Parking.Mqtt.Core.Models.MQTT.Requests
 {
     public class SubscribeRequest : IRequest<SubscribeResponse>
     {
-        public SubscribeRequest(IEnumerable<MQTTTopicConfiguration> topics)
+        public SubscribeRequest(IEnumerable<MQTTTServerConfiguration> topics)
         {
             Topics = topics;
         }
 
-        public IEnumerable<MQTTTopicConfiguration> Topics { get; }
+        public IEnumerable<MQTTTServerConfiguration> Topics { get; }
     }
 }
