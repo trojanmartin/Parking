@@ -69,7 +69,7 @@ namespace Parking.Mqtt.Api
                 endpoints.MapRazorPages();               
             });
 
-            serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
+            serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
 
             //var server = new MqttServerConfiguration()
             //{
