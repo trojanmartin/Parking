@@ -62,7 +62,8 @@ namespace Parking.Mqtt.Api
             var getAll = await _handler.GetConfigurationAsync(new GetConfigurationRequest(null), _indexPresenter);
             if (disconnect && getAll)
             {
-                 Configuration = _indexPresenter.Configurations;               
+                 
+                Configuration = _indexPresenter.Configurations;               
                 return Page();
             }
 
