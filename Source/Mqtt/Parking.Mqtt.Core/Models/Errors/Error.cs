@@ -1,4 +1,6 @@
-﻿namespace Parking.Mqtt.Core.Models
+﻿using Parking.Mqtt.Core.Models.Errors;
+
+namespace Parking.Mqtt.Core.Models
 {
     public class Error
     {

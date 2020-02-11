@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xunit;
 using System;
+using Parking.Mqtt.Core.Exceptions;
+using System.Linq;
+using Parking.Mqtt.Core.Models.Errors;
 
 namespace Parking.Mqtt.Core.UnitTests.UseCases
 {
@@ -60,12 +63,12 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
         }
 
         [Fact]
-        public async void GetConfiguration_GetAllConfigurationsFails_ReturnsFalse()
+        public async void GetConfiguration_GetAllConfigurationsThrowsNotFoundException_ReturnsFalse()
         {
             var mqttRepo = new Mock<IMQTTConfigurationRepository>();
 
             mqttRepo.Setup(x => x.GetConfigurationsAsync())
-                    .Throws(It.IsAny<Exception>());
+                    .Throws(new NotFoundException());
 
             var handler = new BuilderMQTTHandler()
             {
@@ -77,7 +80,29 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var result = await handler.GetConfigurationAsync(new GetConfigurationRequest(null), outputPort.Object);
 
-            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success)));
+            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success && x.Errors.FirstOrDefault().Code == GlobalErrorCodes.NotFound)));
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async void GetConfiguration_GetAllConfigurationsThrowAnyException_ReturnsFalse()
+        {
+            var mqttRepo = new Mock<IMQTTConfigurationRepository>();
+
+            mqttRepo.Setup(x => x.GetConfigurationsAsync())
+                    .Throws(new Exception());
+
+            var handler = new BuilderMQTTHandler()
+            {
+                MQTTRepo = mqttRepo.Object
+            }.Build();
+
+            var outputPort = new Mock<IOutputPort<GetConfigurationResponse>>();
+            outputPort.Setup(x => x.CreateResponse(It.IsAny<GetConfigurationResponse>()));
+
+            var result = await handler.GetConfigurationAsync(new GetConfigurationRequest(null), outputPort.Object);
+
+            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success && x.Errors.FirstOrDefault().Code == GlobalErrorCodes.InternalServer)));
             Assert.False(result);
         }
     }

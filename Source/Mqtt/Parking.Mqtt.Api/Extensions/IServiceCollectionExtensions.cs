@@ -16,8 +16,8 @@ namespace Parking.Mqtt.Api.Extensions
 
         public static IServiceCollection AddAdministrationModule(this IServiceCollection service)
         {
-            return service.AddTransient<ConfigurationWebPresenter>()
-
+            return service.AddSingleton<IndexWebPresenter>()
+                          .AddTransient<EditWebPresenter>()
 
                 ;
         }

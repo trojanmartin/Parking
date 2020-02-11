@@ -1,4 +1,4 @@
-﻿@page "{handler?}/{id?}"
+﻿@page 
 @model Parking.Mqtt.Api.IndexModel
 
 @{
@@ -15,17 +15,22 @@
 
     @foreach (var item in Model.Configuration)
     {
-        var id = item.Name + Guid.NewGuid().ToString("N");
+        var guid = item.Name + Guid.NewGuid().ToString("N");
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#@id" aria-expanded="true" aria-controls="@id">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#@guid" aria-expanded="true" aria-controls="@guid">
                         @Html.DisplayFor(name => item.Name)
+
+                        @if (item.Connected)
+                        {
+                            <span class="badge badge-success">Connected</span>
+                        }
                     </button>
                 </h5>
             </div>
 
-            <div id="@id" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="@guid" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">                
                 <div class="card-body">
 
                     <div class="container">
@@ -68,11 +73,21 @@
                                     @Html.DisplayFor(modelItem => item.UseTls)
                                 </div>
 
-                                <div class="row">
-                                    <button asp-page="./Edit" asp-route-id="@item.Id">Edit</button>
-                                    <button asp-page="./Delete" asp-route-id="@item.Id">Delete</button>
+                                <div class="row">                                   
                                     <form method="post">
-                                        <button asp-page-handler="Connect" asp-route-id="@item.Id">Connect</button>
+
+                                        <button asp-page="./Edit" asp-route-id="@item.Id">Edit</button>
+                                        <button asp-page="./Delete" asp-route-id="@item.Id">Delete</button>
+                                        @if (item.Connected)
+                                        {
+                                            <button asp-page-handler="Disconnect" asp-route-id="@item.Id">Disconnect</button>
+                                        }
+                                        else
+                                        {
+                                            <button asp-page-handler="Connect" asp-route-id="@item.Id">Connect</button>
+
+                                        }
+
                                     </form>
                                 </div>
 

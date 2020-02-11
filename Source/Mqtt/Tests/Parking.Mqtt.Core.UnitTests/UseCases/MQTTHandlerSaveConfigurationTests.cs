@@ -35,27 +35,6 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
             Assert.True(result);
         }
 
-        [Fact]
-        public async void MQTTSaveConfiguration_UnsucessfulySaved_ReturnsFalse()
-        {            
-            var mqttRepo = new Mock<IMQTTConfigurationRepository>();
-
-            mqttRepo.Setup(x => x.CreateConfigurationAsync(It.IsAny<MQTTServerConfigurationDTO>()))
-                    .Returns(Task.FromResult(false));
-
-            var output = new Mock<IOutputPort<SaveConfigurationResponse>>();
-            output.Setup(x => x.CreateResponse(It.IsAny<SaveConfigurationResponse>()));
-
-            var handler = new BuilderMQTTHandler()
-            {               
-                MQTTRepo = mqttRepo.Object
-            }.Build();
-
-            var result = await handler.SaveConfigurationAsync(new SaveConfigurationRequest(It.IsAny<MQTTServerConfigurationDTO>()), output.Object);
-
-            output.Verify(x => x.CreateResponse(It.Is<SaveConfigurationResponse>(a => !a.Success)));
-            Assert.False(result);
-        }
 
         [Fact]
         public async void MQTTSaveConfiguration_RepoThrowsException_ReturnsFalse()
@@ -63,7 +42,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
             var mqttRepo = new Mock<IMQTTConfigurationRepository>();
 
             mqttRepo.Setup(x => x.CreateConfigurationAsync(It.IsAny<MQTTServerConfigurationDTO>()))
-                    .Throws(It.IsAny<Exception>());
+                    .Throws(new Exception());
 
             var output = new Mock<IOutputPort<SaveConfigurationResponse>>();
             output.Setup(x => x.CreateResponse(It.IsAny<SaveConfigurationResponse>()));

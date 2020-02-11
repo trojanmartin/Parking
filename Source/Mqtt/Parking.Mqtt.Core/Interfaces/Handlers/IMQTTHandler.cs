@@ -11,6 +11,8 @@ namespace Parking.Mqtt.Core.Interfaces.Handlers
     {
         Task<bool> ConnectAsync(ConnectRequest connectRequest, IOutputPort<ConnectResponse> outputPort);
 
+        Task<bool> ConnectAsync(int configurationId, IOutputPort<ConnectResponse> outputPort);
+
         Task<bool> SubscribeAsync(SubscribeRequest subscribeRequest, IOutputPort<SubscribeResponse> outputPort);
 
         Task<bool> DisconnectAsync(DisconnectRequest disconnectRequest, IOutputPort<DisconnectResponse> outputPort);
@@ -18,5 +20,7 @@ namespace Parking.Mqtt.Core.Interfaces.Handlers
         Task<bool> GetConfigurationAsync(GetConfigurationRequest configurationRequest, IOutputPort<GetConfigurationResponse> outputPort);
 
         Task<bool> SaveConfigurationAsync(SaveConfigurationRequest saveConfigurationRequest, IOutputPort<SaveConfigurationResponse> outputPort);
+
+        Task<bool> UpdateConfigurationAsync(SaveConfigurationRequest saveConfigurationRequest, IOutputPort<SaveConfigurationResponse> outputPort);
     }
 }

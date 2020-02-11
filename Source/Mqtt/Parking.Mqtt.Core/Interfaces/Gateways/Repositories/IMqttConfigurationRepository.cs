@@ -8,7 +8,7 @@ namespace Parking.Mqtt.Core.Interfaces.Gateways.Repositories
     {
         Task<IEnumerable<MQTTServerConfigurationDTO>> GetConfigurationsAsync();
         Task<MQTTServerConfigurationDTO> GetConfigurationAsync(int id);
-        Task<bool> CreateConfigurationAsync(MQTTServerConfigurationDTO configuration);
-        Task<bool> UpdateConfigurationAsync(MQTTServerConfigurationDTO configuration);
+        Task CreateConfigurationAsync(MQTTServerConfigurationDTO configuration);
+        Task UpdateConfigurationAsync(MQTTServerConfigurationDTO configuration);
     }
 }

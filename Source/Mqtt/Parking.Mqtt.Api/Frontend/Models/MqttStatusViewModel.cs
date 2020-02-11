@@ -1,5 +1,6 @@
 ﻿using Parking.Mqtt.Core.Models.MQTT.DTO;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Parking.Mqtt.Api.Frontend.Models
 {
@@ -7,6 +8,7 @@ namespace Parking.Mqtt.Api.Frontend.Models
     {
         public int? Id { get; set; }
         public string Name { get; set; }
+        [Display(Name= "Connected ")]
         public bool Connected { get; set; }
         public string ClientId { get; set; }
         public string TcpServer { get; set; }

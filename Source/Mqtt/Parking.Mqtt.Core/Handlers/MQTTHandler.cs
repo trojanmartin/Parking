@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Parking.Mqtt.Core.Exceptions;
 using Parking.Mqtt.Core.Interfaces;
 using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
@@ -37,16 +38,41 @@ namespace Parking.Mqtt.Core.Handlers
                 var res = await _mqttService.ConnectAsync(connectRequest.ServerConfiguration);
 
                 _logger.LogInformation("Mqtt service returned {@Response}", res);
-                outputPort.CreateResponse(new ConnectResponse(res.Succes,res.Errors));
+                outputPort.CreateResponse(new ConnectResponse(connectRequest.ServerConfiguration, res.Succes));
                 return res.Succes;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while connecting to broker with request {@ConnectRequest}", connectRequest);
-                var err = new Error("Error while connecting to server", ex.Message);
-                outputPort.CreateResponse(new ConnectResponse(false, new List<Error>() { err }));
+                outputPort.CreateResponse(new ConnectResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
                 return false;
             }
+        }
+
+        public async Task<bool> ConnectAsync(int configurationId, IOutputPort<ConnectResponse> outputPort)
+        {
+            try
+            {
+                var configuration = await _repo.GetConfigurationAsync(configurationId);
+
+                if (configuration != null)
+                    return await ConnectAsync(new ConnectRequest(configuration), outputPort);
+
+                outputPort.CreateResponse(new ConnectResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, $"Configuration with id {configurationId} does not exist") }));
+                return false;
+            }
+            catch(NotFoundException ex)
+            {
+                outputPort.CreateResponse(new ConnectResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, $"Configuration with id {configurationId} does not exist") }));
+                return false;
+            }
+            catch(Exception ex)
+            {
+                outputPort.CreateResponse(new ConnectResponse(false, new[] {  GlobalErrors.UnexpectedError }));
+                return false;
+            }
+
+           
         }
 
         public async Task<bool> DisconnectAsync(DisconnectRequest disconnectRequest ,IOutputPort<DisconnectResponse> outputPort)
@@ -106,7 +132,7 @@ namespace Parking.Mqtt.Core.Handlers
 
         public async Task<bool> GetConfigurationAsync(GetConfigurationRequest configurationRequest, IOutputPort<GetConfigurationResponse> outputPort)
         {
-            _logger.LogInformation("GetConfigurationAsync invoked with {@Request}", configurationRequest);
+           _logger.LogInformation("GetConfigurationAsync invoked with {@Request}", configurationRequest);
 
            try
             {
@@ -124,7 +150,12 @@ namespace Parking.Mqtt.Core.Handlers
                 _logger.LogInformation("GetConfigurationAsync succesfull");
                 return true;
             }
-            catch(Exception ex)
+            catch (NotFoundException ex)
+            {
+                outputPort.CreateResponse(new GetConfigurationResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, ex.Message)}));
+                return false;
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 outputPort.CreateResponse(new GetConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
@@ -138,9 +169,8 @@ namespace Parking.Mqtt.Core.Handlers
            
             try
             {
-                var res = await _repo.CreateConfigurationAsync(saveConfigurationRequest.MqttServerConfiguration);
+                await _repo.CreateConfigurationAsync(saveConfigurationRequest.MqttServerConfiguration);
                 outputPort.CreateResponse(new SaveConfigurationResponse(true));
-
                 _logger.LogInformation("SaveConfigurationAsync succesfull");
                 return true;
             }
@@ -151,5 +181,30 @@ namespace Parking.Mqtt.Core.Handlers
                 return false;
             }
         }
+
+        public async Task<bool> UpdateConfigurationAsync(SaveConfigurationRequest updateConfigurationRequest, IOutputPort<SaveConfigurationResponse> outputPort)
+        {
+            _logger.LogInformation("UpdateConfigurationAsync invoked with {@Request}", updateConfigurationRequest);
+
+            try
+            {
+                await _repo.UpdateConfigurationAsync(updateConfigurationRequest.MqttServerConfiguration);
+                outputPort.CreateResponse(new SaveConfigurationResponse(true));
+                _logger.LogInformation("UpdateConfigurationAsync succesfull");
+                return true;
+            }
+            catch(NotFoundException ex)
+            {
+                outputPort.CreateResponse(new SaveConfigurationResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, ex.Message) }));
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                outputPort.CreateResponse(new SaveConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                return false;
+            }
+        }
+
     }
 }

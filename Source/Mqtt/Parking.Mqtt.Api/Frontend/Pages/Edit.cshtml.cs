@@ -1,27 +1,31 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Parking.Mqtt.Api.Frontend.Models;
+using Parking.Mqtt.Api.Frontend.Presenters;
+using Parking.Mqtt.Core.Interfaces.Handlers;
+using Parking.Mqtt.Core.Models.MQTT;
+using Parking.Mqtt.Core.Models.MQTT.DTO;
+using Parking.Mqtt.Core.Models.MQTT.Requests;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Parking.Mqtt.Infrastructure.Data;
-using Parking.Mqtt.Infrastructure.Data.Entities;
 
 namespace Parking.Mqtt.Api
 {
     public class EditModel : PageModel
     {
-        private readonly Parking.Mqtt.Infrastructure.Data.ApplicationDbContext _context;
+        private readonly IMQTTHandler _handler;
+        private readonly EditWebPresenter _presenter;
 
-        public EditModel(Parking.Mqtt.Infrastructure.Data.ApplicationDbContext context)
+        public EditModel(IMQTTHandler handler, EditWebPresenter presenter)
         {
-            _context = context;
+            _handler = handler;
+            _presenter = presenter;
         }
 
         [BindProperty]
-        public MqttServerConfiguration MqttServerConfiguration { get; set; }
+        public MqttConfigurationViewModel MqttServerConfiguration { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,7 +34,10 @@ namespace Parking.Mqtt.Api
                 return NotFound();
             }
 
-            MqttServerConfiguration = await _context.MqttServerConfigurations.FirstOrDefaultAsync(m => m.Id == id);
+            var res = await _handler.GetConfigurationAsync(new GetConfigurationRequest(id),_presenter);
+
+            if (res)
+                MqttServerConfiguration = _presenter.ConfigurationViewModel;
 
             if (MqttServerConfiguration == null)
             {
@@ -46,32 +53,33 @@ namespace Parking.Mqtt.Api
             if (!ModelState.IsValid)
             {
                 return Page();
-            }
+            }         
 
-            _context.Attach(MqttServerConfiguration).State = EntityState.Modified;
+            
+            if(await _handler.UpdateConfigurationAsync(new SaveConfigurationRequest(VmToDto(MqttServerConfiguration)), _presenter))
+                return RedirectToPage("./Index");
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MqttServerConfigurationExists(MqttServerConfiguration.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            else
+                return RedirectToPage("Error");
+        }       
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool MqttServerConfigurationExists(int id)
+        private MQTTServerConfigurationDTO VmToDto(MqttConfigurationViewModel model)
         {
-            return _context.MqttServerConfigurations.Any(e => e.Id == id);
+            var topics = new List<MQTTTopicConfigurationDTO>();
+
+            if (model.TopicSubscribing != null)
+            {
+               
+
+                foreach (var topic in model.TopicSubscribing)
+                {
+                    var top = new MQTTTopicConfigurationDTO(topic.TopicName, topic.QoS);
+                    topics.Add(top);
+                }
+            }
+        
+
+            return new MQTTServerConfigurationDTO(model.ClientId, model.TcpServer, model.Port, model.Username, model.Password, model.UseTls, model.CleanSession, model.KeepAlive, model.Id, topics, model.Name);
         }
     }
 }

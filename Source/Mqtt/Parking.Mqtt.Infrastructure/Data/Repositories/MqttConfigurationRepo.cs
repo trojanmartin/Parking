@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Parking.Mqtt.Core.Exceptions;
 using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Models.MQTT;
 using Parking.Mqtt.Infrastructure.Data.Entities;
@@ -45,37 +46,40 @@ namespace Parking.Mqtt.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<MQTTServerConfigurationDTO>> GetConfigurationsAsync()
         {
-            var res = await  _context.MqttServerConfigurations.Include(x => x.Topics).ToListAsync();
+            var res = await _context.MqttServerConfigurations.Include(x => x.Topics).ToListAsync();
 
-            return new List<MQTTServerConfigurationDTO>( _mapper.Map<ICollection<MqttServerConfiguration>,IEnumerable<MQTTServerConfigurationDTO>>(res));
+            return new List<MQTTServerConfigurationDTO>(_mapper.Map<ICollection<MqttServerConfiguration>, IEnumerable<MQTTServerConfigurationDTO>>(res));
         }
 
-        public async Task<MQTTServerConfigurationDTO> GetConfigurationAsync(string id)
+        public async Task<MQTTServerConfigurationDTO> GetConfigurationAsync(int id)
         {
-
             var config = await _context.MqttServerConfigurations.FindAsync(id);
+
+            if (config == null)
+                throw new NotFoundException($"Configuration with id {id} not found");
 
             return _mapper.Map<MQTTServerConfigurationDTO>(config);
         }
 
-        public Task<bool> CreateOrUpdateMqttStatusAsync(MQTTServerConfigurationDTO configuration)
+
+
+        public async Task CreateConfigurationAsync(MQTTServerConfigurationDTO configuration)
         {
-            throw new System.NotImplementedException();
+            await _context.MqttServerConfigurations.AddAsync(_mapper.Map<MqttServerConfiguration>(configuration));
+            await _context.SaveChangesAsync();
         }
 
-        public Task<MQTTServerConfigurationDTO> GetConfigurationAsync(int id)
+        public async Task UpdateConfigurationAsync(MQTTServerConfigurationDTO configuration)
         {
-            throw new System.NotImplementedException();
-        }
+            var toUpdate = await _context.MqttServerConfigurations.FindAsync(configuration.Id);
 
-        public Task<bool> CreateConfigurationAsync(MQTTServerConfigurationDTO configuration)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<bool> UpdateConfigurationAsync(MQTTServerConfigurationDTO configuration)
-        {
-            throw new System.NotImplementedException();
+            if (toUpdate != null)
+            {
+                _mapper.Map(configuration,toUpdate);                
+                await _context.SaveChangesAsync();
+            }
+            else
+                throw new NotFoundException($"Configuration with id {configuration.Id} not found");
         }
     }
 }

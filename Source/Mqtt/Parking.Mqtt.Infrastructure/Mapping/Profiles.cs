@@ -19,11 +19,13 @@ namespace Parking.Mqtt.Infrastructure.Mapping
 
 
             CreateMap<MqttTopicConfiguration, MQTTTopicConfigurationDTO>()
-             .ConvertUsing(x => new MQTTTopicConfigurationDTO(x.TopicName, (MQTTQualityOfService)x.QoS));            
+             .ConvertUsing(x => new MQTTTopicConfigurationDTO(x.TopicName, (MQTTQualityOfService)x.QoS));
 
             CreateMap<MQTTServerConfigurationDTO, MqttServerConfiguration>()
                 .ForMember(dest => dest.Topics,
-                opt => opt.MapFrom(src => src.Topics));
+                opt => opt.MapFrom(src => src.Topics))
+                .ForMember(dest => dest.Name,
+                opt => opt.MapFrom(src => src.ConfigurationName));
 
             CreateMap<MqttServerConfiguration, MQTTServerConfigurationDTO>()
                 .ForCtorParam("clientId", opt => opt.MapFrom(src => src.Id))
@@ -35,7 +37,8 @@ namespace Parking.Mqtt.Infrastructure.Mapping
                 .ForCtorParam("useTls", opt => opt.MapFrom(src => src.UseTls))
                 .ForCtorParam("cleanSession", opt => opt.MapFrom(src => src.CleanSession))
                 .ForCtorParam("keepAlive", opt => opt.MapFrom(src => src.KeepAlive))
-                .ForCtorParam("topics", opt => opt.MapFrom(src => src.Topics));         
+                .ForCtorParam("topics", opt => opt.MapFrom(src => src.Topics))         
+                .ForCtorParam("id", opt => opt.MapFrom(src => src.Id));         
                
               
                
