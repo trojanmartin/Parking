@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Parking.Mqtt.Api.Frontend.Models;
 using Parking.Mqtt.Api.Frontend.Presenters;
 using Parking.Mqtt.Core.Interfaces.Handlers;
@@ -8,7 +7,6 @@ using Parking.Mqtt.Core.Models.MQTT;
 using Parking.Mqtt.Core.Models.MQTT.DTO;
 using Parking.Mqtt.Core.Models.MQTT.Requests;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Api

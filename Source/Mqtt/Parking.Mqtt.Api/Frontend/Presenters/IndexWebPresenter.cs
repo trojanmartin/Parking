@@ -19,6 +19,7 @@ namespace Parking.Mqtt.Api.Frontend.Presenters
         {
             if (response.Success)
             {
+                Configurations.Clear();
 
                 foreach (var config in response.ServerConfigurations)
                 {                    
@@ -64,6 +65,7 @@ namespace Parking.Mqtt.Api.Frontend.Presenters
             {
                 var tpc = new MqttTopicViewModel()
                 {
+                    Id = (int)topic.Id,
                     QoS = topic.QoS,
                     TopicName = topic.Name
                 };

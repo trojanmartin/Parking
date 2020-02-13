@@ -1,4 +1,5 @@
-﻿@page 
+﻿@page
+
 @model Parking.Mqtt.Api.IndexModel
 
 @{
@@ -30,7 +31,7 @@
                 </h5>
             </div>
 
-            <div id="@guid" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">                
+            <div id="@guid" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
 
                     <div class="container">
@@ -73,7 +74,7 @@
                                     @Html.DisplayFor(modelItem => item.UseTls)
                                 </div>
 
-                                <div class="row">                                   
+                                <div class="row">
                                     <form method="post">
 
                                         <button asp-page="./Edit" asp-route-id="@item.Id">Edit</button>
@@ -97,18 +98,21 @@
                             <div class="col-8">
                                 <h2>Topics</h2>
 
-                                <table>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().TopicName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().QoS)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @foreach (var topic in item.TopicSubscribing)
                                         {
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().TopicName)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().QoS)
-                                                </th>
-                                            </tr>
 
                                             <tr>
                                                 <td>
@@ -116,6 +120,11 @@
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => topic.QoS)
+                                                </td>
+                                                <td>
+                                                    <a asp-page="./Topic/EditTopic" asp-route-id="@topic.Id">Edit</a> |
+                                                    <a asp-page="./Topic/DetailsTopic" asp-route-id="@topic.Id">Details</a> |
+                                                    <a asp-page="./Topic/DeleteTopic" asp-route-id="@topic.Id">Delete</a>
                                                 </td>
                                             </tr>
                                         }

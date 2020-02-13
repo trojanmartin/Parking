@@ -19,7 +19,7 @@ namespace Parking.Mqtt.Infrastructure.Mapping
 
 
             CreateMap<MqttTopicConfiguration, MQTTTopicConfigurationDTO>()
-             .ConvertUsing(x => new MQTTTopicConfigurationDTO(x.TopicName, (MQTTQualityOfService)x.QoS));
+             .ConvertUsing(x => new MQTTTopicConfigurationDTO(x.TopicName, (MQTTQualityOfService)x.QoS, x.Id));
 
             CreateMap<MQTTServerConfigurationDTO, MqttServerConfiguration>()
                 .ForMember(dest => dest.Topics,

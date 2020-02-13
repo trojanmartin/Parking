@@ -23,6 +23,7 @@ namespace Parking.Mqtt.Api.Frontend.Models
 
     public class MqttTopicViewModel
     {
+        public int Id { get; set; }
         public string TopicName { get; set; }
         public MQTTQualityOfService QoS { get; set; }
     }
