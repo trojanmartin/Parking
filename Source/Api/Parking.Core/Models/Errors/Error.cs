@@ -6,10 +6,13 @@
 
         public string Description { get; }
 
-        public Error(string code, string description)
+        public object Data { get; }
+
+        public Error(string code, string description, object data = null)
         {
             Code = code;
             Description = description;
+            Data = data;
         }
     }
 }

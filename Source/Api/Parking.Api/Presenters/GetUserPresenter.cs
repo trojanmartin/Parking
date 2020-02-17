@@ -2,19 +2,15 @@
 using Parking.Api.Serialization;
 using Parking.Core.Interfaces.Base;
 using Parking.Core.Models.UseCaseResponses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Parking.Api.Presenters
 {
-    public class GetUserPresenter : BasePresenter, IOutputPort<GetUserResponse>
+    public class GetUserPresenter : BasePresenter, IOutputPort<GetUserResponseDTO>
     {
-        public void CreateResponse(GetUserResponse response)
+        public void CreateResponse(GetUserResponseDTO response)
         {
-            Result.Content = response.Success ?  Serializer.SerializeObjectToJson(response.User) : Serializer.SerializeObjectToJson(response);
+            Result.Content = response.Success ?  Serializer.SerializeObjectToJson(response.User) : Serializer.SerializeObjectToJson(response.ErrorResponse);
             Result.StatusCode = (int)(response.Success ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
         }
     }

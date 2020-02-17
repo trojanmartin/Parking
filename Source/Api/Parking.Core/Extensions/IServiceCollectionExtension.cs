@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Parking.Core.Interfaces.Gateways.Services;
-using Parking.Core.Interfaces.UseCases;
-using Parking.Core.UseCases;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Parking.Core.Handlers;
+using Parking.Core.Interfaces.Handlers;
 
 namespace Parking.Core.Extensions
 {
@@ -12,9 +8,8 @@ namespace Parking.Core.Extensions
     {
         public static IServiceCollection AddCoreModule(this IServiceCollection services) =>
 
-            services.AddTransient<ILoginUseCase, LoginUseCase>()
-                    .AddTransient<IRegisterUseCase, RegisterUserUseCase>()                    
-                    .AddTransient<IGetUserUseCase, GetUserUseCase>()                    
+            services.AddTransient<IAccountsHandler, AccountsHandler>()
+                                 
             
             ;
         

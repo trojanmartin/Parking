@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Parking.Infrastructure.Auth
+﻿namespace Parking.Infrastructure.Auth
 {
     public class JwtTokenOptions
     {

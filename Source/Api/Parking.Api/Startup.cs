@@ -5,13 +5,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Parking.Api.AddedSchemas;
 using Parking.Api.Extensions;
+using Parking.Api.Models.Validations;
+using Parking.Api.Swasbuckle;
 using Parking.Core.Extensions;
 using Parking.Infrastructure.Auth;
 using Parking.Infrastructure.Data.EntityFramework;
@@ -36,11 +40,19 @@ namespace Parking.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {           
+        {
             //adding controllers and setting for fluent validation
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(ValidateModelStateAttribute));
+            })
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             ValidatorOptions.LanguageManager.Enabled = false;
 
+            services.Configure<ApiBehaviorOptions>(opttions =>
+            {
+                opttions.SuppressModelStateInvalidFilter = true;
+            });
 
             //// Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -52,11 +64,14 @@ namespace Parking.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+
+                c.DocumentFilter<CustomModelDocumentFilter<ValidationErrorResponse>>();
+
             });
 
             //adding db context
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-            
+
 
             //configure options for jwt 
             services.Configure<JwtTokenOptions>(x =>
@@ -66,7 +81,7 @@ namespace Parking.Api
                 x.ValidTo = Convert.ToInt32(Configuration["JwtTokenOptions:ValidTo"]);
                 x.SecretKey = Configuration["JwtTokenOptions:SecretKey"];
             });
-           
+
 
             //adding all requested module for application
             services.AddApiModule()
@@ -77,14 +92,14 @@ namespace Parking.Api
             // Adds scoped classes for things like UserManager, SignInManager, PasswordHashers etc..
             // NOTE: Automatically adds the validated user from a cookie to the HttpContext.User
             // https://github.com/aspnet/Identity/blob/85f8a49aef68bf9763cd9854ce1dd4a26a7c5d3c/src/Identity/IdentityServiceCollectionExtensions.cs
-            services.AddIdentity<AppUser, IdentityRole>( options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 5;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-            })
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+           {
+               options.Password.RequireDigit = false;
+               options.Password.RequiredLength = 5;
+               options.Password.RequireLowercase = true;
+               options.Password.RequireUppercase = false;
+               options.Password.RequireNonAlphanumeric = false;
+           })
                 // Adds UserStore and RoleStore from this context
                 // That are consumed by the UserManager and RoleManager               
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -136,7 +151,7 @@ namespace Parking.Api
             {
                 c.SwaggerEndpoint("../swagger/v1/swagger.json", "Parking API V1");
                 c.RoutePrefix = string.Empty;
-                
+
             });
 
             // Setup Identity

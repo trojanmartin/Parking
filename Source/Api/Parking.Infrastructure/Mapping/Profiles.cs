@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Parking.Core.Models;
 using Parking.Infrastructure.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Parking.Infrastructure.Mapping
 {

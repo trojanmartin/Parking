@@ -1,11 +1,9 @@
 ﻿using Moq;
 using Parking.Api.Presenters;
 using Parking.Core.Models;
+using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseResponses;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using Xunit;
 
 namespace Parking.Api.UnitTests.Presenters
@@ -17,7 +15,7 @@ namespace Parking.Api.UnitTests.Presenters
         {
             var presenter = new RegisterPresenter();
 
-            presenter.CreateResponse(new RegisterResponse(new[] { new Error(It.IsAny<string>(), It.IsAny<string>()) }, false));
+            presenter.CreateResponse(new RegisterResponseDTO(new ErrorResponse(new[] { new Error(It.IsAny<string>(), It.IsAny<string>()) }), false));
 
             Assert.Equal((int)HttpStatusCode.BadRequest, presenter.Result.StatusCode);
         }
@@ -27,7 +25,7 @@ namespace Parking.Api.UnitTests.Presenters
         { 
             var presenter = new RegisterPresenter();
 
-            presenter.CreateResponse(new RegisterResponse(It.IsAny<string>(), true));
+            presenter.CreateResponse(new RegisterResponseDTO(true,It.IsAny<string>()));
 
             Assert.Equal((int)HttpStatusCode.OK, presenter.Result.StatusCode);
         }

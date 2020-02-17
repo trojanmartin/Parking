@@ -3,9 +3,6 @@ using Parking.Core.Interfaces.Gateways.Repositories;
 using Parking.Core.Interfaces.Gateways.Services;
 using Parking.Infrastructure.Auth;
 using Parking.Infrastructure.Data.EntityFramework.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Parking.Infrastructure.Extensions
 {

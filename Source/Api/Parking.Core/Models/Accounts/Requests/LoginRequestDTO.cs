@@ -1,18 +1,17 @@
 ﻿using Parking.Core.Interfaces.Base;
 using Parking.Core.Models.UseCaseResponses;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Parking.Core.Models.UseCaseRequests
 {
-    public class GetUserRequest : IRequest<GetUserResponse>
+    public class LoginRequestDTO : IRequest<LoginResponseDTO>
     {
         public string Username { get; }
+        public string Password { get; }
 
-        public GetUserRequest(string username)
+        public LoginRequestDTO(string username, string password)
         {
             Username = username;
+            Password = password;
         }
     }
 }

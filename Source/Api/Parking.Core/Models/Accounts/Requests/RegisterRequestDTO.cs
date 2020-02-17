@@ -3,7 +3,7 @@ using Parking.Core.Models.UseCaseResponses;
 
 namespace Parking.Core.Models.UseCaseRequests
 {
-    public class RegisterRequest : IRequest<RegisterResponse>
+    public class RegisterRequestDTO : IRequest<RegisterResponseDTO>
     {
         public string Username { get;  }
 
@@ -15,7 +15,7 @@ namespace Parking.Core.Models.UseCaseRequests
 
         public string Email { get;  }
 
-        public RegisterRequest(string username, string firstName, string lastName, string password, string email)
+        public RegisterRequestDTO(string username, string firstName, string lastName, string password, string email)
         {
             Username = username;
             FirstName = firstName;

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Parking.Api.Presenters;
 using Parking.Api.Routing;
-using Parking.Core.Interfaces.UseCases;
+using Parking.Core.Interfaces.Base;
+using Parking.Core.Interfaces.Handlers;
 using Parking.Core.Models;
+using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseRequests;
 using Parking.Core.Models.UseCaseResponses;
-using Swashbuckle.Swagger.Annotations;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Parking.Api.Controllers
 {
@@ -19,24 +18,18 @@ namespace Parking.Api.Controllers
     [Produces("application/json")]
     [ApiController]
     public class AccountsController : ControllerBase
-    {
-        private readonly ILoginUseCase _loginUseCase;
-        private readonly LoginPresenter _loginPresenter;
-
-        private readonly IRegisterUseCase _registerUseCase;
-        private readonly RegisterPresenter _registerPresenter;
-
-        private readonly IGetUserUseCase _getUserUseCase;
+    {        
+        private readonly LoginPresenter _loginPresenter;       
+        private readonly RegisterPresenter _registerPresenter;        
         private readonly GetUserPresenter _getUserPresenter;
+        private readonly IAccountsHandler _accountsHandler;
 
-        public AccountsController(ILoginUseCase loginUseCase, LoginPresenter loginPresenter, IRegisterUseCase registerUseCase, RegisterPresenter registerPresenter, IGetUserUseCase getUserUseCase, GetUserPresenter getUserPresenter)
+        public AccountsController(LoginPresenter loginPresenter, RegisterPresenter registerPresenter, GetUserPresenter getUserPresenter, IAccountsHandler accountsHandler)
         {
-            _loginUseCase = loginUseCase;
             _loginPresenter = loginPresenter;
-            _registerUseCase = registerUseCase;
             _registerPresenter = registerPresenter;
-            _getUserUseCase = getUserUseCase;
             _getUserPresenter = getUserPresenter;
+            _accountsHandler = accountsHandler;
         }
 
 
@@ -47,11 +40,11 @@ namespace Parking.Api.Controllers
         /// <returns>A newly created User with jwt token</returns>        
         [HttpPost]
         [Route(ApiRouting.Login)]
-        [ProducesResponseType(typeof(LoginResponse),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<Error>), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Token),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] Models.Request.LoginRequest request)
         {
-            await _loginUseCase.HandleAsync(new LoginRequest(request.UserName, request.Password), _loginPresenter);
+            await _accountsHandler.LogInAsync(new LoginRequestDTO(request.UserName, request.Password), _loginPresenter);
 
             return _loginPresenter.Result;
         }
@@ -63,11 +56,11 @@ namespace Parking.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route(ApiRouting.Register)]
-        [ProducesResponseType( typeof(RegisterResponse),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(RegisterResponse),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BaseResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] Models.Request.RegisterRequest request)
         {
-            await _registerUseCase.HandleAsync(new RegisterRequest(request.Username, request.FirstName, request.LastName, request.Password, request.Email), _registerPresenter);
+            await _accountsHandler.RegisterAsync(new RegisterRequestDTO(request.Username, request.FirstName, request.LastName, request.Password, request.Email), _registerPresenter);
 
             return _registerPresenter.Result;
         }
@@ -81,10 +74,10 @@ namespace Parking.Api.Controllers
         [HttpGet]
         [Route(ApiRouting.User)]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUser(string username)
         {
-            await _getUserUseCase.HandleAsync(new GetUserRequest(username), _getUserPresenter);
+            await _accountsHandler.GetUserAsync(username, _getUserPresenter);
 
             return _getUserPresenter.Result;
         }

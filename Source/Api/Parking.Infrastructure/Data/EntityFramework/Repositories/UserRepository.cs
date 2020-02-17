@@ -2,12 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Parking.Core.Interfaces.Gateways.Repositories;
 using Parking.Core.Models;
-using Parking.Core.Models.Gateways.Repositories;
 using Parking.Infrastructure.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Parking.Infrastructure.Data.EntityFramework.Repositories
@@ -31,13 +26,16 @@ namespace Parking.Infrastructure.Data.EntityFramework.Repositories
            return  await _userManager.CheckPasswordAsync(appUser, password);           
         }
 
-        public async Task<CreateUserResponse> CreateUserAsync(User user, string password)
+        public async Task<bool> CreateUserAsync(User user, string password)
         {
+
             var appUser = _mapper.Map<AppUser>(user);
 
             var result = await _userManager.CreateAsync(appUser, password);
 
-            return new CreateUserResponse(appUser.Id, result.Succeeded, result.Succeeded ? null : result.Errors.Select(e => new Error(e.Code, e.Description)));                    
+            //return new CreateUserResponse(appUser.Id, result.Succeeded, result.Succeeded ? null : result.Errors.Select(e => new Error(e.Code, e.Description)));       
+
+            return result.Succeeded;
         }
 
         public async Task<User> FindByNameAsync(string username)
