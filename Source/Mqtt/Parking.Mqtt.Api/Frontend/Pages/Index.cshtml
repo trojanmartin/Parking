@@ -1,0 +1,140 @@
+﻿@page
+
+@model Parking.Mqtt.Api.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<div id="accordion">
+
+    @foreach (var item in Model.Configuration)
+    {
+        var guid = item.Name + Guid.NewGuid().ToString("N");
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#@guid" aria-expanded="true" aria-controls="@guid">
+                        @Html.DisplayFor(name => item.Name)
+
+                        @if (item.Connected)
+                        {
+                            <span class="badge badge-success">Connected</span>
+                        }
+                    </button>
+                </h5>
+            </div>
+
+            <div id="@guid" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h3>Server</h3>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Name, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.TcpServer, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.TcpServer)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Port, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Port)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Username, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.Password, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.Password)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.KeepAlive, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.KeepAlive)
+                                </div>
+
+                                <div class="row">
+                                    @Html.LabelFor(modelItem => item.UseTls, new { @class = "font-weight-bold" })
+                                    @Html.DisplayFor(modelItem => item.UseTls)
+                                </div>
+
+                                <div class="row">
+                                    <form method="post">
+
+                                        <button asp-page="./Edit" asp-route-id="@item.Id">Edit</button>
+                                        <button asp-page="./Delete" asp-route-id="@item.Id">Delete</button>
+                                        @if (item.Connected)
+                                        {
+                                            <button asp-page-handler="Disconnect" asp-route-id="@item.Id">Disconnect</button>
+                                        }
+                                        else
+                                        {
+                                            <button asp-page-handler="Connect" asp-route-id="@item.Id">Connect</button>
+
+                                        }
+
+                                    </form>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-8">
+                                <h2>Topics</h2>
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().TopicName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Configuration[0].TopicSubscribing.FirstOrDefault().QoS)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var topic in item.TopicSubscribing)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => topic.TopicName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => topic.QoS)
+                                                </td>
+                                                <td>
+                                                    <a asp-page="./Topic/EditTopic" asp-route-id="@topic.Id">Edit</a> |
+                                                    <a asp-page="./Topic/DetailsTopic" asp-route-id="@topic.Id">Details</a> |
+                                                    <a asp-page="./Topic/DeleteTopic" asp-route-id="@topic.Id">Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

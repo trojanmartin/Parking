@@ -1,9 +1,6 @@
 ﻿using Parking.Mqtt.Api.Presenters;
-using Parking.Mqtt.Core.Models.UseCaseResponses;
-using System;
-using System.Collections.Generic;
+using Parking.Mqtt.Core.Models.MQTT.Responses;
 using System.Net;
-using System.Text;
 using Xunit;
 
 namespace Parking.Mqtt.Api.UnitTests.Presenters
