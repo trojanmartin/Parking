@@ -1,5 +1,5 @@
 ﻿using Parking.Mqtt.Api.Presenters;
-using Parking.Mqtt.Core.Models.UseCaseResponses;
+using Parking.Mqtt.Core.Models.MQTT.Responses;
 using System.Net;
 using Xunit;
 

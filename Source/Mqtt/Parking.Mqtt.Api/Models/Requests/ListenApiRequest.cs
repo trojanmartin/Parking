@@ -1,8 +1,5 @@
-﻿using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
-using System;
+﻿using Parking.Mqtt.Core.Models.MQTT.DTO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Api.Models.Requests
 {
@@ -14,6 +11,6 @@ namespace Parking.Mqtt.Api.Models.Requests
     public class Topic
     {
         public string TopicName { get; set; }
-        public MqttQualityOfService QoS { get; set; }
+        public MQTTQualityOfService QoS { get; set; }
     }
 }

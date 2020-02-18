@@ -1,7 +1,7 @@
 ﻿using Parking.Mqtt.Api.Presenters.Base;
 using Parking.Mqtt.Api.Serialization;
 using Parking.Mqtt.Core.Interfaces;
-using Parking.Mqtt.Core.Models.UseCaseResponses;
+using Parking.Mqtt.Core.Models.MQTT.Responses;
 using System.Net;
 
 namespace Parking.Mqtt.Api.Presenters

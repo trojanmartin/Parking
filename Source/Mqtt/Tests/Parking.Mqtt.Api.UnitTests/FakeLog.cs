@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Parking.Mqtt.Api.UnitTests
 {
