@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parking.Core.Interfaces
+namespace Parking.Core.Interfaces.Base
 {
     public interface IOutputPort<TResponse>
     {
-        Task Handle(TResponse response);
+        void CreateResponse(TResponse response);
     }
 }
