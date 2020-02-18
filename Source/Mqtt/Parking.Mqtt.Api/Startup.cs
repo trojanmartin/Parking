@@ -42,7 +42,8 @@ namespace Parking.Mqtt.Api
                     .AddInfrastructureModule();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("Default")));
+                    options.UseSqlServer(Configuration.GetConnectionString("Default"), 
+                                        x => x.MigrationsAssembly("Parking.DatabaseMigrations")));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -69,7 +70,7 @@ namespace Parking.Mqtt.Api
                 endpoints.MapRazorPages();               
             });
 
-           // serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+            serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
 
             //var server = new MqttServerConfiguration()
             //{
