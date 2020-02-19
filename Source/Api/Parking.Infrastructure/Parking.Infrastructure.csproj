@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Parking.DatabaseMigrations\Parking.Database.csproj" />
     <ProjectReference Include="..\Parking.Core\Parking.Core.csproj" />
   </ItemGroup>
 

@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Parking.Mqtt.Infrastructure.Data;
-using Parking.Mqtt.Infrastructure.Data.Entities;
+using Parking.Database;
+using Parking.Database.Entities;
+using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Api
 {
     public class DetailsModel : PageModel
     {
-        private readonly Parking.Mqtt.Infrastructure.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public DetailsModel(Parking.Mqtt.Infrastructure.Data.ApplicationDbContext context)
+        public DetailsModel(ApplicationDbContext context)
         {
             _context = context;
         }

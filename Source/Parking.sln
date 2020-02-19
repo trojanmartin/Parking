@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Infrastructure", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Api.UnitTests", "Api\Tests\Parking.Api.UnitTests\Parking.Api.UnitTests.csproj", "{E6398463-1DF4-4881-A15B-113E4189D191}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.DatabaseMigrations", "Parking.DatabaseMigrations\Parking.DatabaseMigrations.csproj", "{49A3CF24-7E9D-447E-8D7F-775C73D9AB4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking.Database", "Parking.DatabaseMigrations\Parking.Database.csproj", "{49A3CF24-7E9D-447E-8D7F-775C73D9AB4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

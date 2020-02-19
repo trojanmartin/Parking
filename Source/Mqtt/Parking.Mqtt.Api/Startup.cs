@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Parking.Database;
 using Parking.Mqtt.Api.Extensions;
 using Parking.Mqtt.Core.Extensions;
-using Parking.Mqtt.Infrastructure.Data;
 using Parking.Mqtt.Infrastructure.Extensions;
 using Serilog;
 using System;
@@ -43,7 +43,7 @@ namespace Parking.Mqtt.Api
 
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Default"), 
-                                        x => x.MigrationsAssembly("Parking.DatabaseMigrations")));
+                                        x => x.MigrationsAssembly("Parking.Database")));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

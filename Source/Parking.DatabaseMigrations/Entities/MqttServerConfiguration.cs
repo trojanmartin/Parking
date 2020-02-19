@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Parking.Mqtt.Infrastructure.Data.Entities
+namespace Parking.Database.Entities
 {
     public class MqttServerConfiguration
     {

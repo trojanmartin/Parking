@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Parking.DatabaseMigrations\Parking.DatabaseMigrations.csproj" />
+    <ProjectReference Include="..\..\Parking.DatabaseMigrations\Parking.Database.csproj" />
     <ProjectReference Include="..\Parking.Mqtt.Core\Parking.Mqtt.Core.csproj" />
     <ProjectReference Include="..\Parking.Mqtt.Infrastructure\Parking.Mqtt.Infrastructure.csproj" />
   </ItemGroup>

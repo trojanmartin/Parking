@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Parking.Core.Interfaces.Gateways.Repositories;
 using Parking.Core.Models;
-using Parking.Infrastructure.Identity;
+using Parking.Database.Entities.Identity;
 using System.Threading.Tasks;
 
 namespace Parking.Infrastructure.Data.EntityFramework.Repositories

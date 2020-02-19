@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Parking.Infrastructure.Identity
+namespace Parking.Database.Entities.Identity
 {
     public class AppUser : IdentityUser
     {

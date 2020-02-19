@@ -1,4 +1,4 @@
-﻿namespace Parking.Mqtt.Infrastructure.Data.Entities
+﻿namespace Parking.Database.Entities
 {
     public class MqttTopicConfiguration
     {

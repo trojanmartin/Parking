@@ -17,10 +17,10 @@ using Parking.Api.Extensions;
 using Parking.Api.Models.Validations;
 using Parking.Api.Swasbuckle;
 using Parking.Core.Extensions;
+using Parking.Database;
+using Parking.Database.Entities.Identity;
 using Parking.Infrastructure.Auth;
-using Parking.Infrastructure.Data.EntityFramework;
 using Parking.Infrastructure.Extensions;
-using Parking.Infrastructure.Identity;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
@@ -70,7 +70,8 @@ namespace Parking.Api
             });
 
             //adding db context
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"),
+                                                        x => x.MigrationsAssembly("Parking.Database")));
 
 
             //configure options for jwt 
@@ -167,7 +168,7 @@ namespace Parking.Api
             });
 
             //Make sure we have database
-            serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
+          //  serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
         }
     }
 }

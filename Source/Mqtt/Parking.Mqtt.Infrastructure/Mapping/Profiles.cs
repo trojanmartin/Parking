@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Parking.Database.Entities;
 using Parking.Mqtt.Core.Models.MQTT;
 using Parking.Mqtt.Core.Models.MQTT.DTO;
-using Parking.Mqtt.Infrastructure.Data.Entities;
-using static Parking.Mqtt.Infrastructure.Data.Entities.MqttTopicConfiguration;
+using static Parking.Database.Entities.MqttTopicConfiguration;
 
 namespace Parking.Mqtt.Infrastructure.Mapping
 {

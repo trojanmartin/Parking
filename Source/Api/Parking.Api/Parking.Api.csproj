@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Parking.DatabaseMigrations\Parking.DatabaseMigrations.csproj" />
+    <ProjectReference Include="..\..\Parking.DatabaseMigrations\Parking.Database.csproj" />
     <ProjectReference Include="..\Parking.Infrastructure\Parking.Infrastructure.csproj" />
   </ItemGroup>
 

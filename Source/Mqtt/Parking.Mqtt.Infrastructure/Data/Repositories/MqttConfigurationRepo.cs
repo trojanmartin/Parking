@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Parking.Database;
+using Parking.Database.Entities;
 using Parking.Mqtt.Core.Exceptions;
 using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Models.MQTT;
-using Parking.Mqtt.Infrastructure.Data.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
