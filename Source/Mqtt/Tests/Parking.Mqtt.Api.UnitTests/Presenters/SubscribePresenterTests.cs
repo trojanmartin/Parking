@@ -1,5 +1,10 @@
-﻿using Parking.Mqtt.Api.Presenters;
+﻿using Moq;
+using Parking.Mqtt.Api.Presenters;
+using Parking.Mqtt.Core.Models.Errors;
+using Parking.Mqtt.Core.Models.MQTT.DTO;
 using Parking.Mqtt.Core.Models.MQTT.Responses;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using Xunit;
 
@@ -12,7 +17,7 @@ namespace Parking.Mqtt.Api.UnitTests.Presenters
         {
             var presenter = new SubscribePresenter();
 
-            presenter.CreateResponse(new SubscribeResponse(true));
+            presenter.CreateResponse(new SubscribeResponse(It.IsAny<IEnumerable<MQTTTopicConfigurationDTO>>(),true));
 
             Assert.Equal((int)HttpStatusCode.OK, presenter.Result.StatusCode);
         }
@@ -22,7 +27,7 @@ namespace Parking.Mqtt.Api.UnitTests.Presenters
         {
             var presenter = new SubscribePresenter();
 
-            presenter.CreateResponse(new SubscribeResponse(false));
+            presenter.CreateResponse(new SubscribeResponse(It.IsAny<ErrorResponse>(), false));
 
             Assert.Equal((int)HttpStatusCode.BadRequest, presenter.Result.StatusCode);
         }

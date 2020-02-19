@@ -1,18 +1,18 @@
 ﻿using Parking.Mqtt.Core.Interfaces;
-using System.Collections.Generic;
+using Parking.Mqtt.Core.Models.Errors;
 
 namespace Parking.Mqtt.Core.Models.MQTT.Responses
 {
     public class DisconnectResponse : BaseResponse
-    {
+    {       
 
-       
-
-        public DisconnectResponse(bool success = false, IEnumerable<Error> errors = null, string message = null) : base(success, errors, message)
+        public DisconnectResponse(ErrorResponse errorResponse, bool success = false, string message = null) : base(success, message, errorResponse)
         {
+           
         }
 
-       
-       
+        public DisconnectResponse(bool success = false, string message = null) : base(success, message)
+        {
+        }
     }
 }

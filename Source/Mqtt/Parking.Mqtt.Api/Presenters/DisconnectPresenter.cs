@@ -14,7 +14,7 @@ namespace Parking.Mqtt.Api.Presenters
 
         public void CreateResponse(DisconnectResponse response)
         {
-            Result.Content = Serializer.SerializeObjectToJson(response);
+            Result.Content = response.Success ?  Serializer.SerializeObjectToJson(response) : Serializer.SerializeObjectToJson(response.ErrorResponse);
             Result.StatusCode = (int)(response.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError); 
         }
     }

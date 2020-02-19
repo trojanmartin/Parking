@@ -46,7 +46,7 @@ namespace Parking.Mqtt.Core.Handlers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while connecting to broker with request {@ConnectRequest}", connectRequest);
-                outputPort.CreateResponse(new ConnectResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                outputPort.CreateResponse(new ConnectResponse(new ErrorResponse(new List<Error>() { GlobalErrors.UnexpectedError })));
                 return false;
             }
         }
@@ -60,17 +60,17 @@ namespace Parking.Mqtt.Core.Handlers
                 if (configuration != null)
                     return await ConnectAsync(new ConnectRequest(configuration), outputPort);
 
-                outputPort.CreateResponse(new ConnectResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, $"Configuration with id {configurationId} does not exist") }));
+                outputPort.CreateResponse(new ConnectResponse(new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, $"Configuration with id {configurationId} does not exist") })));
                 return false;
             }
             catch(NotFoundException ex)
             {
-                outputPort.CreateResponse(new ConnectResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, $"Configuration with id {configurationId} does not exist") }));
+                outputPort.CreateResponse(new ConnectResponse(new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, $"Configuration with id {configurationId} does not exist") })));
                 return false;
             }
             catch(Exception ex)
             {
-                outputPort.CreateResponse(new ConnectResponse(false, new[] {  GlobalErrors.UnexpectedError }));
+                outputPort.CreateResponse(new ConnectResponse(new ErrorResponse( new[] {  GlobalErrors.UnexpectedError })));
                 return false;
             }
 
@@ -83,13 +83,13 @@ namespace Parking.Mqtt.Core.Handlers
             {
                 _logger.LogInformation("Trying to disconnect from broker");
                 await _mqttService.DisconnectAsync();
-                outputPort.CreateResponse(new DisconnectResponse(true,null, "Successfuly disconected from broker "));
+                outputPort.CreateResponse(new DisconnectResponse(true, "Successfuly disconected from broker "));
                 _logger.LogInformation("Successfuly disconected from broker");
                 return true;
             }
             catch (Exception ex)
             {
-                outputPort.CreateResponse(new DisconnectResponse(false, null,ex.Message));
+                outputPort.CreateResponse(new DisconnectResponse(new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
                 _logger.LogError(ex, "Error while disconnecting from broker");
                 return false;
             }
@@ -105,7 +105,9 @@ namespace Parking.Mqtt.Core.Handlers
                 var subscribeResponse = await _mqttService.SubscribeAsync(subscribeRequest.Topics);
                 _logger.LogInformation("MqttService returned {@Response}", subscribeResponse);
 
-                outputPort.CreateResponse(subscribeResponse.Succes ? new SubscribeResponse(true, subscribeResponse.Errors) : new SubscribeResponse(false, subscribeResponse.Errors));
+
+                //TODO Dorobit subscribed topics, teraz sa posiela len null
+                outputPort.CreateResponse(subscribeResponse.Succes ? new SubscribeResponse(null,true) : new SubscribeResponse(new ErrorResponse(subscribeResponse.Errors)));
 
                 if (subscribeResponse.Succes)
                     _mqttService.MessageReceivedAsync += MessageReceivedHandlerAsync;
@@ -116,7 +118,7 @@ namespace Parking.Mqtt.Core.Handlers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while trying to listen topics in request: {@Request}", subscribeRequest);
-                outputPort.CreateResponse(new SubscribeResponse(false));
+                outputPort.CreateResponse(new SubscribeResponse(new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
                 return false;
             }
         }
@@ -150,13 +152,14 @@ namespace Parking.Mqtt.Core.Handlers
             }
             catch (NotFoundException ex)
             {
-                outputPort.CreateResponse(new GetConfigurationResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, ex.Message)}));
+                outputPort.CreateResponse(new GetConfigurationResponse(new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, ex.Message)})));
+                _logger.LogError(ex,ex.Message);
                 return false;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                outputPort.CreateResponse(new GetConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                outputPort.CreateResponse(new GetConfigurationResponse(new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
                 return false;
             }
         }
@@ -175,7 +178,7 @@ namespace Parking.Mqtt.Core.Handlers
             catch(Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                outputPort.CreateResponse(new SaveConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                outputPort.CreateResponse(new SaveConfigurationResponse(new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
                 return false;
             }
         }
@@ -193,13 +196,13 @@ namespace Parking.Mqtt.Core.Handlers
             }
             catch(NotFoundException ex)
             {
-                outputPort.CreateResponse(new SaveConfigurationResponse(false, new[] { new Error(GlobalErrorCodes.NotFound, ex.Message) }));
+                outputPort.CreateResponse(new SaveConfigurationResponse(new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, ex.Message) })));
                 return false;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                outputPort.CreateResponse(new SaveConfigurationResponse(false, new List<Error>() { GlobalErrors.UnexpectedError }));
+                outputPort.CreateResponse(new SaveConfigurationResponse(new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
                 return false;
             }
         }

@@ -1,6 +1,5 @@
 ﻿using Parking.Core.Interfaces.Base;
 using Parking.Core.Models.Errors;
-using System.Collections.Generic;
 
 namespace Parking.Core.Models.UseCaseResponses
 {

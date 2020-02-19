@@ -15,6 +15,8 @@ namespace Parking.Mqtt.Core.UnitTests
 
         public IMqttService MQTTService { get; set; } = new Mock<IMqttService>().Object;
 
-        public IMQTTHandler Build() => new MQTTHandler(Logger, MQTTService, MQTTRepo);
+        public IDataReceivedHandler DataReceivedHandler { get; set; } = new Mock<IDataReceivedHandler>().Object;
+
+        public IMQTTHandler Build() => new MQTTHandler(Logger, MQTTService, MQTTRepo, DataReceivedHandler);
     }
 }

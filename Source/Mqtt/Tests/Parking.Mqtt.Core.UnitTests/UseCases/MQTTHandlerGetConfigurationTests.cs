@@ -80,7 +80,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var result = await handler.GetConfigurationAsync(new GetConfigurationRequest(null), outputPort.Object);
 
-            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success && x.Errors.FirstOrDefault().Code == GlobalErrorCodes.NotFound)));
+            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success && x.ErrorResponse.Errors.FirstOrDefault().Code == GlobalErrorCodes.NotFound)));
             Assert.False(result);
         }
 
@@ -102,7 +102,7 @@ namespace Parking.Mqtt.Core.UnitTests.UseCases
 
             var result = await handler.GetConfigurationAsync(new GetConfigurationRequest(null), outputPort.Object);
 
-            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success && x.Errors.FirstOrDefault().Code == GlobalErrorCodes.InternalServer)));
+            outputPort.Verify(x => x.CreateResponse(It.Is<GetConfigurationResponse>(x => !x.Success && x.ErrorResponse.Errors.FirstOrDefault().Code == GlobalErrorCodes.InternalServer)));
             Assert.False(result);
         }
     }
