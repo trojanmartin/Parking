@@ -21,13 +21,15 @@ namespace Parking.Mqtt.Core.Handlers
 
         private readonly IMqttService _mqttService;
         private readonly IMQTTConfigurationRepository _repo;
+        private readonly IDataReceivedHandler _dataHandler;
         private readonly ILogger _logger;
 
-        public MQTTHandler(ILogger<MQTTHandler> logger, IMqttService mqttService, IMQTTConfigurationRepository repo)
+        public MQTTHandler(ILogger<MQTTHandler> logger, IMqttService mqttService, IMQTTConfigurationRepository repo, IDataReceivedHandler dataHandler)
         {
             _logger = logger;
             _mqttService = mqttService;
             _repo = repo;
+            _dataHandler = dataHandler;
         }
 
         public async Task<bool> ConnectAsync(ConnectRequest connectRequest, IOutputPort<ConnectResponse> outputPort)
@@ -121,11 +123,7 @@ namespace Parking.Mqtt.Core.Handlers
 
         private async Task MessageReceivedHandlerAsync(MQTTMessageDTO message)
         {
-            await  Task.Run(() =>
-           {
-               Console.WriteLine(message.Payload);
-           });
-            
+            await _dataHandler.ProccesMQTTMessage(message);
         }
 
 
