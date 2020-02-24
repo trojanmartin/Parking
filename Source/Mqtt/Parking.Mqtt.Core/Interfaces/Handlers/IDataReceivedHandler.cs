@@ -6,5 +6,7 @@ namespace Parking.Mqtt.Core.Interfaces.Handlers
     public interface IDataReceivedHandler
     {
         Task ProccesMQTTMessage(MQTTMessageDTO message);
+
+        Task NormalizeFromCacheAndSaveToDBAsync();
     }
 }

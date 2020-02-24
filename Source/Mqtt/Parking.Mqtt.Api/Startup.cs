@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Parking.Database;
 using Parking.Mqtt.Api.Extensions;
 using Parking.Mqtt.Core.Extensions;
+using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Infrastructure.Extensions;
 using Serilog;
 using System;
@@ -41,16 +44,28 @@ namespace Parking.Mqtt.Api
                     .AddCoreModule()
                     .AddInfrastructureModule();
 
+
+            var connectionString = Configuration.GetConnectionString("Default");
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("Default"), 
+                    options.UseSqlServer(connectionString, 
                                         x => x.MigrationsAssembly("Parking.Database")));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+
+            services.AddHangfire(configuration => configuration
+                                   .UseSqlServerStorage(connectionString, new SqlServerStorageOptions()
+                                   {
+
+                                   }));
+
+            services.AddHangfireServer();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, IBackgroundJobClient backgroundJobs)
         {
            
             if (env.IsDevelopment())
@@ -69,6 +84,10 @@ namespace Parking.Mqtt.Api
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();               
             });
+
+            
+            //backgroundJobs.
+            //backgroundJobs.Schedule(serviceProvider.GetService<IDataReceivedHandler>().NormalizeFromCacheAndSaveToDBAsync(), DateTimeOffset.)
 
             serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
 
