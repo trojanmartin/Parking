@@ -11,10 +11,12 @@ namespace Parking.Mqtt.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructureModule(this IServiceCollection service)
         {
-            return service.AddSingleton<IMqttService,MqttService>()
-                           .AddTransient<IMQTTConfigurationRepository,MqttConfigurationRepo>()
-                           .AddSingleton<ICacheService, MemoryCacheService>()
+            return service.AddSingleton<IMqttService, MqttService>()
+                          .AddSingleton<ICacheService, MemoryCacheService>()
 
+
+                          .AddTransient<IMQTTConfigurationRepository, MqttConfigurationRepo>()
+                          .AddTransient<IParkDataRepository, ParkDataRepository>()
                            ;
         }
     }

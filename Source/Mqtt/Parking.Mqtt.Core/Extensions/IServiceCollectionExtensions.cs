@@ -10,7 +10,7 @@ namespace Parking.Mqtt.Core.Extensions
         public static IServiceCollection AddCoreModule(this IServiceCollection service)
         {
             return service.AddTransient<IMQTTHandler, MQTTHandler>()
-                          .AddTransient<IDataReceivedHandler, DataReceivedHandler>()
+                          .AddTransient<IDataReceivedHandler, DataReceivedHandler>()                       
                            
                            ;
         }

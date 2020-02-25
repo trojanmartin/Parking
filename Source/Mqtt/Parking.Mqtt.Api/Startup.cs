@@ -48,7 +48,7 @@ namespace Parking.Mqtt.Api
             var connectionString = Configuration.GetConnectionString("Default");
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(connectionString, 
+                    options.UseSqlServer(connectionString,
                                         x => x.MigrationsAssembly("Parking.Database")));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -65,7 +65,7 @@ namespace Parking.Mqtt.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, IBackgroundJobClient backgroundJobs)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, IRecurringJobManager recurringJob)
         {
            
             if (env.IsDevelopment())
@@ -85,9 +85,8 @@ namespace Parking.Mqtt.Api
                 endpoints.MapRazorPages();               
             });
 
-            
-            //backgroundJobs.
-            //backgroundJobs.Schedule(serviceProvider.GetService<IDataReceivedHandler>().NormalizeFromCacheAndSaveToDBAsync(), DateTimeOffset.)
+
+            recurringJob.AddOrUpdate<IDataReceivedHandler>("proccesEntries", x => x.NormalizeFromCacheAndSaveToDBAsync(), Cron.MinuteInterval(15));
 
             serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
 
