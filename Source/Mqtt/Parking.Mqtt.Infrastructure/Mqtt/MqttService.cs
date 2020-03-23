@@ -3,11 +3,11 @@ using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Subscribing;
 using MQTTnet.Protocol;
+using Parking.Mqtt.Core.Exceptions.MQTT;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models;
-using Parking.Mqtt.Core.Models.Gateways;
+using Parking.Mqtt.Core.Models.Configuration;
 using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
-using Parking.Mqtt.Core.Models.MQTT;
 using Parking.Mqtt.Core.Models.MQTT.DTO;
 using System;
 using System.Collections.Generic;
@@ -41,10 +41,10 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         /// </summary>
         /// <param name="topics"></param>
         /// <returns></returns>
-        public async Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTopicConfigurationDTO> topics)
+        public async Task SubscribeAsync(IEnumerable<MQTTTopicConfiguration> topics)
         {
 
-            var returnList = new List<MQTTTopicConfigurationDTO>();
+            var returnList = new List<MQTTTopicConfiguration>();
             var errorList = new List<Error>();
 
 
@@ -55,18 +55,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
                 topicBuilder.WithTopic(topic.Name).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)topic.QoS);                
                       
             }
-            var result = await _client.SubscribeAsync(topicBuilder.Build());
-
-
-            foreach (var res in result.Items)
-            {
-                if (SubscribeSucceeded(res.ResultCode))
-                    returnList.Add(new MQTTTopicConfigurationDTO(res.TopicFilter.Topic, (MQTTQualityOfService)res.TopicFilter.QualityOfServiceLevel));
-                else
-                    errorList.Add(new Error(res.ResultCode.ToString(), res.TopicFilter.Topic));
-            }
-
-            return new MQTTSubscribeGateResponse(returnList, (returnList.Count > 0), errorList);
+            var result = await _client.SubscribeAsync(topicBuilder.Build());            
         }
 
 
@@ -76,31 +65,31 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         
 
 
-        public async Task<MQTTConnectGateResponse> ConnectAsync(MQTTServerConfigurationDTO configuration)
+        public async Task ConnectAsync(MQTTServerConfiguration configuration)
         {
+            try
+            {             
 
-            var errors = new List<Error>();
+                var mqqtOptions = new MqttClientOptionsBuilder()
+                                .WithClientId(configuration.ClientId)
+                                .WithTcpServer(configuration.TcpServer, configuration.Port)
+                                .WithCredentials(configuration.Username, configuration.Password)
+                                .WithTls(t => t.UseTls = configuration.UseTls)
+                                .WithCleanSession(configuration.CleanSession)
+                                .WithKeepAlivePeriod(TimeSpan.FromSeconds(configuration.KeepAlive))
+                                .Build();
 
-            var mqqtOptions = new MqttClientOptionsBuilder()
-                            .WithClientId(configuration.ClientId)
-                            .WithTcpServer(configuration.TcpServer, configuration.Port)
-                            .WithCredentials(configuration.Username, configuration.Password)
-                            .WithTls(t => t.UseTls = configuration.UseTls)
-                            .WithCleanSession(configuration.CleanSession)
-                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(configuration.KeepAlive))
-                            .Build();
-            
-            var result = await _client.ConnectAsync(mqqtOptions);
+                var result = await _client.ConnectAsync(mqqtOptions);
 
-            if (result.ResultCode == MQTTnet.Client.Connecting.MqttClientConnectResultCode.Success)
-            {
-                return new MQTTConnectGateResponse(true);
+                if (result.ResultCode != MQTTnet.Client.Connecting.MqttClientConnectResultCode.Success)
+                {
+                    throw new ConnectionFailedException("Cannot connect to MQTTServer");
+                }
             }
-
-            //error 
-            var err = new Error(result.ResultCode.ToString(), result.ReasonString);
-            errors.Add(err);
-            return new MQTTConnectGateResponse(false, errors);
+            catch(Exception ex)
+            {
+                throw new ConnectionFailedException("Error while connecting to MQTT server", ex);
+            }                 
         }
 
         private bool SubscribeSucceeded(MqttClientSubscribeResultCode resultCode)
@@ -115,17 +104,22 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             if (_client?.Options != null)
             {
                 var tcpOptions = (MqttClientTcpOptions)_client.Options.ChannelOptions;
-               
 
-                return new MQTTGetStatusGateResponse(_client.IsConnected, new MQTTServerConfigurationDTO(_client.Options.ClientId,
-                                                    tcpOptions.Server, (int)tcpOptions.Port, "", "", tcpOptions.TlsOptions.UseTls, false, 100), true);
+
+                return new MQTTGetStatusGateResponse(_client.IsConnected, new MQTTServerConfiguration()
+                {
+                    ClientId = _client.Options.ClientId,
+                    TcpServer = tcpOptions.Server,
+                    Port = (int)tcpOptions.Port,
+                    UseTls = tcpOptions.TlsOptions.UseTls
+                });                                             
 
             }
 
             return new MQTTGetStatusGateResponse(false);
         }
 
-        public async Task UnSubscribe(IEnumerable<MQTTTopicConfigurationDTO> topics)
+        public async Task Unsubscribe(IEnumerable<MQTTTopicConfiguration> topics)
         {
             var topicList = new List<string>();
             foreach(var topic in topics)
@@ -135,5 +129,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 
             await _client.UnsubscribeAsync(topicList.ToArray());
         }
+
+        
     }
 }

@@ -1,6 +1,5 @@
-﻿using Parking.Mqtt.Core.Models.Gateways;
+﻿using Parking.Mqtt.Core.Models.Configuration;
 using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
-using Parking.Mqtt.Core.Models.MQTT;
 using Parking.Mqtt.Core.Models.MQTT.DTO;
 using System;
 using System.Collections.Generic;
@@ -11,10 +10,10 @@ namespace Parking.Mqtt.Core.Interfaces.Gateways.Services
     public interface IMqttService
     {
         event Func<MQTTMessageDTO, Task> MessageReceivedAsync;
-        Task<MQTTSubscribeGateResponse> SubscribeAsync(IEnumerable<MQTTTopicConfigurationDTO> topics);
-        Task<MQTTConnectGateResponse> ConnectAsync(MQTTServerConfigurationDTO configuration);
+        Task SubscribeAsync(IEnumerable<MQTTTopicConfiguration> topics);
+        Task ConnectAsync(MQTTServerConfiguration configuration);
         Task<MQTTGetStatusGateResponse> GetStatusAsync();
         Task DisconnectAsync();
-        Task UnSubscribe(IEnumerable<MQTTTopicConfigurationDTO> topics);
+        Task Unsubscribe(IEnumerable<MQTTTopicConfiguration> topics);
     }
 }

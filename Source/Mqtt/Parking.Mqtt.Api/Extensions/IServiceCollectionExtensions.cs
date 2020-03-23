@@ -1,25 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Parking.Mqtt.Api.Frontend.Presenters;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Parking.Mqtt.Api.Presenters;
+using Parking.Mqtt.Core.Models.Configuration;
 
 namespace Parking.Mqtt.Api.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddApiModule(this IServiceCollection service)
+        public static IServiceCollection AddApiModule(this IServiceCollection service,IConfiguration configuration)
         {
-            return service.AddTransient<SubscribePresenter>()
-                          .AddTransient<ConnectPresenter>()
-                          .AddTransient<DisconnectPresenter>()                          
-                           ;
-        }
+            return service
+                          .AddOptions()
+                          .Configure<MQTTConfiguration>(configuration.GetSection("MQTTConfiguration"))
 
-        public static IServiceCollection AddAdministrationModule(this IServiceCollection service)
-        {
-            return service.AddSingleton<IndexWebPresenter>()
-                          .AddTransient<EditWebPresenter>()
+
 
                 ;
         }
+
+
+        
     }
 }

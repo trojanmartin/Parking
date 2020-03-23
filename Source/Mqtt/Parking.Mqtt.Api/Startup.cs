@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Parking.Database;
 using Parking.Mqtt.Api.Extensions;
+using Parking.Mqtt.Core.Exceptions;
 using Parking.Mqtt.Core.Extensions;
 using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Infrastructure.Extensions;
@@ -30,17 +31,11 @@ namespace Parking.Mqtt.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-
-            services.AddRazorPages().AddRazorPagesOptions(options =>
-            {
-                options.RootDirectory = "/Frontend/Pages";
-            });
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());       
 
 
             //adding all services to dependency injection container
-            services.AddApiModule()
-                    .AddAdministrationModule()
+            services.AddApiModule(Configuration)                  
                     .AddCoreModule()
                     .AddInfrastructureModule();
 
@@ -65,7 +60,7 @@ namespace Parking.Mqtt.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, IBackgroundJobClient backgroundJobs)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, IBackgroundJobClient backgroundJobs, IHostApplicationLifetime hostApplicationLifetime)
         {
            
             if (env.IsDevelopment())
@@ -83,9 +78,8 @@ namespace Parking.Mqtt.Api
             {
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();               
-            });
+            });          
 
-            
             //backgroundJobs.
             //backgroundJobs.Schedule(serviceProvider.GetService<IDataReceivedHandler>().NormalizeFromCacheAndSaveToDBAsync(), DateTimeOffset.)
 
