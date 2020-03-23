@@ -66,22 +66,24 @@ namespace Parking.Mqtt.Core.Handlers
 
         public async Task NormalizeFromCacheAndSaveToDBAsync()
         {
-            var listOfSensors = await _cache.GetAsync<List<string>>(_cachedSensorsList);
-
-            var toSave = new List<SensorData>();
-
-            var actualTime = DateTimeOffset.Now;
-
-            foreach(var id in listOfSensors)
+            try
             {
-                var sensor = await _cache.GetAsync<SensorData>(id);
+                var listOfSensors = await _cache.GetAsync<List<string>>(_cachedSensorsList);
 
-                var normalizedParkEntry = new SensorData()
+                var toSave = new List<SensorData>();
+
+                var actualTime = DateTimeOffset.Now;
+
+                foreach (var id in listOfSensors)
                 {
-                    FCount = sensor.FCount,
-                    Latutide = sensor.Latutide,
-                    Longitude = sensor.Longitude,
-                    ParkEntries = new List<ParkEntry>()
+                    var sensor = await _cache.GetAsync<SensorData>(id);
+
+                    var normalizedParkEntry = new SensorData()
+                    {
+                        FCount = sensor.FCount,
+                        Latutide = sensor.Latutide,
+                        Longitude = sensor.Longitude,
+                        ParkEntries = new List<ParkEntry>()
                     {
                         new ParkEntry()
                         {
@@ -89,12 +91,18 @@ namespace Parking.Mqtt.Core.Handlers
                             TimeStamp = actualTime
                         }
                     }
-               };
+                    };
 
-                toSave.Add(normalizedParkEntry);
+                    toSave.Add(normalizedParkEntry);
+                }
+
+                await _parkDataRepo.SaveAsync(toSave);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while normalizing and saving data to database");               
             }
 
-            await _parkDataRepo.SaveAsync(toSave);
         }
     }
 }
