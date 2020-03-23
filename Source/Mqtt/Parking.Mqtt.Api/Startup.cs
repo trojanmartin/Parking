@@ -10,9 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Parking.Database;
 using Parking.Mqtt.Api.Extensions;
-using Parking.Mqtt.Core.Exceptions;
 using Parking.Mqtt.Core.Extensions;
-using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Infrastructure.Extensions;
 using Serilog;
 using System;
@@ -76,14 +74,13 @@ namespace Parking.Mqtt.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
-                endpoints.MapRazorPages();               
+                endpoints.MapControllers();                      
             });          
 
             //backgroundJobs.
             //backgroundJobs.Schedule(serviceProvider.GetService<IDataReceivedHandler>().NormalizeFromCacheAndSaveToDBAsync(), DateTimeOffset.)
 
-            serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+            //serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
 
             //var server = new MqttServerConfiguration()
             //{

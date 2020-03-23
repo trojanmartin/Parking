@@ -7,9 +7,6 @@ namespace Parking.Database
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-
-        public DbSet<MqttServerConfiguration> MqttServerConfigurations { get; set; }
-        public DbSet<MqttTopicConfiguration> MqttTopicConfigurations { get; set; }
         public DbSet<ParkingLot> ParkingLots { get; set; }
         public DbSet<ParkEntry> ParkEntries { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
@@ -26,14 +23,6 @@ namespace Parking.Database
             builder.Entity<AppUser>()
                    .Property(e => e.Id)
                    .ValueGeneratedOnAdd();
-
-            builder.Entity<MqttServerConfiguration>()
-               .Property(e => e.Id)
-               .ValueGeneratedOnAdd();
-
-            builder.Entity<MqttTopicConfiguration>()
-              .Property(e => e.Id)
-              .ValueGeneratedOnAdd();
 
             builder.Entity<ParkingLot>()
             .Property(e => e.Id)
