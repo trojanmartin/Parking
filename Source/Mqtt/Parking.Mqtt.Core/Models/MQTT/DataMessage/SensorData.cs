@@ -6,11 +6,11 @@ namespace Parking.Mqtt.Core.Models.MQTT.DataMessage
 {
     public class SensorData
     {
-        public double Longitude { get; set; }
+        public string Name { get; set; }
 
-        public double Latutide { get; set; }
+        public string Devui{ get; set; }
 
-        public int FCount { get; set; }
+        public string Position { get; set; }
 
         public IList<ParkEntry> ParkEntries { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Parking.Mqtt.Core.Exceptions;
 using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Interfaces.Handlers;
@@ -31,28 +32,27 @@ namespace Parking.Mqtt.Core.Handlers
             {
                 var data = Serializer.DeserializeToObject<RawSensorData>(message.Payload);
 
-                var sensorId = data.Metadata.Network.Lora.DevEui;
+                var sensorId = data.Deveui;
 
                 var cachedSensor = _cache.GetOrCreate<SensorData>(sensorId, () =>
-                {                  
-
+                {
+                    AddIdToWatchedEntries(sensorId);
                     return new SensorData()
                     {
-                        FCount = data.Metadata.Network.Lora.Fcnt,
-                        Latutide = data.Location.Lat,
-                        Longitude = data.Location.Lon,
+                        Devui = data.Deveui,
+                        Name = data.Name,
                         ParkEntries = new List<ParkEntry>()
                     };
                 });
 
-                AddIdToWatchedEntries(sensorId);
+               
 
 
                 cachedSensor.ParkEntries.Add(new ParkEntry()
                 {
-                    TimeStamp = data.Timestamp,
-                    //ak neparne, stojí tam auto
-                    Parked = Convert.ToInt32(data.Value.Payload) % 2 == 1
+                    TimeStamp = UnixTimestampToDateTime(data.Timestamp),
+                    //ak 1, stojí tam auto
+                    Parked = data.Status == 1
                 });
             });           
 
@@ -80,9 +80,9 @@ namespace Parking.Mqtt.Core.Handlers
 
                     var normalizedParkEntry = new SensorData()
                     {
-                        FCount = sensor.FCount,
-                        Latutide = sensor.Latutide,
-                        Longitude = sensor.Longitude,
+                        Devui = sensor.Devui,
+                        Name = sensor.Name,
+                        Position = sensor.Position,
                         ParkEntries = new List<ParkEntry>()
                     {
                         new ParkEntry()
@@ -98,11 +98,22 @@ namespace Parking.Mqtt.Core.Handlers
 
                 await _parkDataRepo.SaveAsync(toSave);
             }
+            catch(NotFoundException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while normalizing and saving data to database");               
             }
 
+        }
+
+        private DateTime UnixTimestampToDateTime(double unixTime)
+        {
+            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
+            return new DateTime(unixStart.Ticks + unixTimeStampInTicks, DateTimeKind.Utc);
         }
     }
 }

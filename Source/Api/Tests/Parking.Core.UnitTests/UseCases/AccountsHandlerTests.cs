@@ -34,6 +34,7 @@ namespace Parking.Core.UnitTests.UseCases
         [Fact]
         public async void Login_UserDoesNotExist_ReturnsFalse()     
         {
+            //Arrange
             var userRepo = new Mock<IUserRepository>();
             userRepo.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult<User>(null));
@@ -46,8 +47,11 @@ namespace Parking.Core.UnitTests.UseCases
 
             var outputPort = new Mock<IOutputPort<LoginResponseDTO>>().Object;
 
+            //Act
             var result = await handler.LogInAsync(new LoginRequestDTO("username", "password"), outputPort);
 
+
+            //Assert
             Assert.False(result);
         }
 
