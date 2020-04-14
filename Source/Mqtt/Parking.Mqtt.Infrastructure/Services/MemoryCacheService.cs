@@ -36,7 +36,7 @@ namespace Parking.Mqtt.Infrastructure.Services
            {
                var entry = _cache.Get<T>(key);
 
-               return entry ?? throw new NotFoundException($"Object with key {key} is not in memory cache");
+               return entry;//?? throw new NotFoundException($"Object with key {key} is not in memory cache");
            });
         }
 

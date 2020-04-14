@@ -27,14 +27,20 @@ namespace Parking.Database
             builder.Entity<ParkingLot>()
             .Property(e => e.Id)
             .ValueGeneratedOnAdd();
+            
 
             builder.Entity<ParkEntry>()
             .Property(e => e.Id)
             .ValueGeneratedOnAdd();
 
+            builder.Entity<ParkEntry>()
+              .Property(e => e.SensorId)
+              .IsRequired();
+
+
             builder.Entity<Sensor>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
+            .HasKey(e => e.Devui);
+            
 
             base.OnModelCreating(builder);
         }

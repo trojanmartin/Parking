@@ -8,8 +8,6 @@ using Parking.Core.Interfaces.Handlers;
 using Parking.Core.Models;
 using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseRequests;
-using Parking.Core.Models.UseCaseResponses;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Parking.Api.Controllers

@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Exceptions\CacheExceptions\" />
-  </ItemGroup>
-
 </Project>

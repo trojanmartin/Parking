@@ -7,5 +7,7 @@ namespace Parking.Mqtt.Core.Models.MQTT.DataMessage
         public bool Parked { get; set; }
 
         public DateTimeOffset TimeStamp { get; set; }
+
+        public string SensorId { get; set; }
     }
 }

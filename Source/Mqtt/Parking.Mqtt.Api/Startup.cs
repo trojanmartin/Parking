@@ -49,10 +49,10 @@ namespace Parking.Mqtt.Api
 
 
             services.AddHangfire(configuration => configuration
-                                   .UseSqlServerStorage(connectionString, new SqlServerStorageOptions()
-                                   {
+                                     .UseSqlServerStorage(connectionString, new SqlServerStorageOptions()
+                                     {
 
-                                   }));
+                                     }));
 
             services.AddHangfireServer();
 
@@ -80,25 +80,11 @@ namespace Parking.Mqtt.Api
 
 
             RecurringJob.AddOrUpdate(() => serviceProvider.GetService<IMQTTDataHandler>().NormalizeFromCacheAndSaveToDBAsync(), "*/1 * * * *");
-           
-          
-            //serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
-
-            //var server = new MqttServerConfiguration()
-            //{
-            //    Name = "TestKubo",
-            //    CleanSession = false,
-            //    TCPServer = "iot.mythings.sk",
-            //    Port = 1883,
-            //    KeepAlive = 100,
-            //    UseTls = false,
-            //    Username = "xmarceks",
-            //    Password = "xmarceks",
-
-            //    Topics = new List<MqttTopicConfiguration>() { new MqttTopicConfiguration { QoS = MqttTopicConfiguration.MqttQualtiyOfService.AtLeastOnce, TopicName = "/smarthome/#" } }
 
 
-            //};
+            //serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
+
+
             //serviceProvider.GetService<ApplicationDbContext>().MqttServerConfigurations.Add(server);
             //serviceProvider.GetService<ApplicationDbContext>().SaveChanges();
         }

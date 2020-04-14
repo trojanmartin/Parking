@@ -10,6 +10,10 @@ namespace Parking.Database.Entities
 
         public int BoxCount { get; set; }
 
+        public int Longitude { get; set; }
+
+        public int Latutide { get; set; }
+
         public ICollection<Sensor> Sensors { get; set; }
     }
 }
