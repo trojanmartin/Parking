@@ -1,5 +1,5 @@
-﻿using Parking.Mqtt.Core.Models;
-using System.Collections.Generic;
+﻿using Parking.Mqtt.Core.Models.Errors;
+using System.Text.Json.Serialization;
 
 namespace Parking.Mqtt.Core.Interfaces
 {
@@ -8,13 +8,14 @@ namespace Parking.Mqtt.Core.Interfaces
         public bool Success { get; }
         public string Message { get; }
 
-        public IEnumerable<Error> Errors { get; }
+        [JsonIgnore]
+        public ErrorResponse ErrorResponse { get; }
 
-        protected BaseResponse(bool success = false, IEnumerable<Error> errors = null, string message = null)
+        protected BaseResponse(bool success = false,  string message = null, ErrorResponse errorResponse = null)
         {
             Success = success;
             Message = message;
-            Errors = errors;
-        }
+            ErrorResponse = errorResponse;
+        }       
     }
 }

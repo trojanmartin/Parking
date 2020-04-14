@@ -18,4 +18,9 @@
     <ProjectReference Include="..\..\Parking.Mqtt.Api\Parking.Mqtt.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Presenters\" />
+  </ItemGroup>
+
 </Project>
