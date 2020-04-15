@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Parking.Api.Routing;
+using Parking.Core.Models.Data;
 using Parking.Core.Models.Errors;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,8 @@ namespace Parking.Api.Controllers
         /// <param name="sensorId">Deveui of sensor</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [Route(ParkingDataRouting.Latest)]        
+        [Route(ParkingDataRouting.Current)]
+        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>),StatusCodes.Status200OK)]  
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public Task<IActionResult> GetCurrentDataAsync([FromRoute] string parkingLotId, [FromRoute] string sensorId)
         {
@@ -37,8 +38,8 @@ namespace Parking.Api.Controllers
         /// <param name="parkingLotId"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route(ParkingDataRouting.Free)]
+        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>),StatusCodes.Status200OK)]       
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public Task<IActionResult> GetFreeSpotsAsync([FromRoute] string parkingLotId)
         {
@@ -54,10 +55,10 @@ namespace Parking.Api.Controllers
         /// <param name="sensorsIds"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route(ParkingDataRouting.GetData)]
+        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>),StatusCodes.Status200OK)]        
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public Task<IActionResult> GetParkingDataAsync([FromRoute] string parkingLotId, [FromQuery] DateTime from, [FromQuery] DateTime to, [FromQuery] IEnumerable<string> sensorsIds)
+        public Task<IActionResult> GetDataAsync([FromRoute] string parkingLotId, [FromQuery] DateTime from, [FromQuery] DateTime to, [FromQuery] IEnumerable<string> sensorsIds)
         {
             throw new NotImplementedException();
         }

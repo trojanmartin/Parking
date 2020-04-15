@@ -6,6 +6,10 @@ namespace Parking.Database.Entities
     {  
         public string Devui { get; set; }
 
-        public string Name { get; set; }              
+        public string Name { get; set; }
+       
+        public int ParkingSpotId { get; set; }
+
+        public ParkingSpot ParkingSpot { get; set; }
     }
 }

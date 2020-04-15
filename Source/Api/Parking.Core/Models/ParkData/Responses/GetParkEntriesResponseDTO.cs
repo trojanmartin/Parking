@@ -1,20 +1,22 @@
 ﻿using Parking.Core.Interfaces.Base;
 using Parking.Core.Models.Data;
 using Parking.Core.Models.Errors;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Parking.Core.Models.ParkData.Responses
 {
-    public class GetFreeSpotsResponseDTO : BaseResponse
+    public class GetParkEntriesResponseDTO : BaseResponse
     {
         public IEnumerable<ParkingSpot> ParkingSpots { get; }
 
-        public GetFreeSpotsResponseDTO(IEnumerable<ParkingSpot> parkingSpots, bool success = false) : base(success)
+        public GetParkEntriesResponseDTO(IEnumerable<ParkingSpot> parkingSpots,bool success = false) : base(success)
         {
             ParkingSpots = parkingSpots;
         }
 
-        public GetFreeSpotsResponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success,  errorResponse)
+        public GetParkEntriesResponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success,  errorResponse)
         {
         }
     }

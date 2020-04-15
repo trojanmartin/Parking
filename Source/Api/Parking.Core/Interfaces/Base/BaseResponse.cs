@@ -1,14 +1,16 @@
-﻿namespace Parking.Core.Interfaces.Base
+﻿using Parking.Core.Models.Errors;
+
+namespace Parking.Core.Interfaces.Base
 {
     public abstract class BaseResponse
     {
-        public bool Success { get; }
-        public string Message { get; }
+        public bool Success { get; }       
 
-        protected BaseResponse(bool success = false, string message = null)
+        public ErrorResponse ErrorResponse { get; }
+        protected BaseResponse(bool success = false, ErrorResponse errorResponse = null)
         {
-            Success = success;
-            Message = message;
+            Success = success;           
+            ErrorResponse = errorResponse;
         }
     }
 }
