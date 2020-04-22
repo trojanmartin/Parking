@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Parking.Core.Interfaces.Base
 {
@@ -15,5 +16,6 @@ namespace Parking.Core.Interfaces.Base
 
         Task InsertAsync(TEntity entity);
 
+        Task InsertAsync(IEnumerable<TEntity> entities);
     }
 }

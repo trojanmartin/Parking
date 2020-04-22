@@ -8,6 +8,9 @@ namespace Parking.Mqtt.Core.Models.MQTT.DataMessage
 
         public DateTimeOffset TimeStamp { get; set; }
 
-        public string SensorId { get; set; }
+        public string ParkingSpotName { get; set; }
+        public int ParkingSpotParkingLotId { get; set; }
+        public string SensorDevui { get; set; }
+      
     }
 }

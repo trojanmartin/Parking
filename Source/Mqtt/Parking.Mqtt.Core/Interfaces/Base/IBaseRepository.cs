@@ -8,11 +8,11 @@ namespace Parking.Mqtt.Core.Interfaces.Base
     public interface IBaseRepository<TEntity>
     {     
 
-        Task<TEntity> GetByIdAsync(object Id);
+        Task<TEntity> GetByIdAsync(params object[] Id);
 
         Task UpdateAsync(TEntity entity);
 
-        Task DeleteAsync(int Id);
+        Task DeleteAsync(params object[] Id);
 
         Task DeleteAsync(TEntity entity);
 

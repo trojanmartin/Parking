@@ -6,9 +6,7 @@ namespace Parking.Core.Models.Data
     public class ParkingSpot
     {        
 
-        public string Name { get;set; }
-
-        public string Devui { get;set; }
+        public string Name { get;set; }       
 
         public IEnumerable<ParkingEntry> ParkingEntries { get; set;}
     }

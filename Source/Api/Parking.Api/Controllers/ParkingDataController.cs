@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Parking.Api.Presenters.Base;
+using Parking.Api.Presenters.ParkingData;
 using Parking.Api.Routing;
+using Parking.Api.Serialization;
+using Parking.Core.Interfaces.Handlers;
 using Parking.Core.Models.Data;
 using Parking.Core.Models.Errors;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Parking.Api.Controllers
@@ -17,6 +21,14 @@ namespace Parking.Api.Controllers
     public class ParkingDataController
     {
 
+        private readonly IParkingDataHandler _dataHandler;
+        private readonly ParkingDataResponsePresenter _parkingDataPresenter;
+
+        public ParkingDataController(IParkingDataHandler dataHandler)
+        {
+            _dataHandler = dataHandler;
+        }
+
         /// <summary>
         /// Returns latest data for given ParkingLot. If sensorId is null, data fromm all sensors are returned
         /// </summary>
@@ -25,11 +37,41 @@ namespace Parking.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route(ParkingDataRouting.Current)]
-        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>),StatusCodes.Status200OK)]  
+        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public Task<IActionResult> GetCurrentDataAsync([FromRoute] string parkingLotId, [FromRoute] string sensorId)
+        public async Task<IActionResult> GetCurrentDataAsync([FromRoute] int parkingLotId, [FromRoute] string sensorId)
         {
-            throw new NotImplementedException();
+            var result = new JsonContentResult()
+            {
+                Content = Serializer.SerializeObjectToJson(new[]
+               {
+                    new ParkingSpot()
+                    {
+                       Name = "TEST",
+                       ParkingEntries = new []
+                       {
+                           new ParkingEntry()
+                           {
+                               Parked = true,
+                               Time = DateTime.Now
+                           },
+                           new ParkingEntry()
+                           {
+                               Parked = true,
+                               Time = DateTime.Now
+                           }
+                       }
+                    }
+                }),
+                StatusCode = (int)HttpStatusCode.OK
+            };
+
+            return result;
+
+
+            await _dataHandler.GetLatestSpotsEntriesAsync(parkingLotId, sensorId, _parkingDataPresenter);
+
+            return _parkingDataPresenter.Result;
         }
 
         /// <summary>
@@ -39,10 +81,38 @@ namespace Parking.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route(ParkingDataRouting.Free)]
-        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>),StatusCodes.Status200OK)]       
+        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public Task<IActionResult> GetFreeSpotsAsync([FromRoute] string parkingLotId)
+        public async Task<IActionResult> GetFreeSpotsAsync([FromRoute] string parkingLotId)
         {
+
+            var result = new JsonContentResult()
+            {
+                Content = Serializer.SerializeObjectToJson(new[]
+              {
+                    new ParkingSpot()
+                    {
+                       Name = "TEST",
+                       ParkingEntries = new []
+                       {
+                           new ParkingEntry()
+                           {
+                               Parked = true,
+                               Time = DateTime.Now
+                           },
+                           new ParkingEntry()
+                           {
+                               Parked = true,
+                               Time = DateTime.Now
+                           }
+                       }
+                    }
+                }),
+                StatusCode = (int)HttpStatusCode.OK
+            };
+
+            return result;
+
             throw new NotImplementedException();
         }
 
@@ -56,14 +126,42 @@ namespace Parking.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route(ParkingDataRouting.GetData)]
-        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>),StatusCodes.Status200OK)]        
+        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public Task<IActionResult> GetDataAsync([FromRoute] string parkingLotId, [FromQuery] DateTime from, [FromQuery] DateTime to, [FromQuery] IEnumerable<string> sensorsIds)
+        public async Task<IActionResult> GetDataAsync([FromRoute] string parkingLotId, [FromQuery] DateTime from, [FromQuery] DateTime to, [FromQuery] IEnumerable<string> sensorsIds)
         {
+            var result = new JsonContentResult()
+            {
+                Content = Serializer.SerializeObjectToJson(new[]
+              {
+                    new ParkingSpot()
+                    {
+                       Name = "TEST",
+                       ParkingEntries = new []
+                       {
+                           new ParkingEntry()
+                           {
+                               Parked = true,
+                               Time = DateTime.Now
+                           },
+                           new ParkingEntry()
+                           {
+                               Parked = true,
+                               Time = DateTime.Now
+                           }
+                       }
+                    }
+                }),
+                StatusCode = (int)HttpStatusCode.OK
+            };
+
+            return result;
+
+
             throw new NotImplementedException();
         }
 
-        
+
 
 
 

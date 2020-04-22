@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Parking.Mqtt.Core.Models.MQTT.DataMessage;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Parking.Mqtt.Core.Models.MQTT.ParkingData;
 
 namespace Parking.Mqtt.Infrastructure.Mapping
 {
@@ -10,11 +8,14 @@ namespace Parking.Mqtt.Infrastructure.Mapping
     {
         public Profiles()
         {
-            CreateMap<Database.Entities.ParkEntry, ParkEntry>();
-            CreateMap<ParkEntry, Database.Entities.ParkEntry>();
+            CreateMap<Database.Entities.ParkingEntry, ParkEntry>();
+            CreateMap<ParkEntry, Database.Entities.ParkingEntry>();
 
-            CreateMap<Database.Entities.Sensor, SensorData>();
-            CreateMap<SensorData, Database.Entities.Sensor>();
+            CreateMap<Database.Entities.Sensor, Sensor>();
+            CreateMap<Sensor, Database.Entities.Sensor>();
+
+            CreateMap<Database.Entities.ParkingSpot, ParkingSpot>();
+            CreateMap<ParkingSpot, Database.Entities.ParkingSpot>();
         }
     }
 }

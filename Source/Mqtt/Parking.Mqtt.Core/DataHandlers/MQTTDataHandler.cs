@@ -5,6 +5,7 @@ using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Core.Models.MQTT.DataMessage;
 using Parking.Mqtt.Core.Models.MQTT.DTO;
+using Parking.Mqtt.Core.Models.MQTT.ParkingData;
 using Parking.Mqtt.Core.Serialization;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,20 @@ namespace Parking.Mqtt.Core.Handlers
 {
     public class MQTTDataHandler : IMQTTDataHandler
     {
-        private const string _cachedSensorsList = "fiitList";
+        private const string _cachedSensorsList = "FIIT";
+        private const int _fiitParkingLotId = 1;
         private readonly ICacheService _cache;
         private readonly ILogger _logger;
-        private readonly IParkEntryRepository _parkEntryRepo;
+        private readonly IParkingEntryRepository _parkEntryRepo;
         private readonly ISensorRepository _sensorRepo;
-        public MQTTDataHandler(ILogger<MQTTDataHandler> logger, ICacheService cache, IParkEntryRepository parkEntryRepo, ISensorRepository sensorRepo)
+        private readonly IParkingSpotRepository _spotRepo;
+        public MQTTDataHandler(ILogger<MQTTDataHandler> logger, ICacheService cache, IParkingEntryRepository parkEntryRepo, ISensorRepository sensorRepo, IParkingSpotRepository spotRepo)
         {
             _logger = logger;
             _cache = cache;
             _parkEntryRepo = parkEntryRepo;
             _sensorRepo = sensorRepo;
+            _spotRepo = spotRepo;
         }
 
         public async Task ProccesMessage(MQTTMessageDTO message)
@@ -33,11 +37,11 @@ namespace Parking.Mqtt.Core.Handlers
             _logger.LogInformation("Received message. {@Message}", message);
             await Task.Run(() =>
             {
-                var data = Serializer.DeserializeToObject<RawSensorData>(message.Payload);           
+                var data = Serializer.DeserializeToObject<RawSensorData>(message.Payload);
 
                 var sensorId = data.Deveui;
 
-                if(sensorId == null || string.IsNullOrEmpty(sensorId))
+                if (sensorId == null || string.IsNullOrEmpty(sensorId))
                 {
                     _logger.LogError("Message received with empty SensorId");
                     return;
@@ -54,16 +58,14 @@ namespace Parking.Mqtt.Core.Handlers
                     };
                 });
 
-               
-
 
                 cachedSensor.ParkEntries.Add(new ParkEntry()
-                {                    
+                {
                     TimeStamp = UnixTimestampToDateTime(data.Timestamp),
                     //ak 1, stojí tam auto
-                    Parked = data.Status == 1                   
+                    Parked = data.Status == 1
                 });
-            });           
+            });
 
         }
 
@@ -94,14 +96,12 @@ namespace Parking.Mqtt.Core.Handlers
                     {
                         Devui = sensor.Devui,
                         Name = sensor.Name,
-                        Position = sensor.Position,
-                        ParkEntries = sensor.ParkEntries.Count == 0 ? new List<ParkEntry>() :  new List<ParkEntry>()
+                        ParkEntries = sensor.ParkEntries.Count == 0 ? new List<ParkEntry>() : new List<ParkEntry>()
                         {
                             new ParkEntry()
                             {
                                 Parked = sensor.ParkEntries.Any(x => x.Parked),
-                                TimeStamp = actualTime,
-                                SensorId = sensor.Devui
+                                TimeStamp = actualTime                                
                             }
                         }
                     };
@@ -112,13 +112,13 @@ namespace Parking.Mqtt.Core.Handlers
 
                 await SaveDataAsync(toSave);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while normalizing and saving data to database");               
+                _logger.LogError(ex, "Error while normalizing and saving data to database");
             }
 
         }
@@ -126,17 +126,43 @@ namespace Parking.Mqtt.Core.Handlers
 
         private async Task SaveDataAsync(IEnumerable<SensorData> sensorsData)
         {
-            foreach(var sensor in sensorsData)
+            foreach (var sensor in sensorsData)
             {
-               var isNewSensor =   await  _sensorRepo.GetByIdAsync(sensor.Devui) == null ? true : false;
+
+                //momentalne 1, je to Id parkoviska pri fiitke
+                var spot = await _spotRepo.GetByIdAsync(sensor.Name, _fiitParkingLotId);
+
+                if (spot == null)
+                    await _spotRepo.InsertAsync(new ParkingSpot()
+                    {
+                        Name = sensor.Name,
+                        ParkingLotId = _fiitParkingLotId
+                    });
+
+                spot = await _spotRepo.GetByIdAsync(sensor.Name, _fiitParkingLotId);
+
+                var isNewSensor = await _sensorRepo.GetByIdAsync(sensor.Devui) == null ? true : false;
 
                 if (isNewSensor)
-                    await _sensorRepo.InsertAsync(sensor);
+                    await _sensorRepo.InsertAsync(new Sensor() 
+                    { 
+                        Active = true,
+                        Devui = sensor.Devui,
+                        ParkingSpotName = sensor.Name,
+                        ParkingSpotParkingLotId = _fiitParkingLotId
+                    });
 
-                foreach(var parkEntry in sensor.ParkEntries)
+                foreach (var parkEntry in sensor.ParkEntries)
                 {
-                    await _parkEntryRepo.InsertAsync(parkEntry);
-                }                
+                    await _parkEntryRepo.InsertAsync(new ParkEntry()
+                    {
+                        Parked = parkEntry.Parked,
+                        TimeStamp = parkEntry.TimeStamp,
+                        ParkingSpotName = sensor.Name,
+                        SensorDevui = sensor.Devui,
+                        ParkingSpotParkingLotId = _fiitParkingLotId                        
+                    });
+                }
             }
         }
 

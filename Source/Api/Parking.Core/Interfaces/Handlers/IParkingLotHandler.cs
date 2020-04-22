@@ -8,8 +8,8 @@ namespace Parking.Core.Interfaces.Handlers
 {
     public interface IParkingLotHandler
     {
-        Task GetParkingLotByIdAsync(string parkingLotId, IOutputPort<GetParkingLotsResponsesDTO> outputPort);
+        Task GetParkingLotByIdAsync(int? parkingLotId, IOutputPort<GetParkingLotsResponseDTO> outputPort);
 
-        Task AddParkingLotAsync(AddParkingLotRequestDTO request, IOutputPort<StandardResultResponseDTO> outputPort);
+        Task AddParkingLotAsync(AddParkingLotRequestDTO request, IOutputPort<StandardResponse> outputPort);
     }
 }

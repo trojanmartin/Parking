@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Parking.Core.Models.ParkData.Responses
 {
-    public class GetCurrentDataReponseDTO : BaseResponse
+    public class GetParkingDataResponseDTO : BaseResponse
     {
-        public GetCurrentDataReponseDTO(IEnumerable<ParkingSpot> parkingSpots,bool success = false) : base(success)
+        public GetParkingDataResponseDTO(IEnumerable<ParkingSpot> parkingSpots,bool success = false) : base(success)
         {
             ParkingSpots = parkingSpots;
         }
 
-        public GetCurrentDataReponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success,  errorResponse)
+        public GetParkingDataResponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success,  errorResponse)
         {
         }
 

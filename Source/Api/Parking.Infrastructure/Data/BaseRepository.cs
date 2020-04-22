@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Parking.Core.Exceptions;
 using Parking.Core.Interfaces.Base;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Parking.Infrastructure.Data
@@ -76,6 +77,18 @@ namespace Parking.Infrastructure.Data
         public virtual async Task InsertAsync(TEntity entity)
         {
             dbSet.Add(_mapper.Map<TDatabaseEntity>(entity));
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task InsertAsync(IEnumerable<TEntity> entities)
+        {
+            if (entities is null)
+                return;
+
+            foreach(var entity in entities)
+            {
+                dbSet.Add(_mapper.Map<TDatabaseEntity>(entity));
+            }
             await dbContext.SaveChangesAsync();
         }
 

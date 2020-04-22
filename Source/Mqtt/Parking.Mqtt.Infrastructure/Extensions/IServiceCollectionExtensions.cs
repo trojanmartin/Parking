@@ -15,8 +15,9 @@ namespace Parking.Mqtt.Infrastructure.Extensions
             return service.AddSingleton<IMqttService,MqttService>()                         
                           .AddSingleton<ICacheService, MemoryCacheService>()
 
-                          .AddTransient<IParkEntryRepository,ParkEntryRepository>()
+                          .AddTransient<IParkingEntryRepository,ParkEntryRepository>()
                           .AddTransient<ISensorRepository,SensorRepository>()
+                          .AddTransient<IParkingSpotRepository,ParkingSpotRepository>()
                            ;
         }
     }

@@ -9,6 +9,8 @@ namespace Parking.Core.Extensions
         public static IServiceCollection AddCoreModule(this IServiceCollection services) =>
 
             services.AddTransient<IAccountsHandler, AccountsHandler>()
+            .AddTransient<IParkingDataHandler, ParkingDataHandler>()
+            .AddTransient<IParkingLotHandler, ParkingLotHandler>()
                                  
             
             ;

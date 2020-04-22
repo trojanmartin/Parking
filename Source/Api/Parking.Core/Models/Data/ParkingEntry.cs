@@ -6,7 +6,7 @@ namespace Parking.Core.Models.Data
 {
     public class ParkingEntry
     {
-        public string Parked { get; set; }
+        public bool Parked { get; set; }
 
         public DateTime Time { get; set;}
     }

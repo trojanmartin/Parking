@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Infrastructure.Data.Repositories
 {
-    public class ParkEntryRepository : BaseRepository<Database.Entities.ParkEntry, ParkEntry>, IParkEntryRepository
+    public class ParkEntryRepository : BaseRepository<Database.Entities.ParkingEntry, ParkEntry>, IParkingEntryRepository
     {       
 
         public ParkEntryRepository(ApplicationDbContext _context, IMapper mapper) : base(_context,mapper)

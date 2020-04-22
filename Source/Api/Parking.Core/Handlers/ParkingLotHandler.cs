@@ -25,7 +25,7 @@ namespace Parking.Core.Handlers
             _lotRepo = lotRepo;
         }
 
-        public async Task AddParkingLotAsync(AddParkingLotRequestDTO request, IOutputPort<StandardResultResponseDTO> outputPort)
+        public async Task AddParkingLotAsync(AddParkingLotRequestDTO request, IOutputPort<StandardResponse> outputPort)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Parking.Core.Handlers
 
                 await _lotRepo.InsertAsync(request.ParkingLot);
 
-                outputPort.CreateResponse(new StandardResultResponseDTO(true));
+                outputPort.CreateResponse(new StandardResponse(true, "ParkingLot created successfully"));
 
                 _logger.LogInformation($"Inserting new parking lot ended sucessfully");
             }
@@ -41,12 +41,12 @@ namespace Parking.Core.Handlers
             {
                 _logger.LogError(ex, "Error while inserting new parking lot");
 
-                outputPort.CreateResponse(new StandardResultResponseDTO(false,new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));                
+                outputPort.CreateResponse(new StandardResponse(false,new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));                
             }
 
         }
 
-        public async Task GetParkingLotByIdAsync(string parkingLotId, IOutputPort<GetParkingLotsResponsesDTO> outputPort)
+        public async Task GetParkingLotByIdAsync(int? parkingLotId, IOutputPort<GetParkingLotsResponseDTO> outputPort)
         {
             try
             {
@@ -54,27 +54,27 @@ namespace Parking.Core.Handlers
 
                 var parkingLots = new List<ParkingLot>();
 
-                if (parkingLotId == null)
+                if (parkingLotId != null)
                     parkingLots.Add(await _lotRepo.GetByIdAsync(parkingLotId));
 
                 else
                     parkingLots.AddRange(await _lotRepo.GetAllParkingLotsAsync());
 
 
-                outputPort.CreateResponse(new GetParkingLotsResponsesDTO(parkingLots, true));
+                outputPort.CreateResponse(new GetParkingLotsResponseDTO(parkingLots, true));
 
                 _logger.LogInformation($"Getting parking lot ended sucessfully");
             }
             catch(NotFoundException)
             {
                 _logger.LogInformation($"ParkingLot with id {parkingLotId} does not exist");
-                outputPort.CreateResponse(new GetParkingLotsResponsesDTO(false, new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, $"ParkingLot with id {parkingLotId} does not exist") })));
+                outputPort.CreateResponse(new GetParkingLotsResponseDTO(false, new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, $"ParkingLot with id {parkingLotId} does not exist") })));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting parking lot");
 
-                outputPort.CreateResponse(new GetParkingLotsResponsesDTO(false, new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
+                outputPort.CreateResponse(new GetParkingLotsResponseDTO(false, new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
             }
         }
     }

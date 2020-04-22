@@ -14,5 +14,6 @@ namespace Parking.Database.Entities
 
         public int Latutide { get; set; }
       
+        public ICollection<ParkingSpot> ParkingSpots { get; set; }
     }
 }

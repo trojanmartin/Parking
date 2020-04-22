@@ -3,7 +3,7 @@ using Parking.Core.Models.Data;
 
 namespace Parking.Core.Models.ParkingLots.Requests
 {
-    public class AddParkingLotRequestDTO : IRequest<StandardResultResponseDTO>
+    public class AddParkingLotRequestDTO : IRequest<StandardResponse>
     {
         public AddParkingLotRequestDTO(ParkingLot parkingLot)
         {
