@@ -4,20 +4,18 @@ using Parking.Core.Models.Errors;
 namespace Parking.Core.Models.UseCaseResponses
 {
     public class GetUserResponseDTO : BaseResponse
-    {
-        public ErrorResponse ErrorResponse { get; }
+    {     
 
         public User User { get; }
 
 
-        public GetUserResponseDTO(User user ,bool success = false, string message = null) : base(success, message)
+        public GetUserResponseDTO(User user ,bool success = false) : base(success)
         {
             User = user;
         }
 
-        public GetUserResponseDTO(ErrorResponse erros, bool success = false, string message = null) : base(success, message)
+        public GetUserResponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success, errorResponse)
         {
-            ErrorResponse = erros;
         }
     }
 }

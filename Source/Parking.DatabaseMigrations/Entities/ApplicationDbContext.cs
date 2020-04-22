@@ -8,7 +8,8 @@ namespace Parking.Database
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<ParkingLot> ParkingLots { get; set; }
-        public DbSet<ParkEntry> ParkEntries { get; set; }
+        public DbSet<ParkingEntry> ParkEntries { get; set; }
+        public DbSet<ParkingSpot> ParkingSpots { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -23,24 +24,30 @@ namespace Parking.Database
             builder.Entity<AppUser>()
                    .Property(e => e.Id)
                    .ValueGeneratedOnAdd();
+           
+            builder.Entity<ParkingLot>(options =>
+            {
+                options.Property(e => e.Id)
+                       .ValueGeneratedOnAdd();
+            });
 
-            builder.Entity<ParkingLot>()
+
+            builder.Entity<ParkingSpot>(options =>
+            {
+                options.HasKey(x => new { x.Name, x.ParkingLotId });
+            });
+
+            builder.Entity<ParkingEntry>()
             .Property(e => e.Id)
             .ValueGeneratedOnAdd();
-            
 
-            builder.Entity<ParkEntry>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
-
-            builder.Entity<ParkEntry>()
-              .Property(e => e.SensorId)
-              .IsRequired();
-
+            builder.Entity<ParkingEntry>()
+              .Property(e => e.Id)
+              .IsRequired();               
 
             builder.Entity<Sensor>()
-            .HasKey(e => e.Devui);
-            
+            .HasKey(x => x.Devui);
+
 
             base.OnModelCreating(builder);
         }

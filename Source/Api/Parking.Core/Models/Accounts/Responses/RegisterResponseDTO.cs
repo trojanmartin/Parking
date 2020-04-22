@@ -7,14 +7,12 @@ namespace Parking.Core.Models.UseCaseResponses
     public class RegisterResponseDTO : BaseResponse
     {
 
-        public ErrorResponse ErrorResponse { get; }
+       
 
-        public RegisterResponseDTO(bool success = false, string message = null) : base(success, message) { }
-      
+        public RegisterResponseDTO(bool success = false) : base(success) { }
 
-        public RegisterResponseDTO(ErrorResponse errors, bool success = false, string message = null) : base(success, message)
+        public RegisterResponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success, errorResponse)
         {
-            ErrorResponse = errors;
         }
     }
 }

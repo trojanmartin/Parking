@@ -7,18 +7,15 @@ namespace Parking.Core.Models.UseCaseResponses
     public class LoginResponseDTO : BaseResponse
     {       
 
-        public Token Token { get; }
+        public Token Token { get; }       
 
-        public ErrorResponse ErrorResponse { get; }
-
-        public LoginResponseDTO(Token token,bool success = false, string message = null) : base(success, message)
+        public LoginResponseDTO(Token token,bool success = false) : base(success)
         {           
             Token = token;
         }
 
-        public LoginResponseDTO(ErrorResponse errors, bool success = false, string message = null) : base(success, message)
+        public LoginResponseDTO(bool success = false, ErrorResponse errorResponse = null) : base(success, errorResponse)
         {
-            ErrorResponse = errors;
         }
     }
 }

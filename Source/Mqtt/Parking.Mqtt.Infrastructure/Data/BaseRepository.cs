@@ -33,7 +33,7 @@ namespace Parking.Mqtt.Infrastructure.Data
         /// Provides deleting entities by their Id 
         /// </summary>
         /// <param name="Id">Id of the entity </param>
-        public async Task DeleteAsync(int Id)
+        public async Task DeleteAsync(params object[] Id)
         {
             var entity = dbSet.Find(Id);
 
@@ -60,7 +60,7 @@ namespace Parking.Mqtt.Infrastructure.Data
 
 
 
-        public async Task<TEntity> GetByIdAsync(object Id) => _mapper.Map<TEntity>(await dbSet.FindAsync(Id));
+        public async Task<TEntity> GetByIdAsync(params object[] Id) => _mapper.Map<TEntity>(await dbSet.FindAsync(Id));
 
         /// <summary>
         /// Insert entity into database

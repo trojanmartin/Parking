@@ -46,11 +46,11 @@ namespace Parking.Core.Handlers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                outputPort.CreateResponse(new GetUserResponseDTO(new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
+                outputPort.CreateResponse(new GetUserResponseDTO(false,new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
                 return false;
             }
 
-            outputPort.CreateResponse(new GetUserResponseDTO(new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, $"User with userName {name} does not exist") }), false));
+            outputPort.CreateResponse(new GetUserResponseDTO(false,new ErrorResponse(new[] { new Error(GlobalErrorCodes.NotFound, $"User with userName {name} does not exist") })));
             return false;
         }
 
@@ -81,11 +81,11 @@ namespace Parking.Core.Handlers
             catch (Exception ex)
             {
                 _logger.LogInformation(ex.Message);
-                outputPort.CreateResponse(new LoginResponseDTO(new ErrorResponse (new[] { GlobalErrors.UnexpectedError })));
+                outputPort.CreateResponse(new LoginResponseDTO(false,new ErrorResponse (new[] { GlobalErrors.UnexpectedError })));
                 return false;
             }
 
-            outputPort.CreateResponse(new LoginResponseDTO(new ErrorResponse (new[] { new Error(GlobalErrorCodes.InvalidCredentials, "Username or password is invalid") })));
+            outputPort.CreateResponse(new LoginResponseDTO(false,new ErrorResponse (new[] { new Error(GlobalErrorCodes.InvalidCredentials, "Username or password is invalid") })));
             return false;
         }
 
@@ -99,10 +99,10 @@ namespace Parking.Core.Handlers
                 _logger.LogInformation("User repository returned {@response}", result);
 
                 if(result)
-                    outputPort.CreateResponse(new RegisterResponseDTO(true, "User succesfully created"));
+                    outputPort.CreateResponse(new RegisterResponseDTO(true));
 
                 else
-                    outputPort.CreateResponse(new RegisterResponseDTO(new ErrorResponse(new List<Error> {new Error(GlobalErrorCodes.InternalServer,"Cannot create new user") }), false));
+                    outputPort.CreateResponse(new RegisterResponseDTO(false,new ErrorResponse(new List<Error> {new Error(GlobalErrorCodes.InternalServer,"Cannot create new user") })));
 
                 return result;
             }
@@ -110,7 +110,7 @@ namespace Parking.Core.Handlers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                outputPort.CreateResponse(new RegisterResponseDTO(new ErrorResponse (new List<Error> { GlobalErrors.UnexpectedError })));
+                outputPort.CreateResponse(new RegisterResponseDTO(false,new ErrorResponse (new List<Error> { GlobalErrors.UnexpectedError })));
                 return false;
             }
         }
