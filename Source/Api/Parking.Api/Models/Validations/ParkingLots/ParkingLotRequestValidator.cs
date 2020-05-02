@@ -13,8 +13,8 @@ namespace Parking.Api.Models.Validations.ParkingLots
         {
             RuleFor(x => x.Name).NotEmpty().NotNull(); ;
             RuleFor(x => x.BoxCount).NotEmpty().NotNull();          
-            RuleFor(x => x.Latutide).NotEmpty().NotNull();
-            RuleFor(x => x.Longitude).NotEmpty().NotNull();
+            RuleFor(x => x.Latitude).NotEmpty().NotNull();
+            RuleFor(x => x.Longtitude).NotEmpty().NotNull();
         }
     }
 }
