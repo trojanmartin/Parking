@@ -8,9 +8,10 @@ namespace Parking.Core.Interfaces.Gateways.Repositories
 {
     public interface IParkingSpotsRepository : IBaseRepository<ParkingSpot>
     {
-        Task<IEnumerable<ParkingSpot>> GetParkingSpots(int parkingLotId);
-        Task<IEnumerable<ParkingSpot>> GetParkingSpotWithEntries(int parkingLotId, string spotId);
-        Task<ParkingSpot> GetParkingSpotWithLastEntries(int parkingLotId, string spotId);
-        Task<IEnumerable<ParkingSpot>> GetParkingSpotWithLastEntries(int parkingLotId);
+        Task<IEnumerable<ParkingSpot>> GetParkingSpotsAsync(int parkingLotId);
+        Task<IEnumerable<ParkingSpot>> GetParkingSpotWithEntriesAsync(int parkingLotId, string spotId);
+        Task<IEnumerable<ParkingSpot>> GetParkingSpotWithEntriesAsync(int parkingLotId, DateTimeOffset? from, DateTimeOffset? to, IEnumerable<string> spotName);
+        Task<ParkingSpot> GetParkingSpotWithLastEntryAsync(int parkingLotId, string spotId);
+        Task<IEnumerable<ParkingSpot>> GetParkingSpotsWithLastEntriesAsync(int parkingLotId);
     }
 }

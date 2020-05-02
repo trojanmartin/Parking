@@ -8,6 +8,6 @@ namespace Parking.Core.Models.Data
     {
         public bool Parked { get; set; }
 
-        public DateTime Time { get; set;}
+        public DateTimeOffset TimeStamp { get; set;}
     }
 }

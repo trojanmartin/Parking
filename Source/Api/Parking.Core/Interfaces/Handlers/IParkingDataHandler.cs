@@ -8,10 +8,8 @@ namespace Parking.Core.Interfaces.Handlers
 {
     public interface IParkingDataHandler
     {
-        Task GetLatestSpotsEntriesAsync(int parkingLotId, string spotId, IOutputPort<GetParkingDataResponseDTO> outputPort);
+        Task GetCurrentSpotsEntriesAsync(int parkingLotId, string spotId, IOutputPort<GetParkingDataResponseDTO> outputPort);       
 
-        Task GetFreeSpotsAsync(int parkingLotId, IOutputPort<GetParkingDataResponseDTO> outputPort);
-
-        Task GetSpotsEntriesAsync(int parkingLotId, DateTime from, DateTime to, IEnumerable<string> spotIds, IOutputPort<GetParkingDataResponseDTO> outputPort);
+        Task GetSpotsEntriesAsync(int parkingLotId, DateTime? from, DateTime? to, IEnumerable<string> spotIds, IOutputPort<GetParkingDataResponseDTO> outputPort);
     }
 }

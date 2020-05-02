@@ -10,6 +10,6 @@ namespace Parking.Database.Entities
         public ParkingLot ParkingLot { get; set; }  
         
         public ICollection<ParkingEntry>  ParkEntries { get; set; }
-        public ICollection<Sensor> Sensors { get; set; }
+        public ICollection<Sensor> Sensors { get; set; }       
     }
 }

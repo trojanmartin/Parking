@@ -17,8 +17,8 @@
 
     public class ParkingDataRouting
     {
-        public const string GetData = "/api/parkingdata/{parkingLotId}";
-        public const string Current = "/api/parkingdata/current/{parkingLotId}/{sensorId}";
-        public const string Free = "/api/parkingdata/free/{parkingLotId}";
+        public const string GetData = "/api/parkingdata";
+        public const string Current = "/api/parkingdata/current";
+        public const string Free = "/api/parkingdata/free";
     }
 }

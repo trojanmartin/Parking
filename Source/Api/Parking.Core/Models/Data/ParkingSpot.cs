@@ -8,6 +8,6 @@ namespace Parking.Core.Models.Data
 
         public string Name { get;set; }       
 
-        public IEnumerable<ParkingEntry> ParkingEntries { get; set;}
+        public IEnumerable<ParkingEntry> ParkEntries { get; set;}
     }
 }

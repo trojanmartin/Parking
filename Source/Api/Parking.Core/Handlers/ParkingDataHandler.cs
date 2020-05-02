@@ -27,24 +27,26 @@ namespace Parking.Core.Handlers
             _lotsRepo = lotsRepo;
         }
 
-        public async Task GetLatestSpotsEntriesAsync(int parkingLotId, string spotId, IOutputPort<GetParkingDataResponseDTO> outputPort)
+        public async Task GetCurrentSpotsEntriesAsync(int parkingLotId, string spotId, IOutputPort<GetParkingDataResponseDTO> outputPort)
         {
             try
             {
-                var spots = new List<ParkingSpot>();
-                spots.AddRange(await _spotsRepo.GetParkingSpotWithEntries(parkingLotId, spotId));
+
+                _logger.LogInformation($"Getting current spot entries for parking lot {parkingLotId} and spotName {spotId}");
+
+                var spots = new List<ParkingSpot>();              
                 if (spotId == null)
                 {
-                    spots.AddRange(await _spotsRepo.GetParkingSpotWithLastEntries(parkingLotId));                 
+                    spots.AddRange(await _spotsRepo.GetParkingSpotsWithLastEntriesAsync(parkingLotId));                 
 
                 }
 
                 else
                 {
-                    spots.Add(await _spotsRepo.GetParkingSpotWithLastEntries(parkingLotId, spotId));
+                    spots.Add(await _spotsRepo.GetParkingSpotWithLastEntryAsync(parkingLotId, spotId));
                 }
 
-
+                _logger.LogInformation($"Creating parking data response");
                 outputPort.CreateResponse(new GetParkingDataResponseDTO(spots, true));
             }
             catch (NotFoundException)
@@ -63,14 +65,23 @@ namespace Parking.Core.Handlers
             }
         }
 
-        public Task GetSpotsEntriesAsync(int parkingLotId, DateTime from, DateTime to, IEnumerable<string> sensorIds, IOutputPort<GetParkingDataResponseDTO> outputPort)
+        public async Task GetSpotsEntriesAsync(int parkingLotId, DateTime? from, DateTime? to, IEnumerable<string> spotName, IOutputPort<GetParkingDataResponseDTO> outputPort)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var res = await _spotsRepo.GetParkingSpotWithEntriesAsync(parkingLotId, from, to, spotName);
 
-        public Task GetFreeSpotsAsync(int parkingLotId, IOutputPort<GetParkingDataResponseDTO> outputPort)
-        {
-            throw new NotImplementedException();
-        }
+                outputPort.CreateResponse(new GetParkingDataResponseDTO(res, true));
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting parking entries");
+
+                outputPort.CreateResponse(new GetParkingDataResponseDTO(false, new ErrorResponse(new[] { GlobalErrors.UnexpectedError })));
+            }
+
+           
+        }       
     }
 }
