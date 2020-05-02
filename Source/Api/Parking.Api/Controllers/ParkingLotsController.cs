@@ -55,8 +55,8 @@ namespace Parking.Api.Controllers
             {
                 Name = request.Name,
                 BoxCount = request.BoxCount,
-                Latutide = request.Latutide,
-                Longitude = request.Longitude
+                Latitude = request.Latitude,
+                Longtitude = request.Longtitude
             }), _standardPresenter);
 
 

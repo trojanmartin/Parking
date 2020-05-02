@@ -8,8 +8,8 @@
 
         public int BoxCount { get; set;}
 
-        public int Longitude { get; set;}
+        public float Longtitude { get; set;}
 
-        public int Latutide { get; set;}
+        public float Latitude { get; set;}
     }
 }
