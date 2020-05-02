@@ -23,7 +23,7 @@ namespace Parking.Api.Controllers
 
     [Produces("application/json")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ParkingLotsController
     {
         private readonly IParkingLotHandler _lotHandler;
@@ -49,15 +49,7 @@ namespace Parking.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddParkingLotAsync([FromBody] ParkingLotRequest request)
         {
-            var result = new JsonContentResult()
-            {
-                Content = Serializer.SerializeObjectToJson(new StandardResponse(true, "Parking lot successfully added")),
-                StatusCode = (int)HttpStatusCode.OK
-            };
-
-            return result;
-
-
+            
 
             await _lotHandler.AddParkingLotAsync(new AddParkingLotRequestDTO(new ParkingLot()
             {
@@ -82,25 +74,7 @@ namespace Parking.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetParkingLotsAsync([FromQuery] int? parkingLotId)
         {
-            var result = new JsonContentResult()
-            {
-                Content = Serializer.SerializeObjectToJson(new[] 
-                {
-                    new ParkingLot()
-                    {
-                        Id = 1,
-                        BoxCount = 20,
-                        Latutide = 15,
-                        Longitude = 15,
-                        Name = "TEST"
-                    }
-                }),
-                StatusCode = (int)HttpStatusCode.OK
-            };
-
-            return result;
-
-
+          
             await _lotHandler.GetParkingLotByIdAsync(parkingLotId, _getParkingLotsPresenter);
 
             return _getParkingLotsPresenter.Result;
