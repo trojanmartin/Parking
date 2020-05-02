@@ -24,9 +24,10 @@ namespace Parking.Api.Controllers
         private readonly IParkingDataHandler _dataHandler;
         private readonly ParkingDataResponsePresenter _parkingDataPresenter;
 
-        public ParkingDataController(IParkingDataHandler dataHandler)
+        public ParkingDataController(IParkingDataHandler dataHandler, ParkingDataResponsePresenter parkingDataPresenter)
         {
             _dataHandler = dataHandler;
+            _parkingDataPresenter = parkingDataPresenter;
         }
 
         /// <summary>
@@ -39,82 +40,13 @@ namespace Parking.Api.Controllers
         [Route(ParkingDataRouting.Current)]
         [ProducesResponseType(typeof(IEnumerable<ParkingSpot>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCurrentDataAsync([FromRoute] int parkingLotId, [FromRoute] string sensorId)
-        {
-            var result = new JsonContentResult()
-            {
-                Content = Serializer.SerializeObjectToJson(new[]
-               {
-                    new ParkingSpot()
-                    {
-                       Name = "TEST",
-                       ParkingEntries = new []
-                       {
-                           new ParkingEntry()
-                           {
-                               Parked = true,
-                               Time = DateTime.Now
-                           },
-                           new ParkingEntry()
-                           {
-                               Parked = true,
-                               Time = DateTime.Now
-                           }
-                       }
-                    }
-                }),
-                StatusCode = (int)HttpStatusCode.OK
-            };
-
-            return result;
-
-
-            await _dataHandler.GetLatestSpotsEntriesAsync(parkingLotId, sensorId, _parkingDataPresenter);
+        public async Task<IActionResult> GetCurrentDataAsync([FromQuery] int parkingLotId, [FromQuery] string sensorId)
+        {         
+            await _dataHandler.GetCurrentSpotsEntriesAsync(parkingLotId, sensorId, _parkingDataPresenter);
 
             return _parkingDataPresenter.Result;
         }
-
-        /// <summary>
-        /// Returned currently free spots from given parking lot
-        /// </summary>
-        /// <param name="parkingLotId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route(ParkingDataRouting.Free)]
-        [ProducesResponseType(typeof(IEnumerable<ParkingSpot>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFreeSpotsAsync([FromRoute] string parkingLotId)
-        {
-
-            var result = new JsonContentResult()
-            {
-                Content = Serializer.SerializeObjectToJson(new[]
-              {
-                    new ParkingSpot()
-                    {
-                       Name = "TEST",
-                       ParkingEntries = new []
-                       {
-                           new ParkingEntry()
-                           {
-                               Parked = true,
-                               Time = DateTime.Now
-                           },
-                           new ParkingEntry()
-                           {
-                               Parked = true,
-                               Time = DateTime.Now
-                           }
-                       }
-                    }
-                }),
-                StatusCode = (int)HttpStatusCode.OK
-            };
-
-            return result;
-
-            throw new NotImplementedException();
-        }
+       
 
         /// <summary>
         /// Returns data with specified query. If some parameters are not given, they are ignored 
@@ -128,37 +60,11 @@ namespace Parking.Api.Controllers
         [Route(ParkingDataRouting.GetData)]
         [ProducesResponseType(typeof(IEnumerable<ParkingSpot>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetDataAsync([FromRoute] string parkingLotId, [FromQuery] DateTime from, [FromQuery] DateTime to, [FromQuery] IEnumerable<string> sensorsIds)
+        public async Task<IActionResult> GetDataAsync([FromQuery] int parkingLotId, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] IEnumerable<string> spotNames)
         {
-            var result = new JsonContentResult()
-            {
-                Content = Serializer.SerializeObjectToJson(new[]
-              {
-                    new ParkingSpot()
-                    {
-                       Name = "TEST",
-                       ParkingEntries = new []
-                       {
-                           new ParkingEntry()
-                           {
-                               Parked = true,
-                               Time = DateTime.Now
-                           },
-                           new ParkingEntry()
-                           {
-                               Parked = true,
-                               Time = DateTime.Now
-                           }
-                       }
-                    }
-                }),
-                StatusCode = (int)HttpStatusCode.OK
-            };
+            await  _dataHandler.GetSpotsEntriesAsync(parkingLotId, from, to, spotNames, _parkingDataPresenter);
 
-            return result;
-
-
-            throw new NotImplementedException();
+            return _parkingDataPresenter.Result;
         }
 
 

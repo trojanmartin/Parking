@@ -14,8 +14,14 @@ namespace Parking.Infrastructure.Mapping
 
             CreateMap<Database.Entities.ParkingLot, ParkingLot>();
             CreateMap<ParkingLot,Database.Entities.ParkingLot>();
-          
-            
+
+            CreateMap<Database.Entities.ParkingSpot, ParkingSpot>();
+            CreateMap<ParkingSpot, Database.Entities.ParkingSpot>();
+
+            CreateMap<Database.Entities.ParkingEntry, ParkingEntry>();
+            CreateMap<ParkingEntry, Database.Entities.ParkingEntry>();
+
+
         }  
     }
 }
