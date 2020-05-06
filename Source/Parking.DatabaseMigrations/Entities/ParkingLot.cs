@@ -10,9 +10,9 @@ namespace Parking.Database.Entities
 
         public int BoxCount { get; set; }
 
-        public float Longtitude { get; set; }
+        public double Longtitude { get; set; }
 
-        public float Latitude { get; set; }
+        public double Latitude { get; set; }
       
         public ICollection<ParkingSpot> ParkingSpots { get; set; }
     }
