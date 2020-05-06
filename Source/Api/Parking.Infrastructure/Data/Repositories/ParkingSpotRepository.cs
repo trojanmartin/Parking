@@ -35,19 +35,19 @@ namespace Parking.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<ParkingSpot>> GetParkingSpotWithEntriesAsync(int parkingLotId, string spotId)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
-                //TODO
-                var response = from spot in _dbContext.ParkingSpots
-                               join entry in _dbContext.ParkEntries
-                               on new { spot.ParkingLotId, spot.Name } equals new { ParkingLotId = entry.ParkingSpotParkingLotId, Name = entry.ParkingSpotName } into spotWithEntries
-                               from spotEntry in spotWithEntries
-                               where spotEntry.ParkingSpotParkingLotId == parkingLotId && spotEntry.ParkingSpotName == spotId
-                               select spotEntry;                              
 
+                var res = await _dbContext.ParkingLots
+                                    .Include(x => x.ParkingSpots)
+                                        .ThenInclude(spots => spots.ParkEntries)
+                                        
+                                    .SingleOrDefaultAsync(x => x.Id == parkingLotId);
 
+                if (spotId != null)
+                    res.ParkingSpots = new[] { res.ParkingSpots.SingleOrDefault(x => x.Name == spotId) };
 
-                return new[] { new ParkingSpot() };
+                return _mapper.Map<IEnumerable<ParkingSpot>>(res.ParkingSpots);
             });
         }
 

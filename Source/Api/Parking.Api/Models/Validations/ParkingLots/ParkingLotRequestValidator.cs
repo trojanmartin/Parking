@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
 using Parking.Api.Models.Request.ParkingLots;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Parking.Api.Models.Validations.ParkingLots
 {
