@@ -37,6 +37,22 @@ namespace Parking.Api.Controllers
             _getParkingLotsPresenter = getParkingLotsPresenter;
         }
 
+        /// <summary>
+        /// Returns ParkingLot of given id. If its null, all ParkingLots are returned
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(ParkingLotsRouting.Get)]
+        [ProducesResponseType(typeof(IEnumerable<ParkingLot>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetParkingLotsAsync([FromQuery] int? parkingLotId)
+        {
+
+            await _lotHandler.GetParkingLotByIdAsync(parkingLotId, _getParkingLotsPresenter);
+            
+            return _getParkingLotsPresenter.Result;
+        }
+
 
         /// <summary>
         /// Adds new ParkingLot 
@@ -61,24 +77,7 @@ namespace Parking.Api.Controllers
 
 
             return _standardPresenter.Result;
-        }
-
-
-        /// <summary>
-        /// Returns ParkingLot of given id. If its null, all ParkingLots are returned
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route(ParkingLotsRouting.Get)]
-        [ProducesResponseType(typeof(IEnumerable<ParkingLot>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetParkingLotsAsync([FromQuery] int? parkingLotId)
-        {
-          
-            await _lotHandler.GetParkingLotByIdAsync(parkingLotId, _getParkingLotsPresenter);
-
-            return _getParkingLotsPresenter.Result;
-        }
+        }      
 
 
     }

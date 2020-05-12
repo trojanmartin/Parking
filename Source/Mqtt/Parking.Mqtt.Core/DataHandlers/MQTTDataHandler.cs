@@ -8,6 +8,7 @@ using Parking.Mqtt.Core.Models.MQTT.DTO;
 using Parking.Mqtt.Core.Models.MQTT.ParkingData;
 using Parking.Mqtt.Core.Serialization;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace Parking.Mqtt.Core.Handlers
                     {
                         Devui = data.Deveui,
                         Name = data.Name,
-                        ParkEntries = new List<ParkEntry>()
+                        ParkEntries = new ConcurrentBag<ParkEntry>()
                     };
                 });
 
@@ -71,15 +72,18 @@ namespace Parking.Mqtt.Core.Handlers
 
         private void AddIdToWatchedEntries(string id)
         {
-            var list = _cache.GetOrCreate(_cachedSensorsList, () => new List<string>());
+            var list = _cache.GetOrCreate(_cachedSensorsList, () => new ConcurrentBag<string>());
             list.Add(id);
         }
 
         public async Task NormalizeFromCacheAndSaveToDBAsync()
         {
+
+            _logger.LogInformation("Normalizing and saving data to database");
+
             try
             {
-                var listOfSensors = await _cache.GetAsync<List<string>>(_cachedSensorsList);
+                var listOfSensors = await _cache.GetAsync<ConcurrentBag<string>>(_cachedSensorsList);
 
                 if (listOfSensors == null)
                     return;
@@ -96,7 +100,7 @@ namespace Parking.Mqtt.Core.Handlers
                     {
                         Devui = sensor.Devui,
                         Name = sensor.Name,
-                        ParkEntries = sensor.ParkEntries.Count == 0 ? new List<ParkEntry>() : new List<ParkEntry>()
+                        ParkEntries = sensor.ParkEntries.Count == 0 ? new ConcurrentBag<ParkEntry>() : new ConcurrentBag<ParkEntry>()
                         {
                             new ParkEntry()
                             {
@@ -106,11 +110,11 @@ namespace Parking.Mqtt.Core.Handlers
                         }
                     };
 
-                    sensor.ParkEntries = new List<ParkEntry>();
+                    sensor.ParkEntries.Clear();
                     toSave.Add(normalizedParkEntry);
                 }
 
-                await SaveDataAsync(toSave);
+              await SaveDataAsync(toSave);
             }
             catch (NotFoundException ex)
             {

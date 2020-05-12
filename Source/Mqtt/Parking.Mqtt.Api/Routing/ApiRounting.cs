@@ -2,6 +2,6 @@
 {
     public static class ApiRouting
     {
-       
+        public const string Health = "api/health";
     }
 }

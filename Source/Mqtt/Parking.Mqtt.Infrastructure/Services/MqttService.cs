@@ -34,7 +34,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             var message = Encoding.UTF8.GetString(data.ApplicationMessage.Payload);
             await MessageReceivedAsync(new MQTTMessageDTO(message, data.ApplicationMessage.Topic, data.ClientId));           
         }
-
+  
 
         /// <summary>
         /// TODO su

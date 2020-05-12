@@ -58,15 +58,15 @@ namespace Parking.Mqtt.Core.Interfaces
                 await ConfigureAsync();
 
 
-                while (true)
-                {
-                    await Task.Delay(100);
+                //while (true)
+                //{
+                //    await Task.Delay(100);
                     if (stoppingToken.IsCancellationRequested)
                     {
                         await DisconnectAsync();
-                        break;
+                      //  break;
                     }
-                }
+              //  }
             });            
         }
     }

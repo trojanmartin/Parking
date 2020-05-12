@@ -51,7 +51,7 @@ namespace Parking.Mqtt.Api
             services.AddHangfire(configuration => configuration
                                      .UseSqlServerStorage(connectionString, new SqlServerStorageOptions()
                                      {
-
+                                         
                                      }));
 
             services.AddHangfireServer();
@@ -78,6 +78,12 @@ namespace Parking.Mqtt.Api
                 endpoints.MapControllers();                      
             });
 
+
+
+            app.UseHangfireServer(new BackgroundJobServerOptions()
+            {
+                SchedulePollingInterval = TimeSpan.FromSeconds(10)
+            });
 
             RecurringJob.AddOrUpdate(() => serviceProvider.GetService<IMQTTDataHandler>().NormalizeFromCacheAndSaveToDBAsync(), "*/1 * * * *");
 
