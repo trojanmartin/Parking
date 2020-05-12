@@ -85,7 +85,7 @@ namespace Parking.Mqtt.Api
                 SchedulePollingInterval = TimeSpan.FromSeconds(10)
             });
 
-            RecurringJob.AddOrUpdate(() => serviceProvider.GetService<IMQTTDataHandler>().NormalizeFromCacheAndSaveToDBAsync(), "*/1 * * * *");
+            RecurringJob.AddOrUpdate(() => serviceProvider.GetService<IMQTTDataHandler>().NormalizeFromCacheAndSaveToDBAsync(), Configuration.GetValue<string>("SavingDataInterval"));
 
 
             //serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
