@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Concurrent;
 
 namespace Parking.Mqtt.Core.Models.MQTT.DataMessage
 {
@@ -10,6 +8,6 @@ namespace Parking.Mqtt.Core.Models.MQTT.DataMessage
 
         public bool Active { get; set; }
         public string Name { get; set; }
-        public IList<ParkEntry> ParkEntries { get; set; }
+        public ConcurrentBag<ParkEntry> ParkEntries { get; set; }
     }
 }

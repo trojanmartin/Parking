@@ -12,6 +12,5 @@ namespace Parking.Core.Interfaces.Handlers
         public Task<bool> RegisterAsync(RegisterRequestDTO loginRequest, IOutputPort<RegisterResponseDTO> outputPort);
         public Task<bool> GetUserAsync(string name, IOutputPort<GetUserResponseDTO> outputPort);
 
-
     }
 }
