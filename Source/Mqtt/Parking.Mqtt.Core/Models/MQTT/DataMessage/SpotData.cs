@@ -2,9 +2,9 @@
 
 namespace Parking.Mqtt.Core.Models.MQTT.DataMessage
 {
-    public class SensorData
+    public class SpotData
     {       
-        public string Devui{ get; set; }
+        public string SensorDevui{ get; set; }
 
         public bool Active { get; set; }
         public string Name { get; set; }

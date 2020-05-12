@@ -19,7 +19,7 @@ namespace Parking.Mqtt.Core.DataReceivers
         private readonly IServiceScopeFactory _serviceFactory;
 
         public FIITParkingDataReceiver(ILogger<FIITParkingDataReceiver> logger, IServiceScopeFactory serviceScopeFactory, IHostApplicationLifetime applicationLifetime, IMqttService client, IOptions<MQTTConfiguration> configs)
-                                    : base(client, configs.Value.ServerConfiguration, configs.Value.TopicConfiguration)
+                                    : base(logger,client, configs.Value.ServerConfiguration, configs.Value.TopicConfiguration)
         {
             _logger = logger;
             _serviceFactory = serviceScopeFactory;

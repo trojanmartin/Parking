@@ -66,12 +66,14 @@ namespace Parking.Infrastructure.Data.Repositories
 
               var lot = await _dbContext.ParkingLots
                                     .Include(x => x.ParkingSpots)
-                                        .ThenInclude(spots => spots.ParkEntries)
+                                        .ThenInclude(spots => spots.ParkEntries).AsNoTracking()
                                     .SingleOrDefaultAsync(x => x.Id == parkingLotId);
+
+                
 
                 foreach(var sp in lot.ParkingSpots)
                 {
-                    sp.ParkEntries = new[] { sp.ParkEntries.OrderBy(x => x.Parked).FirstOrDefault() };
+                    sp.ParkEntries = new[] { sp.ParkEntries.OrderByDescending(x => x.TimeStamp).FirstOrDefault() };
                 }
 
 
@@ -84,7 +86,7 @@ namespace Parking.Infrastructure.Data.Repositories
             return await Task.Run(() =>
             {
                 var spots = _dbContext.ParkingSpots
-                              .Include(x => x.ParkEntries)
+                              .Include(x => x.ParkEntries).AsNoTracking()
                               .Where(x => x.ParkingLotId == parkingLotId);
 
                 if (spotNames.Any())
