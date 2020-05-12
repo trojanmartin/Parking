@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Parking.Mqtt.Core.Interfaces.Base;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models.Configuration;
@@ -15,11 +16,14 @@ namespace Parking.Mqtt.Core.Interfaces
         private readonly MQTTServerConfiguration _serverConfig;
         private readonly IEnumerable<MQTTTopicConfiguration> _topicsConfig;
         private readonly IMqttService _client;
+        private readonly ILogger<MQTTBackgroundService> _logger;
 
-     
 
-        public MQTTBackgroundService(IMqttService client, MQTTServerConfiguration serverConfig, IEnumerable<MQTTTopicConfiguration> topicsConfig)
+
+
+        public MQTTBackgroundService(ILogger<MQTTBackgroundService> logger, IMqttService client, MQTTServerConfiguration serverConfig, IEnumerable<MQTTTopicConfiguration> topicsConfig)
         {
+            _logger = logger;
             _serverConfig = serverConfig;
             _topicsConfig = topicsConfig;
             _client = client;
@@ -33,7 +37,13 @@ namespace Parking.Mqtt.Core.Interfaces
 
         private async Task ConnectAsync()
         {
+
+            _logger.LogInformation("Connecting to broker with configuration {@Configuration}",_serverConfig);
+
             await _client.ConnectAsync(_serverConfig);
+
+            _logger.LogInformation("Connected succesfully");
+
             _client.MessageReceivedAsync += HandleMessageAsync;
         }
 
@@ -42,7 +52,9 @@ namespace Parking.Mqtt.Core.Interfaces
 
         private async Task SubscribeAsync()
         {
+            _logger.LogInformation("Subscribing topics {@Topics}",_topicsConfig);
             await _client.SubscribeAsync(_topicsConfig);
+            _logger.LogInformation("Subscribed succesfully");
         }     
                          
 

@@ -36,17 +36,7 @@ namespace Parking.Mqtt.Api
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-               .ConfigureAppConfiguration((hostingContext, config) =>
-               {
-                   //if (hostingContext.HostingEnvironment.IsDevelopment())
-                   config.AddJsonFile("appsettings.Development.json", optional: true);
-
-                   //else        
-
-                   config.AddEnvironmentVariables();
-
-               })
+            Host.CreateDefaultBuilder(args)             
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
