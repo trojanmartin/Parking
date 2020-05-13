@@ -1,5 +1,7 @@
-﻿using MQTTnet;
+﻿using Microsoft.Extensions.Logging;
+using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Subscribing;
 using MQTTnet.Protocol;
@@ -17,17 +19,29 @@ using System.Threading.Tasks;
 namespace Parking.Mqtt.Infrastructure.Mqtt
 {
     public class MqttService : IMqttService
-    {       
-       
+    {
+        private readonly ILogger _logger;
         private readonly IMqttClient _client;
         public event Func<MQTTMessageDTO, Task> MessageReceivedAsync;
 
-        public MqttService()
+        public MqttService(ILogger<MqttService> logger)
         {
+            _logger = logger;
             _client = new MqttFactory().CreateMqttClient();
 
+
+            _client.UseDisconnectedHandler(OnDisconnectedAsync);
             _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);            
         }
+
+
+        private async Task OnDisconnectedAsync(MqttClientDisconnectedEventArgs arg)
+        {
+            _logger.LogError(arg.Exception,"Client disconnected");
+            await _client.ReconnectAsync();
+          //  await ConnectAsync()
+        }
+
 
         public async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs data)
         {            
