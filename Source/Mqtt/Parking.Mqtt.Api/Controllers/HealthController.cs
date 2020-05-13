@@ -22,10 +22,7 @@ namespace Parking.Mqtt.Api.Controllers
         [HttpGet]
         [Route(ApiRouting.Health)]
         public async Task<IActionResult> GetHealthAsync()
-        {          
-                     
-
-         
+        {         
 
             return new OkObjectResult(await _healthHandler.GetHealthAsync());
         }
