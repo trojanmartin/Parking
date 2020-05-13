@@ -15,5 +15,7 @@ namespace Parking.Mqtt.Core.Interfaces.Gateways.Services
         Task<MQTTGetStatusGateResponse> GetStatusAsync();
         Task DisconnectAsync();
         Task Unsubscribe(IEnumerable<MQTTTopicConfiguration> topics);
+
+        void DisposeClient();
     }
 }

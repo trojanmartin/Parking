@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Subscribing;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Infrastructure.Mqtt
 {
-    public class MqttService : IMqttService
+    public class MqttService : IMqttService, IDisposable
     {
         private readonly ILogger _logger;
         private readonly IMqttClient _client;
@@ -29,9 +30,15 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             _logger = logger;
             _client = new MqttFactory().CreateMqttClient();
 
-
+            _client.UseConnectedHandler(OnConnectedAsync);
             _client.UseDisconnectedHandler(OnDisconnectedAsync);
             _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);            
+        }
+
+        private async Task OnConnectedAsync(MqttClientConnectedEventArgs arg)
+        {
+            _logger.LogInformation("Client Connected, {@ConnectResult}",arg.AuthenticateResult);
+            //  await ConnectAsync()
         }
 
 
@@ -144,6 +151,42 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             await _client.UnsubscribeAsync(topicList.ToArray());
         }
 
-        
+        // Flag: Has Dispose already been called?
+        bool disposed = false;
+
+        // Public implementation of Dispose pattern callable by consumers.
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                // Free any other managed objects here.
+                _client.Dispose();
+            }
+
+            
+            // Free any unmanaged objects here.
+            //
+            disposed = true;
+        }
+
+        public void DisposeClient()
+        {
+            Dispose();
+        }
+
+        ~MqttService()
+        {
+            Dispose(false);
+        }
     }
 }

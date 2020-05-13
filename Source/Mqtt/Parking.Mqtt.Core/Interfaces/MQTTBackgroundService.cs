@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic.FileIO;
 using Parking.Mqtt.Core.Interfaces.Base;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Models.Configuration;
@@ -38,7 +39,7 @@ namespace Parking.Mqtt.Core.Interfaces
         private async Task ConnectAsync()
         {
 
-            _logger.LogInformation("Connecting to broker with configuration {@Configuration}",_serverConfig);
+            _logger.LogInformation("Connecting to broker with configuration {@Configuration}", _serverConfig);
 
             await _client.ConnectAsync(_serverConfig);
 
@@ -52,11 +53,11 @@ namespace Parking.Mqtt.Core.Interfaces
 
         private async Task SubscribeAsync()
         {
-            _logger.LogInformation("Subscribing topics {@Topics}",_topicsConfig);
+            _logger.LogInformation("Subscribing topics {@Topics}", _topicsConfig);
             await _client.SubscribeAsync(_topicsConfig);
             _logger.LogInformation("Subscribed succesfully");
-        }     
-                         
+        }
+
 
         protected virtual async Task DisconnectAsync()
         {
@@ -64,7 +65,7 @@ namespace Parking.Mqtt.Core.Interfaces
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
-        {           
+        {
             return Task.Run(async () =>
             {
                 await ConfigureAsync();
@@ -73,13 +74,15 @@ namespace Parking.Mqtt.Core.Interfaces
                 //while (true)
                 //{
                 //    await Task.Delay(100);
-                    if (stoppingToken.IsCancellationRequested)
-                    {
-                        await DisconnectAsync();
-                      //  break;
-                    }
-              //  }
-            });            
+                if (stoppingToken.IsCancellationRequested)
+                {
+                    await DisconnectAsync();
+
+                    _client.DisposeClient();
+
+                }
+                //  }
+            });
         }
     }
 }

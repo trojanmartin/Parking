@@ -27,7 +27,7 @@ namespace Parking.Mqtt.Api.Controllers
         public async Task<IActionResult> GetHealthAsync()
         {
 
-            //await _healthHandler.GetHealthAsync();
+            await _healthHandler.GetHealthAsync();
 
             var res = new Dictionary<string, string>();
 
