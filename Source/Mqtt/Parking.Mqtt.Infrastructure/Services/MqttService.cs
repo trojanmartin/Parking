@@ -32,10 +32,10 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         {
             _logger = logger;
 
-            var a = new MqttNetLogger();
-            a.LogMessagePublished += A_LogMessagePublished;
+           // var a = new MqttNetLogger();
+           // a.LogMessagePublished += A_LogMessagePublished;
 
-            _client = new MqttFactory().CreateMqttClient(logger: a);
+            _client = new MqttFactory().CreateMqttClient();
 
             _client.UseConnectedHandler(OnConnectedAsync);
             _client.UseDisconnectedHandler(OnDisconnectedAsync);
@@ -49,8 +49,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 
         private async Task OnConnectedAsync(MqttClientConnectedEventArgs arg)
         {
-            _logger.LogInformation("Client Connected, {@ConnectResult}",arg.AuthenticateResult);
-            //  await ConnectAsync()
+            _logger.LogInformation("Client Connected, {@ConnectResult}",arg.AuthenticateResult);           
         }
 
 
@@ -65,9 +64,8 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Error while recconecting");
-            }
-            
-          //  await ConnectAsync()
+            }            
+          
         }
 
 
