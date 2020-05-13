@@ -64,7 +64,16 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         private async Task OnDisconnectedAsync(MqttClientDisconnectedEventArgs arg)
         {
             _logger.LogError(arg.Exception,"Client disconnected");
-            await _client.ReconnectAsync();
+            try
+            {
+                if(!_client.IsConnected)
+                    await _client.ReconnectAsync();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error while recconecting");
+            }
+            
           //  await ConnectAsync()
         }
 
