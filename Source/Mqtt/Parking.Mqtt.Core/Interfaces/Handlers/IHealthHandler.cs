@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Core.Interfaces.Handlers
 {
-    public interface HealthHandler
+    public interface IHealthHandler
     {
-        Task GetHealthAsync(IOutputPort<HealthDTO> outputPort);
+        Task GetHealthAsync();
     }
 }

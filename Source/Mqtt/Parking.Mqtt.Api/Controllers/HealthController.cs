@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Parking.Mqtt.Api.Routing;
+using Parking.Mqtt.Core.Interfaces.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,20 @@ namespace Parking.Mqtt.Api.Controllers
     [ApiController]    
     public class HealthController
     {
-       
+        private readonly IHealthHandler _healthHandler;
 
-        public HealthController()
+        public HealthController(IHealthHandler healthHandler)
         {
-           
+            _healthHandler = healthHandler;
         }
 
 
         [HttpGet]
         [Route(ApiRouting.Health)]
-        public IActionResult GetHealth()
+        public async Task<IActionResult> GetHealthAsync()
         {
+
+            //await _healthHandler.GetHealthAsync();
 
             var res = new Dictionary<string, string>();
 

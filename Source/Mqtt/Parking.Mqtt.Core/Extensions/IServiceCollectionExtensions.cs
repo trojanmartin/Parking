@@ -13,6 +13,7 @@ namespace Parking.Mqtt.Core.Extensions
             return service.AddHostedService<FIITParkingDataReceiver>()
 
                           .AddScoped<IMQTTDataHandler,MQTTDataHandler>()
+                          .AddScoped<IHealthHandler,HealthHandler>()
                            
                            ;
         }
