@@ -2,6 +2,7 @@
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Interfaces.Handlers;
 using Parking.Mqtt.Core.Models;
+using Parking.Mqtt.Core.Models.Gateways.Services.Mqtt;
 using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Core
@@ -16,9 +17,9 @@ namespace Parking.Mqtt.Core
             this._client = client;
         }
 
-        public async Task GetHealthAsync()
+        public async Task<MQTTGetStatusGateResponse> GetHealthAsync()
         {
-            var response = await _client.GetStatusAsync();
+            return await _client.GetStatusAsync();
         }
     }
 }

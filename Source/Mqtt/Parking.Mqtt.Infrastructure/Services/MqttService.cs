@@ -133,7 +133,7 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
                     TcpServer = tcpOptions.Server,
                     Port = (int)tcpOptions.Port,
                     UseTls = tcpOptions.TlsOptions.UseTls
-                });                                             
+                },true);                                             
 
             }
 
