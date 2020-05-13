@@ -22,18 +22,11 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
 {
 
     public class MqttService : IMqttService, IDisposable
-    {
-
-     
+    {    
 
         private readonly ILogger _logger;
         private readonly IMqttClient _client;
-        public event Func<MQTTMessageDTO, Task> MessageReceivedAsync;
-
-
-        
-
-
+        public event Func<MQTTMessageDTO, Task> MessageReceivedAsync;       
 
         public MqttService(ILogger<MqttService> logger)
         {
@@ -117,14 +110,15 @@ namespace Parking.Mqtt.Infrastructure.Mqtt
         public async Task ConnectAsync(MQTTServerConfiguration configuration)
         {
             try
-            {             
+            {
 
                 var mqqtOptions = new MqttClientOptionsBuilder()
-                                .WithClientId(configuration.ClientId)
+                                //.WithClientId(configuration.ClientId)
                                 .WithTcpServer(configuration.TcpServer, configuration.Port)
                                 .WithCredentials(configuration.Username, configuration.Password)
                                 .WithTls(t => t.UseTls = configuration.UseTls)
                                 .WithCleanSession(configuration.CleanSession)
+                                .WithCommunicationTimeout(TimeSpan.FromSeconds(5))
                                 .WithKeepAlivePeriod(TimeSpan.FromSeconds(configuration.KeepAlive))
                                 .Build();
 
