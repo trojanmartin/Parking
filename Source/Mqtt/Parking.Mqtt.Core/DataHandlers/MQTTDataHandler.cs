@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Parking.Mqtt.Core.Exceptions;
+using Parking.Mqtt.Core.Extensions;
 using Parking.Mqtt.Core.Interfaces.Gateways.Repositories;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
 using Parking.Mqtt.Core.Interfaces.Handlers;
@@ -90,7 +91,7 @@ namespace Parking.Mqtt.Core.Handlers
 
                 var toSave = new List<SpotData>();
 
-                var actualTime = DateTimeOffset.Now;
+                var actualTime = DateTimeOffset.Now.UtcDateTime.Truncate(TimeSpan.FromMinutes(1));
 
                 foreach (var id in listOfSpots)
                 {
@@ -113,6 +114,8 @@ namespace Parking.Mqtt.Core.Handlers
                     sensor.ParkEntries.Clear();
                     toSave.Add(normalizedParkEntry);
                 }
+
+                var b = DateTimeOffset.Now.LocalDateTime.GetDateTimeFormats();
 
               await SaveDataAsync(toSave);
 
