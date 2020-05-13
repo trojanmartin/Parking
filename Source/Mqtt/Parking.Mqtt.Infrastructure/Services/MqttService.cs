@@ -5,6 +5,7 @@ using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Subscribing;
+using MQTTnet.Diagnostics;
 using MQTTnet.Protocol;
 using Parking.Mqtt.Core.Exceptions.MQTT;
 using Parking.Mqtt.Core.Interfaces.Gateways.Services;
@@ -19,20 +20,38 @@ using System.Threading.Tasks;
 
 namespace Parking.Mqtt.Infrastructure.Mqtt
 {
+
     public class MqttService : IMqttService, IDisposable
     {
+
+     
+
         private readonly ILogger _logger;
         private readonly IMqttClient _client;
         public event Func<MQTTMessageDTO, Task> MessageReceivedAsync;
 
+
+        
+
+
+
         public MqttService(ILogger<MqttService> logger)
         {
             _logger = logger;
-            _client = new MqttFactory().CreateMqttClient();
+
+            var a = new MqttNetLogger();
+            a.LogMessagePublished += A_LogMessagePublished;
+
+            _client = new MqttFactory().CreateMqttClient(logger: a);
 
             _client.UseConnectedHandler(OnConnectedAsync);
             _client.UseDisconnectedHandler(OnDisconnectedAsync);
             _client.UseApplicationMessageReceivedHandler(OnMessageReceivedAsync);            
+        }
+
+        private void A_LogMessagePublished(object sender, MqttNetLogMessagePublishedEventArgs e)
+        {
+            _logger.LogWarning("MqttLOG {@Message}", e.LogMessage);
         }
 
         private async Task OnConnectedAsync(MqttClientConnectedEventArgs arg)
