@@ -24,7 +24,7 @@ namespace Parking.Api.UnitTests.Presenters
         public void LoginPresenter_UseCaseFails_ContainsUnauthorized()
         {
             var presenter = new LoginPresenter();
-            presenter.CreateResponse(new LoginResponseDTO(new ErrorResponse(new[] { new Error(It.IsAny<string>(), It.IsAny<string>())}), false));
+            presenter.CreateResponse(new LoginResponseDTO(false,new ErrorResponse(new[] { new Error(It.IsAny<string>(), It.IsAny<string>())})));
 
             Assert.Equal((int)HttpStatusCode.Unauthorized, presenter.Result.StatusCode);
         }

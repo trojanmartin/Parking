@@ -15,7 +15,7 @@ namespace Parking.Api.UnitTests.Presenters
         {
             var presenter = new RegisterPresenter();
 
-            presenter.CreateResponse(new RegisterResponseDTO(new ErrorResponse(new[] { new Error(It.IsAny<string>(), It.IsAny<string>()) }), false));
+            presenter.CreateResponse(new RegisterResponseDTO(false,new ErrorResponse(new[] { new Error(It.IsAny<string>(), It.IsAny<string>()) })));
 
             Assert.Equal((int)HttpStatusCode.BadRequest, presenter.Result.StatusCode);
         }
@@ -25,7 +25,7 @@ namespace Parking.Api.UnitTests.Presenters
         { 
             var presenter = new RegisterPresenter();
 
-            presenter.CreateResponse(new RegisterResponseDTO(true,It.IsAny<string>()));
+            presenter.CreateResponse(new RegisterResponseDTO(true));
 
             Assert.Equal((int)HttpStatusCode.OK, presenter.Result.StatusCode);
         }

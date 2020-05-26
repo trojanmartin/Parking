@@ -1,14 +1,18 @@
-﻿namespace Parking.Core.Interfaces.Base
+﻿using Parking.Core.Models.Errors;
+using System.Text.Json.Serialization;
+
+namespace Parking.Core.Interfaces.Base
 {
     public abstract class BaseResponse
     {
         public bool Success { get; }
-        public string Message { get; }
 
-        protected BaseResponse(bool success = false, string message = null)
+        [JsonIgnore]
+        public ErrorResponse ErrorResponse { get; }
+        protected BaseResponse(bool success = false, ErrorResponse errorResponse = null)
         {
-            Success = success;
-            Message = message;
+            Success = success;           
+            ErrorResponse = errorResponse;
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Parking.Database.Entities;
-using Parking.Mqtt.Core.Models.MQTT;
-using Parking.Mqtt.Core.Models.MQTT.DTO;
-using static Parking.Database.Entities.MqttTopicConfiguration;
+using Parking.Mqtt.Core.Models.MQTT.DataMessage;
+using Parking.Mqtt.Core.Models.MQTT.ParkingData;
 
 namespace Parking.Mqtt.Infrastructure.Mapping
 {
@@ -10,38 +8,14 @@ namespace Parking.Mqtt.Infrastructure.Mapping
     {
         public Profiles()
         {
-            CreateMap<MQTTTopicConfigurationDTO, MqttTopicConfiguration>()
-                .ConvertUsing(x => new MqttTopicConfiguration
-                {
-                    QoS = (MqttQualtiyOfService)x.QoS,
-                    TopicName = x.Name
-                });
+            CreateMap<Database.Entities.ParkingEntry, ParkEntry>();
+            CreateMap<ParkEntry, Database.Entities.ParkingEntry>();
 
+            CreateMap<Database.Entities.Sensor, Sensor>();
+            CreateMap<Sensor, Database.Entities.Sensor>();
 
-            CreateMap<MqttTopicConfiguration, MQTTTopicConfigurationDTO>()
-             .ConvertUsing(x => new MQTTTopicConfigurationDTO(x.TopicName, (MQTTQualityOfService)x.QoS, x.Id));
-
-            CreateMap<MQTTServerConfigurationDTO, MqttServerConfiguration>()
-                .ForMember(dest => dest.Topics,
-                opt => opt.MapFrom(src => src.Topics))
-                .ForMember(dest => dest.Name,
-                opt => opt.MapFrom(src => src.ConfigurationName));
-
-            CreateMap<MqttServerConfiguration, MQTTServerConfigurationDTO>()
-                .ForCtorParam("clientId", opt => opt.MapFrom(src => src.Id))
-                .ForCtorParam("configurationName", opt => opt.MapFrom(src => src.Name))
-                .ForCtorParam("tcpServer", opt => opt.MapFrom(src => src.TCPServer))
-                .ForCtorParam("port", opt => opt.MapFrom(src => src.Port))
-                .ForCtorParam("username", opt => opt.MapFrom(src => src.Username))
-                .ForCtorParam("password", opt => opt.MapFrom(src => src.Password))
-                .ForCtorParam("useTls", opt => opt.MapFrom(src => src.UseTls))
-                .ForCtorParam("cleanSession", opt => opt.MapFrom(src => src.CleanSession))
-                .ForCtorParam("keepAlive", opt => opt.MapFrom(src => src.KeepAlive))
-                .ForCtorParam("topics", opt => opt.MapFrom(src => src.Topics))         
-                .ForCtorParam("id", opt => opt.MapFrom(src => src.Id));         
-               
-              
-               
+            CreateMap<Database.Entities.ParkingSpot, ParkingSpot>();
+            CreateMap<ParkingSpot, Database.Entities.ParkingSpot>();
         }
     }
 }

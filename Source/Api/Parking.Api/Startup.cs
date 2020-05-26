@@ -168,7 +168,7 @@ namespace Parking.Api
             });
 
             //Make sure we have database
-          //  serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
+          // serviceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
         }
     }
 }

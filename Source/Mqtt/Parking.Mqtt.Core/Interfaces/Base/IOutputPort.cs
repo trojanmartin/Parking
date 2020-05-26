@@ -1,4 +1,4 @@
-﻿namespace Parking.Mqtt.Core.Interfaces
+﻿namespace Parking.Mqtt.Core.Interfaces.Base
 {
     public interface IOutputPort<TResponse>
     {

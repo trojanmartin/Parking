@@ -8,8 +8,6 @@ using Parking.Core.Interfaces.Handlers;
 using Parking.Core.Models;
 using Parking.Core.Models.Errors;
 using Parking.Core.Models.UseCaseRequests;
-using Parking.Core.Models.UseCaseResponses;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Parking.Api.Controllers
@@ -39,7 +37,7 @@ namespace Parking.Api.Controllers
         /// <param name="request"></param>
         /// <returns>A newly created User with jwt token</returns>        
         [HttpPost]
-        [Route(ApiRouting.Login)]
+        [Route(AccountsRouting.Login)]
         [ProducesResponseType(typeof(Token),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] Models.Request.LoginRequest request)
@@ -55,7 +53,7 @@ namespace Parking.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route(ApiRouting.Register)]
+        [Route(AccountsRouting.Register)]
         [ProducesResponseType(typeof(BaseResponse),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] Models.Request.RegisterRequest request)
@@ -72,7 +70,7 @@ namespace Parking.Api.Controllers
         /// <param name="username"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route(ApiRouting.User)]
+        [Route(AccountsRouting.User)]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUser(string username)
